@@ -7,7 +7,7 @@ export default function HomePage() {
       <header className="site-header">
         <div className="container">
           <div className="brand">
-            Claude <span>Design Loader</span>
+            Theme <span>Loader</span>
           </div>
           <div className="tag">Next.js · App Router</div>
         </div>
@@ -15,7 +15,7 @@ export default function HomePage() {
 
       <main className="container">
         <section className="hero">
-          <h1>Designs from Claude Design</h1>
+          <h1>Designs from theme</h1>
           <p>
             Each card below is a self-contained design loaded into this app.
             Open one to view it full-screen. The original HTML, styles, and

@@ -1,12 +1,12 @@
-# Claude Design Loader
+# Theme Loader
 
 A simple [Next.js](https://nextjs.org) (App Router) app that loads designs from
-**Claude Design** and renders them faithfully.
+**theme** and renders them faithfully.
 
 ## Source
 
-The designs come from the Claude Design handoff package
-`Stpatricks 3-handoff.tar.gz` (the design share URL returns a gzipped tarball).
+The designs come from the theme handoff package
+`Stpatricks 3-handoff.tar.gz` (the share URL returns a gzipped tarball).
 Its README describes a school-website prototype with several builds plus a
 seasonal variant:
 

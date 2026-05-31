@@ -1,4 +1,4 @@
-// Registry of designs loaded from Claude Design.
+// Registry of designs loaded from theme.
 //
 // The designs come from the handoff package `Stpatricks 3-handoff.tar.gz`.
 // Each is a self-contained HTML document rendered in the viewer via an <iframe>,
@@ -36,7 +36,7 @@ export const designs: Design[] = [
       "Admissions CTA — “Enrolment for 2027 is now open.”",
       "Footer (links to the Winter edition)",
     ],
-    source: "Claude Design",
+    source: "Theme",
   },
   {
     slug: "st-patricks-school-winter",
@@ -54,7 +54,7 @@ export const designs: Design[] = [
       "Admissions CTA",
       "Footer",
     ],
-    source: "Claude Design",
+    source: "Theme",
   },
 ];
 
