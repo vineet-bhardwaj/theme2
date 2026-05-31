@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>St. Patrick's School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+<script src="image-slot.js"></script>
+<style>
+  :root {
+    --cream: #f1ece1;
+    --cream-deep: #e8e1d2;
+    --card: #f8f5ee;
+    --ink: #1a1814;
+    --ink-soft: #4a463d;
+    --ink-faint: #8c8576;
+    --line: #d9d1bf;
+    --green: #1f5641;
+    --green-deep: #163d2e;
+    --accent: #c9622e;
+    --display: 'Schibsted Grotesk', sans-serif;
+    --serif: 'Newsreader', Georgia, serif;
+    --maxw: 1200px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--display);
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* subtle grain/texture via radial noise overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(120% 90% at 80% -10%, rgba(31,86,65,0.05), transparent 60%),
+      radial-gradient(100% 80% at -10% 110%, rgba(201,98,46,0.04), transparent 55%);
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
+
+  img { display: block; max-width: 100%; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ CHIP ============ */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .chip::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 26px;
+    border-radius: 100px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), background .3s, color .3s, box-shadow .3s;
+    white-space: nowrap;
+  }
+  .btn-dark { background: var(--ink); color: var(--cream); }
+  .btn-dark:hover { background: var(--green-deep); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(22,61,46,.25); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .btn .arr { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+  .btn:hover .arr { transform: translateX(4px); }
+
+  /* ============ NAV ============ */
+  header.nav {
+    position: fixed;
+    top: 18px; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 0 24px;
+    transition: top .4s ease;
+  }
+  .navbar {
+    width: 100%;
+    max-width: var(--maxw);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 11px 12px 11px 26px;
+    background: rgba(248,245,238,0.82);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(217,209,191,0.8);
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(26,24,20,0.06);
+    transition: box-shadow .4s, background .4s;
+  }
+  .nav.scrolled .navbar { box-shadow: 0 10px 40px rgba(26,24,20,0.12); background: rgba(248,245,238,0.94); }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 19px; letter-spacing: -0.01em; }
+  .brand .seal {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--green);
+    color: #f4eede;
+    display: grid; place-items: center;
+    font-family: var(--serif);
+    font-size: 17px; font-weight: 500;
+    font-style: italic;
+    flex-shrink: 0;
+  }
+  .navlinks { display: flex; gap: 30px; font-size: 15px; font-weight: 500; color: var(--ink-soft); }
+  .navlinks a { position: relative; padding: 4px 0; transition: color .25s; }
+  .navlinks a::after {
+    content:""; position:absolute; left:0; bottom:-2px; height:1.5px; width:0;
+    background: var(--green); transition: width .3s ease;
+  }
+  .navlinks a:hover { color: var(--ink); }
+  .navlinks a:hover::after { width: 100%; }
+  .nav-cta { display: flex; align-items: center; gap: 8px; }
+
+  /* winter nav graphics */
+  .navbar { position: relative; }
+  .nav-frost {
+    position: absolute; top: -8px; left: 30px; right: 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    pointer-events: none; z-index: 2;
+  }
+  .nav-frost i {
+    font-style: normal; font-size: 12px; line-height: 1;
+    color: #aacfe0;
+    text-shadow: 0 1px 3px rgba(120,170,200,0.5);
+    animation: flakeBob 3.4s ease-in-out infinite;
+  }
+  .nav-frost i:nth-child(2n) { font-size: 10px; color: #c4dcea; animation-duration: 4.2s; }
+  .nav-frost i:nth-child(3n) { font-size: 14px; animation-duration: 3.8s; }
+  .nav-frost i:nth-child(odd) { animation-delay: .6s; }
+  @keyframes flakeBob { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(2px) rotate(20deg); } }
+  .nav-season {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--green); white-space: nowrap;
+    padding: 8px 14px; border-radius: 100px;
+    background: linear-gradient(135deg, #eaf4ef, #dcecf4);
+    border: 1px solid #cfe3da;
+  }
+  .nav-season .fl { font-style: normal; color: #5fa987; animation: spinFlake 9s linear infinite; display: inline-block; }
+  @keyframes spinFlake { to { transform: rotate(360deg); } }
+  @media (max-width: 760px) { .nav-season { display: none; } }
+
+  /* ============ HERO ============ */
+  .hero { position: relative; z-index: 1; padding: 150px 0 70px; }
+  .hero-top { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: end; margin-bottom: 44px; }
+  .hero h1 {
+    font-size: clamp(46px, 6.4vw, 92px);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+  .hero h1 .serif {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 .green { color: var(--green); }
+  .hero-right { padding-bottom: 8px; }
+  .hero-right p { font-size: 18px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 26px; max-width: 38ch; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* mosaic */
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 220px 220px;
+    gap: 14px;
+  }
+  .mosaic image-slot { width: 100%; height: 100%; }
+  .m-tall { grid-row: span 2; }
+  .m-wide { grid-column: span 2; }
+  .mosaic .tagcard {
+    grid-row: span 1;
+    background: var(--green);
+    color: #f1ece1;
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .tagcard .big { font-family: var(--serif); font-style: italic; font-size: 30px; line-height: 1.05; }
+  .tagcard .sm { font-size: 13px; opacity: .8; letter-spacing: .03em; }
+
+  /* ============ MARQUEE / STATS ============ */
+  .stats { position: relative; z-index: 1; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 30px; }
+  .stats-inner { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 46px 28px; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: none; }
+  .stat .num { font-size: clamp(40px, 4.5vw, 62px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .stat .num .suffix { color: var(--green); }
+  .stat .lab { margin-top: 12px; font-size: 14px; color: var(--ink-soft); letter-spacing: .02em; }
+
+  /* ============ SECTION SHELL ============ */
+  section.block { position: relative; z-index: 1; padding: 100px 0; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 50px; }
+  .sec-head h2 { font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.025em; font-weight: 800; max-width: 16ch; }
+  .sec-head h2 .serif { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--green); }
+  .sec-head .lead { font-size: 17px; line-height: 1.55; color: var(--ink-soft); max-width: 40ch; }
+
+  /* ============ ABOUT ============ */
+  .about-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 56px; align-items: center; }
+  .about-copy .chip { margin-bottom: 22px; }
+  .about-copy h2 { font-size: clamp(32px, 3.8vw, 52px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 800; margin-bottom: 24px; }
+  .about-copy h2 .serif { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--green); }
+  .about-copy p { font-size: 17px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 18px; max-width: 46ch; }
+  .pill-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .pill-list span { font-size: 14px; font-weight: 500; padding: 9px 16px; border-radius: 100px; border: 1px solid var(--line); background: var(--card); color: var(--ink-soft); }
+  .about-art { position: relative; }
+  .about-art image-slot { width: 100%; height: 520px; }
+  .about-badge {
+    position: absolute; left: -22px; bottom: 32px;
+    background: var(--cream); border: 1px solid var(--line);
+    border-radius: 18px; padding: 18px 22px;
+    box-shadow: 0 16px 40px rgba(26,24,20,.12);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .about-badge .seal2 { width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: #f1ece1; display: grid; place-items: center; font-family: var(--serif); font-style: italic; font-size: 20px; }
+  .about-badge .t { font-size: 13px; color: var(--ink-faint); }
+  .about-badge .b { font-size: 16px; font-weight: 700; }
+
+  /* ============ PRINCIPAL ============ */
+  .principal { background: var(--green); color: #efe9da; }
+  .principal::before {
+    content: "\201C";
+    position: absolute; top: 30px; left: 4%;
+    font-family: var(--serif); font-size: 260px; line-height: 1;
+    color: rgba(241,236,225,0.08); pointer-events: none;
+  }
+  .principal .wrap { position: relative; }
+  .principal-grid { display: grid; grid-template-columns: 320px 1fr; gap: 64px; align-items: center; }
+  .principal-photo { position: relative; }
+  .principal-photo image-slot { width: 280px; height: 340px; }
+  .principal-photo .tag { margin-top: 18px; }
+  .principal-photo .tag .n { font-size: 21px; font-weight: 700; }
+  .principal-photo .tag .r { font-size: 14px; opacity: .75; margin-top: 3px; }
+  .principal-body .chip { color: #cfe3d8; }
+  .principal-body .chip::before { background: var(--accent); }
+  .quote { font-family: var(--serif); font-size: clamp(24px, 2.9vw, 38px); line-height: 1.34; font-weight: 400; letter-spacing: -0.01em; margin: 26px 0 0; }
+  .quote .em { font-style: italic; color: #fff; }
+  .quote-sig { margin-top: 34px; font-family: var(--serif); font-style: italic; font-size: 26px; opacity: .9; }
+
+  /* ============ GALLERY ============ */
+  .gallery-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 200px; gap: 14px; }
+  .gallery-grid image-slot { width: 100%; height: 100%; }
+  .g-a { grid-column: span 2; grid-row: span 2; }
+  .g-b { grid-column: span 2; }
+  .g-c { grid-column: span 2; }
+  .g-d { grid-column: span 3; }
+  .g-e { grid-column: span 3; }
+  .g-f { grid-column: span 2; }
+  .g-g { grid-column: span 2; }
+  .g-h { grid-column: span 2; }
+
+  /* ============ ADMISSIONS CTA ============ */
+  .cta-band { position: relative; z-index: 1; padding: 60px 0 110px; }
+  .cta-inner {
+    background:
+      radial-gradient(130% 120% at 50% -20%, #1f6f4d 0%, #11543a 38%, #0c3326 100%);
+    color: var(--cream);
+    border-radius: 32px; padding: 88px 64px 72px;
+    display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 40px; align-items: center;
+    position: relative; overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 30px 60px rgba(12,51,38,0.35);
+  }
+  .cta-inner::after {
+    content:""; position:absolute; right:-80px; bottom:-100px; width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(214,164,90,.35), transparent 70%);
+  }
+  #cta-snow { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .cta-inner > div { position: relative; z-index: 3; }
+  .cta-chip { margin-bottom: 18px; }
+  .cta-chip::before { background: #e7c074; box-shadow: 0 0 12px rgba(231,192,116,0.9); }
+  /* fairy lights strung across the top */
+  .lights {
+    position: absolute; top: 0; left: 0; right: 0; height: 30px; z-index: 2;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 0 38px; pointer-events: none;
+  }
+  .lights i {
+    width: 9px; height: 9px; border-radius: 50%; margin-top: 10px;
+    display: block; position: relative;
+    animation: twinkle 2.4s ease-in-out infinite;
+  }
+  .lights i::before { content:""; position:absolute; left:50%; top:-10px; width:1px; height:11px; background: rgba(255,255,255,0.22); transform: translateX(-50%); }
+  .lights i:nth-child(4n+1) { background:#f0b8a0; box-shadow:0 0 10px 2px rgba(232,140,110,0.8); animation-delay:0s; }
+  .lights i:nth-child(4n+2) { background:#e7c074; box-shadow:0 0 10px 2px rgba(231,192,116,0.85); animation-delay:.5s; }
+  .lights i:nth-child(4n+3) { background:#9bdcc0; box-shadow:0 0 10px 2px rgba(120,210,170,0.8); animation-delay:1s; }
+  .lights i:nth-child(4n+4) { background:#cfe9ff; box-shadow:0 0 10px 2px rgba(160,205,240,0.8); animation-delay:1.5s; }
+  .lights i:nth-child(odd) { margin-top: 16px; }
+  @keyframes twinkle { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+  .cta-inner h2 { font-size: clamp(34px, 4vw, 56px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 800; position: relative; }
+  .cta-inner h2 .serif { font-family: var(--serif); font-style: italic; font-weight: 500; color: #e7c074; }
+  .cta-inner p { color: rgba(241,236,225,.78); font-size: 17px; margin-top: 16px; line-height: 1.5; max-width: 44ch; position: relative; }
+  .cta-actions { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 3; }
+  .cta-actions .btn-dark { background: var(--cream); color: #11543a; }
+  .cta-actions .btn-dark:hover { background: #e7c074; color: #0c3326; }
+  .cta-actions .btn-ghost { color: var(--cream); border-color: rgba(241,236,225,.32); }
+  .cta-actions .btn-ghost:hover { border-color: var(--cream); }
+
+  /* ============ FOOTER ============ */
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--line); padding: 64px 0 40px; }
+  .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+  .foot-brand .brand { margin-bottom: 18px; }
+  .foot-brand p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; max-width: 32ch; }
+  .foot-col h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); margin-bottom: 16px; font-weight: 700; }
+  .foot-col a, .foot-col p { display: block; font-size: 15px; color: var(--ink-soft); margin-bottom: 11px; transition: color .2s; }
+  .foot-col a:hover { color: var(--green); }
+  .foot-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 54px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-faint); }
+
+  /* ============ REVEAL ANIM ============ */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; }
+  .reveal.d2 { transition-delay: .16s; }
+  .reveal.d3 { transition-delay: .24s; }
+
+  /* image-slot styling to match cream theme */
+  image-slot { --is-bg: var(--cream-deep); border-radius: 18px; overflow: hidden; }
+
+  /* ============ HERO CAROUSEL (winter) ============ */
+  .hero-carousel { position: relative; height: 100vh; min-height: 620px; width: 100%; overflow: hidden; z-index: 1; }
+  .carousel-track { position: absolute; inset: 0; }
+  .cslide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transform: scale(1.08);
+    transition: opacity 1.4s ease, transform 7s ease;
+  }
+  .cslide.is-active { opacity: 1; transform: scale(1); }
+  .carousel-scrim {
+    position: absolute; inset: 0; z-index: 2;
+    background:
+      linear-gradient(180deg, rgba(13,30,46,0.55) 0%, rgba(13,30,46,0.30) 38%, rgba(13,30,46,0.72) 100%),
+      radial-gradient(120% 90% at 50% 0%, rgba(31,86,65,0.25), transparent 60%);
+  }
+  .carousel-content { position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; }
+  .carousel-content .wrap { width: 100%; }
+  .carousel-content h1 {
+    font-size: clamp(48px, 7vw, 104px); line-height: 0.96; letter-spacing: -0.03em; font-weight: 800;
+    color: #fbfdff; max-width: 16ch; margin: 18px 0 0;
+    text-shadow: 0 4px 40px rgba(8,20,32,0.4);
+  }
+  .carousel-content h1 .serif { font-family: var(--serif); font-weight: 500; font-style: italic; color: #bfe3d4; }
+  .carousel-content p { color: rgba(243,248,252,0.88); font-size: clamp(17px,1.5vw,20px); line-height: 1.55; max-width: 46ch; margin: 24px 0 30px; text-shadow: 0 2px 20px rgba(8,20,32,0.4); }
+  .chip.light { color: #dceee6; }
+  .chip.light::before { background: #8fd4b6; box-shadow: 0 0 12px rgba(143,212,182,0.8); }
+  .btn-light { background: #fbfdff; color: var(--ink); }
+  .btn-light:hover { background: #bfe3d4; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(8,20,32,0.35); }
+  .btn-outline { background: rgba(255,255,255,0.06); color: #fbfdff; border-color: rgba(255,255,255,0.4); backdrop-filter: blur(4px); }
+  .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+
+  .carousel-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.35);
+    color: #fff; font-size: 22px; cursor: pointer;
+    backdrop-filter: blur(8px); display: grid; place-items: center;
+    transition: background .25s, transform .25s;
+  }
+  .carousel-arrow:hover { background: rgba(255,255,255,0.26); }
+  .carousel-arrow.prev { left: 28px; }
+  .carousel-arrow.next { right: 28px; }
+  .carousel-arrow:hover.prev { transform: translateY(-50%) translateX(-3px); }
+  .carousel-arrow:hover.next { transform: translateY(-50%) translateX(3px); }
+  .carousel-dots { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 6; display: flex; gap: 12px; }
+  .cdot { width: 36px; height: 4px; border-radius: 4px; border: none; background: rgba(255,255,255,0.4); cursor: pointer; transition: background .3s, width .3s; padding: 0; }
+  .cdot.is-active { background: #fff; width: 54px; }
+
+  /* ============ SNOWFLAKES (hero only) ============ */
+  #snow { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+
+  @media (max-width: 1000px) {
+    .carousel-arrow { width: 44px; height: 44px; font-size: 18px; }
+    .carousel-arrow.prev { left: 12px; }
+    .carousel-arrow.next { right: 12px; }
+  }
+
+
+  @media (max-width: 1000px) {
+    .hero-top { grid-template-columns: 1fr; gap: 28px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .principal-grid { grid-template-columns: 1fr; gap: 36px; }
+    .principal-photo image-slot { width: 100%; max-width: 360px; }
+    .cta-inner { grid-template-columns: 1fr; padding: 48px 36px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .navlinks { display: none; }
+  }
+  @media (max-width: 720px) {
+    .wrap { padding: 0 20px; }
+    .mosaic { grid-template-columns: repeat(2, 1fr); grid-template-rows: 180px 180px 180px; }
+    .m-tall { grid-row: span 2; }
+    .m-wide { grid-column: span 2; }
+    .mosaic .tagcard { grid-column: span 2; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+    .g-a,.g-b,.g-c,.g-d,.g-e,.g-f,.g-g,.g-h { grid-column: span 1; grid-row: span 1; }
+    .g-a { grid-column: span 2; grid-row: span 2; }
+    .sec-head { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .foot-grid { grid-template-columns: 1fr; }
+    .foot-bottom { flex-direction: column; gap: 12px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <nav class="navbar">
+    <span class="nav-frost" aria-hidden="true"><i>&#10052;</i><i>&#10053;</i><i>&#10054;</i><i>&#10052;</i><i>&#10053;</i><i>&#10054;</i><i>&#10052;</i><i>&#10053;</i></span>
+    <a href="#top" class="brand"><span class="seal">P</span> St. Patrick's</a>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#principal">Principal</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#admissions">Admissions</a>
+    </div>
+    <div class="nav-cta">
+      <span class="nav-season"><i class="fl">&#10052;</i> Winter Term</span>
+      <a href="#admissions" class="btn btn-dark">Apply now <span class="arr">&rarr;</span></a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO CAROUSEL -->
+  <section class="hero-carousel" id="hero">
+    <canvas id="snow"></canvas>
+    <div class="carousel-track" id="carouselTrack">
+      <div class="cslide is-active" style="background-image:url('uploads/c1.jpg')"></div>
+      <div class="cslide" style="background-image:url('uploads/c2.jpg')"></div>
+      <div class="cslide" style="background-image:url('uploads/c3.jpg')"></div>
+    </div>
+    <div class="carousel-scrim"></div>
+
+    <div class="carousel-content">
+      <div class="wrap">
+        <span class="chip light reveal">Winter Term · 2026</span>
+        <h1 class="reveal d1">A place where <span class="serif">curiosity</span> becomes <span class="serif">character.</span></h1>
+        <p class="reveal d2">St. Patrick's School has nurtured confident, kind and capable young people for over a century — through rigorous academics and a community that feels like home.</p>
+        <div class="hero-actions reveal d2">
+          <a href="#admissions" class="btn btn-light">Book a campus tour <span class="arr">&rarr;</span></a>
+          <a href="#about" class="btn btn-outline">Discover our story</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="carousel-arrow prev" id="cPrev" aria-label="Previous slide">&#8592;</button>
+    <button class="carousel-arrow next" id="cNext" aria-label="Next slide">&#8594;</button>
+    <div class="carousel-dots" id="carouselDots">
+      <button class="cdot is-active" data-i="0" aria-label="Slide 1"></button>
+      <button class="cdot" data-i="1" aria-label="Slide 2"></button>
+      <button class="cdot" data-i="2" aria-label="Slide 3"></button>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="wrap">
+      <div class="stats-inner">
+        <div class="stat reveal">
+          <div class="num"><span data-count="1912" data-plain="1">1912</span></div>
+          <div class="lab">Founded — over a century of teaching</div>
+        </div>
+        <div class="stat reveal d1">
+          <div class="num"><span data-count="980">0</span></div>
+          <div class="lab">Students from K through Year 12</div>
+        </div>
+        <div class="stat reveal d2">
+          <div class="num"><span data-count="32">0</span><span class="suffix">+</span></div>
+          <div class="lab">Academic & co-curricular programs</div>
+        </div>
+        <div class="stat reveal d3">
+          <div class="num"><span data-count="98">0</span><span class="suffix">%</span></div>
+          <div class="lab">Graduates into higher education</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-copy">
+          <span class="chip reveal">About the school</span>
+          <h2 class="reveal d1">An education built on <span class="serif">substance,</span> not show.</h2>
+          <p class="reveal d1">For more than a hundred years, St. Patrick's has balanced academic ambition with genuine care. Our classrooms are small, our standards are high, and every child is known by name.</p>
+          <p class="reveal d2">We believe character is taught as deliberately as calculus — through service, sport, the arts, and the everyday culture of a school that expects the best and brings it out.</p>
+          <div class="pill-list reveal d2">
+            <span>Small class sizes</span>
+            <span>Faith & values</span>
+            <span>STEM & humanities</span>
+            <span>Arts & athletics</span>
+            <span>Pastoral care</span>
+          </div>
+        </div>
+        <div class="about-art reveal d1">
+          <image-slot id="about-1" shape="rounded" radius="22" placeholder="Wide campus or classroom photo"></image-slot>
+          <div class="about-badge">
+            <span class="seal2">A+</span>
+            <div>
+              <div class="t">Consistently ranked</div>
+              <div class="b">Top tier results</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPAL -->
+  <section class="block principal" id="principal">
+    <div class="wrap">
+      <div class="principal-grid">
+        <div class="principal-photo reveal">
+          <image-slot id="principal-photo" shape="rounded" radius="20" src="uploads/team2.jpg" placeholder="Principal portrait"></image-slot>
+          <div class="tag">
+            <div class="n">Bro. Ronish Mathew</div>
+            <div class="r">Principal, St. Patrick's School</div>
+          </div>
+        </div>
+        <div class="principal-body">
+          <span class="chip reveal">A message from our Principal</span>
+          <p class="quote reveal d1">When a child walks through our gates, we make a quiet promise: to see them clearly, challenge them honestly, and send them out into the world <span class="em">ready — not just for exams, but for life.</span></p>
+          <div class="quote-sig reveal d2">Bro. Ronish Mathew</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="block" id="gallery">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="reveal">Life at <span class="serif">St. Patrick's.</span></h2>
+        <p class="lead reveal d1">A glimpse of the everyday — lessons, friendships, fixtures and the moments in between that make this place ours.</p>
+      </div>
+      <div class="gallery-grid reveal d1">
+        <image-slot id="g-1" class="g-a" shape="rounded" radius="18" src="uploads/c1.jpg" placeholder="Featured photo"></image-slot>
+        <image-slot id="g-2" class="g-b" shape="rounded" radius="18" placeholder="Classroom"></image-slot>
+        <image-slot id="g-3" class="g-c" shape="rounded" radius="18" src="uploads/c3.jpg" placeholder="Science lab"></image-slot>
+        <image-slot id="g-4" class="g-d" shape="rounded" radius="18" placeholder="Sports day"></image-slot>
+        <image-slot id="g-5" class="g-e" shape="rounded" radius="18" placeholder="Music / performance"></image-slot>
+        <image-slot id="g-6" class="g-f" shape="rounded" radius="18" src="uploads/c2.jpg" placeholder="Library"></image-slot>
+        <image-slot id="g-7" class="g-g" shape="rounded" radius="18" placeholder="Art room"></image-slot>
+        <image-slot id="g-8" class="g-h" shape="rounded" radius="18" placeholder="Outdoors / campus"></image-slot>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMISSIONS CTA -->
+  <section class="cta-band" id="admissions">
+    <div class="wrap">
+      <div class="cta-inner reveal">
+        <canvas id="cta-snow"></canvas>
+        <span class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <div>
+          <span class="chip light cta-chip">&#10052; Season's greetings from St. Patrick's</span>
+          <h2>Enrolment for <span class="serif">2027</span> is now open.</h2>
+          <p>Places are limited and offered on a rolling basis. Book a personal tour, meet our staff, and see what makes St. Patrick's feel like home this winter.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-dark">Start your application <span class="arr">&rarr;</span></a>
+          <a href="#" class="btn btn-ghost">Book a campus tour</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand"><span class="seal">P</span> St. Patrick's</a>
+        <p>A century-old community shaping confident, compassionate learners — from their first day to their last.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#about">About us</a>
+        <a href="#principal">Principal's message</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#admissions">Admissions</a>
+      </div>
+      <div class="foot-col">
+        <h4>Visit</h4>
+        <p>14 Abbey Lane<br>Riverdale, 4350</p>
+        <a href="#">Get directions</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="#">+1 (555) 018 2290</a>
+        <a href="#">hello@stpatricks.edu</a>
+        <a href="#">Office: Mon–Fri, 8–4</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 St. Patrick's School. All rights reserved.</span>
+      <span><a href="St. Patrick's School.html">Standard front page &rarr;</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav shadow on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Count-up stats
+  function animateCount(el) {
+    const target = +el.dataset.count;
+    const plain = el.dataset.plain === '1'; // no thousands formatting (years)
+    const dur = 1500;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(target * eased);
+      el.textContent = plain ? val : val.toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = plain ? target : target.toLocaleString();
+    }
+    requestAnimationFrame(tick);
+  }
+  const statIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateCount(e.target); statIO.unobserve(e.target); }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(el => statIO.observe(el));
+
+  // ===== HERO CAROUSEL =====
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.cslide'));
+    const dots = Array.from(document.querySelectorAll('.cdot'));
+    let i = 0, timer;
+    function go(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+    }
+    function next() { go(i + 1); }
+    function prev() { go(i - 1); }
+    function restart() { clearInterval(timer); timer = setInterval(next, 5500); }
+    document.getElementById('cNext').addEventListener('click', () => { next(); restart(); });
+    document.getElementById('cPrev').addEventListener('click', () => { prev(); restart(); });
+    dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); restart(); }));
+    restart();
+  })();
+
+  // ===== SNOWFLAKES (reusable, scoped to a host) =====
+  function createSnow(canvas, host, opts) {
+    opts = opts || {};
+    const ctx = canvas.getContext('2d');
+    let w, h, flakes;
+    function size() {
+      w = canvas.width = host.clientWidth;
+      h = canvas.height = host.clientHeight;
+    }
+    function makeFlakes() {
+      const count = Math.min(opts.max || 90, Math.floor(w / (opts.spacing || 16)));
+      flakes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.6 + 0.8,
+        sp: Math.random() * 0.8 + 0.35,
+        drift: Math.random() * 0.7 - 0.35,
+        sway: Math.random() * Math.PI * 2,
+        o: Math.random() * 0.5 + 0.35
+      }));
+    }
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (const f of flakes) {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + f.o + ')';
+        ctx.shadowColor = 'rgba(220,238,250,0.8)';
+        ctx.shadowBlur = 4;
+        ctx.fill();
+        f.sway += 0.01;
+        f.y += f.sp;
+        f.x += f.drift + Math.sin(f.sway) * 0.4;
+        if (f.y > h + 6) { f.y = -6; f.x = Math.random() * w; }
+        if (f.x > w + 6) f.x = -6;
+        if (f.x < -6) f.x = w + 6;
+      }
+      requestAnimationFrame(draw);
+    }
+    size(); makeFlakes(); draw();
+    window.addEventListener('resize', () => { size(); makeFlakes(); });
+  }
+
+  createSnow(document.getElementById('snow'), document.querySelector('.hero-carousel'), { max: 90, spacing: 16 });
+  const ctaSnow = document.getElementById('cta-snow');
+  if (ctaSnow) createSnow(ctaSnow, document.querySelector('.cta-inner'), { max: 55, spacing: 18 });
+</script>
+
+</body>
+</html>
