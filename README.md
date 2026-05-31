@@ -53,6 +53,29 @@ The seasonal "Winter" edition of the same layout — the second of the two desig
 in the handoff. It references `./uploads/*.jpg` and `./image-slot.js`, which are
 shipped alongside it under `public/designs/`.
 
+### Heronwood Academy — `/designs/heronwood-academy`
+
+A third design, from a separate handoff (`stpatricks4`): an editorial
+"broadsheet" school landing page on a clean white palette (Newsreader serif +
+Archivo Expanded) with sky-blue as the signature accent. Hero — _"Where
+curiosity becomes character."_ — a riverside college-prep school (est. 1898).
+Sections:
+
+- Top strip — _"Ad Lucem · Founded 1898"_
+- Sticky nav with a typographic crest (monogram)
+- Hero with a rotating wax-seal medallion and a photo slot
+- Scrolling values marquee — _Inquiry · Stewardship · Craft …_
+- Stats band — _1898 · 14+ advanced courses · 22 programs · 9:1 class size_
+- Academics index — _"A curriculum of consequence."_ (hover to expand)
+- Mission pull-quote — Dr. Eleanor Vance, Head of School
+- Admissions CTA — _"Begin a Heronwood education."_
+- Footer (motto _"Ad Lucem — toward the light."_)
+
+It loads `./image-slot.js` and `./tweaks-panel.jsx` (the live Tweaks panel:
+color lead, accent, dark-hero toggle, headline font, hero layout), both shipped
+under `public/designs/`. The hero and Head-of-School photos that the designer
+dropped in are inlined as `src` data URLs so they render without the editor host.
+
 ## Adding another design
 
 The app is built to host multiple designs. To add another one:

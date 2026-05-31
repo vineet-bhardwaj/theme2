@@ -56,6 +56,25 @@ export const designs: Design[] = [
     ],
     source: "Theme",
   },
+  {
+    slug: "heronwood-academy",
+    title: "Heronwood Academy",
+    description:
+      "Editorial “broadsheet” school landing page on a clean white palette (Newsreader serif + Archivo Expanded), with sky-blue as the signature accent. Hero reads “Where curiosity becomes character.” — a riverside, college-preparatory school (est. 1898) with a rotating wax-seal medallion, a scrolling values marquee, an index-style academics list, and a dark “Apply” close. Includes a live Tweaks panel (color lead, accent, dark hero, headline font, hero layout).",
+    file: "/designs/heronwood-academy.html",
+    sections: [
+      "Top strip — “Ad Lucem · Founded 1898”",
+      "Sticky nav with a typographic crest",
+      "Hero — “Where curiosity becomes character.” + wax-seal medallion",
+      "Values marquee (Inquiry · Stewardship · Craft …)",
+      "Stats band (1898 · 14+ courses · 22 programs · 9:1)",
+      "Academics index — “A curriculum of consequence.”",
+      "Mission — Dr. Eleanor Vance, Head of School",
+      "Admissions CTA — “Begin a Heronwood education.”",
+      "Footer (Ad Lucem — toward the light.)",
+    ],
+    source: "Theme",
+  },
 ];
 
 export function getDesign(slug: string): Design | undefined {
