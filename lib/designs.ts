@@ -80,7 +80,7 @@ export const designs: Design[] = [
     title: "St. Patrick's Academy, Meerut",
     description:
       "Final design for client feedback — a motion-forward navigation system + landing page for St. Patrick's Academy in the “Academic Excellence & Prestige” language (Royal Navy + Academic Gold, Playfair Display + Plus Jakarta Sans). A 0→100% loader splash with rotating taglines hands off to a scroll-transform header (transparent over the navy hero, frosting to solid white on scroll) with desktop mega-menus, a mobile drawer, and an announcement ticker. Sections: Ken-Burns hero, Welcome cards, About Us with an animated crest medallion + video glimpse, an ICSE 2025 high-scorers carousel, Our Facilities, and the “For God and Country” motto + Principal's message.",
-    file: "/designs/saint-patricks-academy/Navigation.dc.html",
+    file: "/designs/saint-patricks-academy/Navigation.dc.html?v=noanim",
     sections: [
       "Loader splash — crest + rotating taglines, 0→100%",
       "Scroll-transform header (mega-menus + ticker + utility bar)",

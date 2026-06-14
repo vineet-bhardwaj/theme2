@@ -136,9 +136,9 @@
           <a href="{{ item.href }}" onMouseEnter="{{ item.onEnter }}" style="position: relative; display: inline-flex; align-items: center; gap: 6px; height: 76px; padding: 0 16px; font-size: 14.5px; font-weight: 600; color: {{ item.color }}; transition: color .25s ease;" style-hover="{ color: 'hsl(45,90%,50%)' }">
             {{ item.label }}
             <sc-if value="{{ item.hasMega }}" hint-placeholder-val="{{ false }}">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }}; transition: transform .3s ease;"><path d="m6 9 6 6 6-6"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }};"><path d="m6 9 6 6 6-6"/></svg>
             </sc-if>
-            <span style="position: absolute; left: 16px; right: 16px; bottom: 20px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px; transform: scaleX({{ item.underline }}); transform-origin: left; transition: transform .3s cubic-bezier(.4,0,.2,1);"></span>
+            <span style="position: absolute; left: 16px; right: 16px; bottom: 20px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px; transform: scaleX({{ item.underline }}); transform-origin: left;"></span>
           </a>
         </sc-for>
       </nav>
