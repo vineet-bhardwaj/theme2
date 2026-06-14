@@ -75,6 +75,26 @@ export const designs: Design[] = [
     ],
     source: "Theme",
   },
+  {
+    slug: "saint-patricks-academy",
+    title: "St. Patrick's Academy, Meerut",
+    description:
+      "Final design for client feedback — a motion-forward navigation system + landing page for St. Patrick's Academy in the “Academic Excellence & Prestige” language (Royal Navy + Academic Gold, Playfair Display + Plus Jakarta Sans). A 0→100% loader splash with rotating taglines hands off to a scroll-transform header (transparent over the navy hero, frosting to solid white on scroll) with desktop mega-menus, a mobile drawer, and an announcement ticker. Sections: Ken-Burns hero, Welcome cards, About Us with an animated crest medallion + video glimpse, an ICSE 2025 high-scorers carousel, Our Facilities, and the “For God and Country” motto + Principal's message.",
+    file: "/designs/saint-patricks-academy/Navigation.dc.html",
+    sections: [
+      "Loader splash — crest + rotating taglines, 0→100%",
+      "Scroll-transform header (mega-menus + ticker + utility bar)",
+      "Mobile drawer with accordion nav",
+      "Hero — “Where tradition meets tomorrow.” + Ken-Burns photos",
+      "Welcome — “An education that shapes the whole child” (3 cards)",
+      "About Us — animated crest medallion + video glimpse",
+      "ICSE 2025 high scorers carousel",
+      "Our Facilities — floating image cards",
+      "Our Motto — “For God and Country” + Principal's message",
+      "Footer (crest + © St. Patrick's Academy)",
+    ],
+    source: "Theme",
+  },
 ];
 
 export function getDesign(slug: string): Design | undefined {

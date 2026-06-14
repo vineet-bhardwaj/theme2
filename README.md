@@ -76,6 +76,33 @@ color lead, accent, dark-hero toggle, headline font, hero layout), both shipped
 under `public/designs/`. The hero and Head-of-School photos that the designer
 dropped in are inlined as `src` data URLs so they render without the editor host.
 
+### St. Patrick's Academy, Meerut — `/designs/saint-patricks-academy`
+
+The **final design for client feedback**, from the `saint-patricks` handoff. A
+motion-forward navigation system + landing page in the "Academic Excellence &
+Prestige" language: **Royal Navy + Academic Gold**, **Playfair Display + Plus
+Jakarta Sans**. Hero — _"Where tradition meets tomorrow."_ — a sixty-year-old
+school (estd 1965) with a Ken-Burns photo backdrop. Sections:
+
+- Loader splash — spinning gold ring + crest, rotating taglines, 0 → 100%
+- Scroll-transform header — transparent over the navy hero, frosting to solid
+  white on scroll; desktop mega-menus, announcement ticker, utility bar
+- Mobile drawer with accordion navigation (below 1080px)
+- Hero — headline, stat strip, dual CTAs, bouncing scroll cue
+- Welcome — _"An education that shapes the whole child"_ (3 cards)
+- About Us — animated crest medallion (rotating motto) + video glimpse card
+- ICSE 2025 high scorers — achievers carousel with photo drop-slots
+- Our Facilities — floating image cards
+- Our Motto — _"For God and Country"_ + the Principal's message
+- Footer (crest + © St. Patrick's Academy)
+
+Unlike the other designs, this is a Claude Design `.dc.html` document: it ships
+with its own runtime (`support.js`, which loads React from a CDN and renders the
+`<x-dc>` template) and the `<image-slot>` component (`image-slot.js`), so it's
+served from its own folder with its relative assets intact:
+[`public/designs/saint-patricks-academy/`](public/designs/saint-patricks-academy/).
+All copy, stats, names and photos are placeholders pending real content.
+
 ## Adding another design
 
 The app is built to host multiple designs. To add another one:
