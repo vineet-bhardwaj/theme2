@@ -17,12 +17,9 @@
   #dc-root { height: 100vh !important; overflow-y: auto !important; overflow-x: hidden; }
   body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: hsl(220,80%,25%); -webkit-font-smoothing: antialiased; background: #fff; }
   a { text-decoration: none; color: inherit; }
-  @keyframes spaFadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-  @keyframes spaMegaIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes spaItemIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @keyframes spaDrawerIn { from { transform: translateX(108%); } to { transform: translateX(0); } }
   @keyframes spaFadeBg { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes spaCue { 0% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(9px); opacity: 1; } 100% { transform: translateY(0); opacity: 0.3; } }
   @keyframes spaArrow { 0%,100% { transform: translate(-50%, 0); opacity: 0.5; } 50% { transform: translate(-50%, 10px); opacity: 1; } }
   @keyframes spaGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.12); } }
   @keyframes spaTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -35,7 +32,7 @@
   @keyframes spaLoaderRing { to { transform: rotate(360deg); } }
   [data-carousel-track]::-webkit-scrollbar { display: none; }
   @media (prefers-reduced-motion: reduce) {
-    [style*="spaFadeUp"], [style*="spaItemIn"], [style*="spaMegaIn"], [style*="spaDrawerIn"] { animation: none !important; opacity: 1 !important; transform: none !important; }
+    [style*="spaItemIn"], [style*="spaDrawerIn"] { animation: none !important; opacity: 1 !important; transform: none !important; }
   }
 </style>
 <script src="image-slot.js"></script>
@@ -161,9 +158,8 @@
       </button>
     </div>
 
-    <!-- mega menu panel -->
-    <sc-if value="{{ megaOpen }}" hint-placeholder-val="{{ false }}">
-      <div style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: saturate(180%) blur(14px); border-top: 1px solid hsl(212,32%,91%); box-shadow: 0 30px 60px -24px rgba(15,28,70,0.32); animation: spaMegaIn .12s linear both;">
+    <!-- mega menu panel (always mounted; fades in/out via opacity + visibility) -->
+      <div style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid hsl(212,32%,91%); box-shadow: 0 30px 60px -24px rgba(15,28,70,0.32); opacity: {{ megaOpacity }}; visibility: {{ megaVisibility }}; pointer-events: {{ megaPointer }}; transition: {{ megaTransition }}; will-change: opacity; transform: translateZ(0);">
         <div style="max-width: 1240px; margin: 0 auto; padding: 38px 28px 42px; display: flex; gap: 56px; align-items: flex-start;">
           <div style="display: flex; gap: 60px; flex: 1; flex-wrap: wrap;">
             <sc-for list="{{ megaColumns }}" as="col" hint-placeholder-count="2">
@@ -192,7 +188,6 @@
           </sc-if>
         </div>
       </div>
-    </sc-if>
   </header>
 
   <!-- ============ MOBILE DRAWER ============ -->
@@ -595,6 +590,7 @@ class Component extends DCLogic {
   state = {
     scrolled: false,
     activeMenu: null,
+    menuVisible: false,
     mobileOpen: false,
     mobileExpanded: null,
     isMobile: (typeof window !== 'undefined' ? window.innerWidth < 1080 : false),
@@ -769,6 +765,31 @@ class Component extends DCLogic {
     clearInterval(this._progTimer);
     clearInterval(this._tagTimer);
     clearTimeout(this._introFallback);
+    clearTimeout(this._openTimer);
+    clearTimeout(this._closeTimer);
+  }
+
+  // Mega-menu open/close with hover intent + a symmetric fade. The panel
+  // stays mounted; we toggle visibility and keep the active content during
+  // the fade-out (via _closeTimer) so it never pops empty mid-transition.
+  openMenu(k) {
+    if (this.state.isMobile) return;
+    clearTimeout(this._closeTimer);
+    if (this.state.activeMenu === k && this.state.menuVisible) return;
+    clearTimeout(this._openTimer);
+    this._openTimer = setTimeout(() => {
+      this.setState({ activeMenu: k, menuVisible: true });
+    }, 80);
+  }
+
+  closeMenu() {
+    clearTimeout(this._openTimer);
+    if (!this.state.menuVisible && !this.state.activeMenu) return;
+    this.setState({ menuVisible: false });
+    clearTimeout(this._closeTimer);
+    this._closeTimer = setTimeout(() => {
+      this.setState({ activeMenu: null });
+    }, 220);
   }
 
   renderVals() {
@@ -776,7 +797,7 @@ class Component extends DCLogic {
     const navyDeep = 'hsl(220,74%,14%)';
     const gold = 'hsl(45,90%,50%)';
     const slate = 'hsl(220,16%,42%)';
-    const { scrolled, activeMenu, mobileOpen, mobileExpanded, isMobile, loaderProgress, taglineIndex, loaderFading, loaderGone } = this.state;
+    const { scrolled, activeMenu, menuVisible, mobileOpen, mobileExpanded, isMobile, loaderProgress, taglineIndex, loaderFading, loaderGone } = this.state;
     const taglines = this._taglines.map((t, i) => ({ text: t, opacity: i === taglineIndex ? 1 : 0 }));
 
     const DATA = [
@@ -828,23 +849,23 @@ class Component extends DCLogic {
       { key: 'contact', label: 'Contact' },
     ];
 
-    const setMenu = (k) => { if (!isMobile) this.setState({ activeMenu: k }); };
-    const clearMenu = () => { if (this.state.activeMenu) this.setState({ activeMenu: null }); };
+    const openMenu = (k) => this.openMenu(k);
+    const closeMenu = () => this.closeMenu();
 
     const active = DATA.find((n) => n.key === activeMenu && n.columns);
-    const megaOpen = !!active && !isMobile;
-    const solid = scrolled || megaOpen;
+    const megaShown = !!active && menuVisible && !isMobile;
+    const solid = scrolled || megaShown;
 
     const navColor = solid ? navy : '#ffffff';
 
     const navItems = DATA.map((n) => {
-      const open = activeMenu === n.key && !!n.columns;
+      const open = activeMenu === n.key && menuVisible && !!n.columns;
       return {
         key: n.key, label: n.label, href: '#', hasMega: !!n.columns, open,
         color: open ? gold : navColor,
         underline: open ? 1 : 0,
         chevron: open ? 'rotate(180deg)' : 'rotate(0deg)',
-        onEnter: n.columns ? () => setMenu(n.key) : () => clearMenu(),
+        onEnter: n.columns ? () => openMenu(n.key) : () => closeMenu(),
       };
     });
 
@@ -881,7 +902,11 @@ class Component extends DCLogic {
     });
 
     return {
-      navItems, megaOpen, megaColumns, megaFeatured,
+      navItems, megaColumns, megaFeatured,
+      megaOpacity: megaShown ? 1 : 0,
+      megaVisibility: megaShown ? 'visible' : 'hidden',
+      megaPointer: megaShown ? 'auto' : 'none',
+      megaTransition: megaShown ? 'opacity .12s linear, visibility 0s' : 'opacity .12s linear, visibility 0s .12s',
       headerBg: solid ? 'rgba(255,255,255,0.94)' : 'transparent',
       headerBlur: solid ? 'saturate(180%) blur(14px)' : 'blur(0px)',
       headerShadow: solid ? '0 12px 40px -14px rgba(15,28,70,0.24)' : '0 0 0 rgba(0,0,0,0)',
@@ -911,7 +936,7 @@ class Component extends DCLogic {
       scrollNext: () => { const el = this.trackRef.current; if (el) el.scrollBy({ left: el.clientWidth * 0.8, behavior: 'smooth' }); },
       desktopDisplay: isMobile ? 'none' : 'flex',
       hamburgerDisplay: isMobile ? 'flex' : 'none',
-      clearMenu,
+      clearMenu: closeMenu,
       mobileItems, mobileOpen,
       line1: mobileOpen ? 'translateY(7.5px) rotate(45deg)' : 'none',
       line2Opacity: mobileOpen ? 0 : 1,
