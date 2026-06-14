@@ -41,6 +41,7 @@ export default function HomePage() {
                     title={`${d.title} preview`}
                     tabIndex={-1}
                     aria-hidden="true"
+                    loading="lazy"
                   />
                 </Link>
                 <div className="card-body">
