@@ -772,24 +772,18 @@ class Component extends DCLogic {
   // Mega-menu open/close with hover intent + a symmetric fade. The panel
   // stays mounted; we toggle visibility and keep the active content during
   // the fade-out (via _closeTimer) so it never pops empty mid-transition.
+  // DIAGNOSTIC: animation removed — menu opens/closes instantly (no fade,
+  // no hover-intent delay) to isolate whether the CSS animation or the
+  // React re-render is what makes the dropdown feel clunky.
   openMenu(k) {
     if (this.state.isMobile) return;
-    clearTimeout(this._closeTimer);
     if (this.state.activeMenu === k && this.state.menuVisible) return;
-    clearTimeout(this._openTimer);
-    this._openTimer = setTimeout(() => {
-      this.setState({ activeMenu: k, menuVisible: true });
-    }, 80);
+    this.setState({ activeMenu: k, menuVisible: true });
   }
 
   closeMenu() {
-    clearTimeout(this._openTimer);
     if (!this.state.menuVisible && !this.state.activeMenu) return;
-    this.setState({ menuVisible: false });
-    clearTimeout(this._closeTimer);
-    this._closeTimer = setTimeout(() => {
-      this.setState({ activeMenu: null });
-    }, 220);
+    this.setState({ menuVisible: false, activeMenu: null });
   }
 
   renderVals() {
@@ -906,7 +900,7 @@ class Component extends DCLogic {
       megaOpacity: megaShown ? 1 : 0,
       megaVisibility: megaShown ? 'visible' : 'hidden',
       megaPointer: megaShown ? 'auto' : 'none',
-      megaTransition: megaShown ? 'opacity .12s linear, visibility 0s' : 'opacity .12s linear, visibility 0s .12s',
+      megaTransition: 'none',
       headerBg: solid ? 'rgba(255,255,255,0.94)' : 'transparent',
       headerBlur: solid ? 'saturate(180%) blur(14px)' : 'blur(0px)',
       headerShadow: solid ? '0 12px 40px -14px rgba(15,28,70,0.24)' : '0 0 0 rgba(0,0,0,0)',
