@@ -17,9 +17,12 @@
   #dc-root { height: 100vh !important; overflow-y: auto !important; overflow-x: hidden; }
   body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: hsl(220,80%,25%); -webkit-font-smoothing: antialiased; background: #fff; }
   a { text-decoration: none; color: inherit; }
+  @keyframes spaFadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes spaMegaIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes spaItemIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @keyframes spaDrawerIn { from { transform: translateX(108%); } to { transform: translateX(0); } }
   @keyframes spaFadeBg { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes spaCue { 0% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(9px); opacity: 1; } 100% { transform: translateY(0); opacity: 0.3; } }
   @keyframes spaArrow { 0%,100% { transform: translate(-50%, 0); opacity: 0.5; } 50% { transform: translate(-50%, 10px); opacity: 1; } }
   @keyframes spaGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.12); } }
   @keyframes spaTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -29,10 +32,11 @@
   @keyframes spaKen2 { 0%,100% { transform: scale(1.0); } 50% { transform: scale(1.08); } }
   @keyframes spaFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
   @keyframes spaLoaderFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes spaCrestFloat { 0%,100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%,calc(-50% - 8px)); } }
   @keyframes spaLoaderRing { to { transform: rotate(360deg); } }
   [data-carousel-track]::-webkit-scrollbar { display: none; }
   @media (prefers-reduced-motion: reduce) {
-    [style*="spaItemIn"], [style*="spaDrawerIn"] { animation: none !important; opacity: 1 !important; transform: none !important; }
+    [style*="spaFadeUp"], [style*="spaItemIn"], [style*="spaMegaIn"], [style*="spaDrawerIn"] { animation: none !important; opacity: 1 !important; transform: none !important; }
   }
 </style>
 <script src="image-slot.js"></script>
@@ -123,10 +127,10 @@
 
       <!-- brand -->
       <a href="#" style="display: flex; align-items: center; gap: 14px; transform: {{ brandScale }}; transform-origin: left center; transition: transform .4s cubic-bezier(.4,0,.2,1);">
-        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 54px; width: auto; display: block; flex-shrink: 0; filter: {{ crestShadow }}; transition: filter .45s ease;">
+        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 64px; width: auto; display: block; flex-shrink: 0; filter: {{ crestShadow }}; transition: filter .45s ease;">
         <span style="display: flex; flex-direction: column; line-height: 1; color: {{ brandColor }}; transition: color .45s ease;">
-          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 21px; letter-spacing: 0.01em; white-space: nowrap;">St. Patrick's Academy</span>
-          <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 5px; opacity: .72;">Meerut &middot; Estd 1965</span>
+          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 24px; letter-spacing: 0.01em; white-space: nowrap;">St. Patrick's Academy</span>
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 5px; opacity: .72;">Meerut &middot; Estd 1965</span>
         </span>
       </a>
 
@@ -136,9 +140,9 @@
           <a href="{{ item.href }}" onMouseEnter="{{ item.onEnter }}" style="position: relative; display: inline-flex; align-items: center; gap: 6px; height: 76px; padding: 0 16px; font-size: 14.5px; font-weight: 600; color: {{ item.color }}; transition: color .25s ease;" style-hover="{ color: 'hsl(45,90%,50%)' }">
             {{ item.label }}
             <sc-if value="{{ item.hasMega }}" hint-placeholder-val="{{ false }}">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }};"><path d="m6 9 6 6 6-6"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }}; transition: transform .3s ease;"><path d="m6 9 6 6 6-6"/></svg>
             </sc-if>
-            <span style="position: absolute; left: 16px; right: 16px; bottom: 20px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px; transform: scaleX({{ item.underline }}); transform-origin: left;"></span>
+            <span style="position: absolute; left: 16px; right: 16px; bottom: 20px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px; transform: scaleX({{ item.underline }}); transform-origin: left; transition: transform .3s cubic-bezier(.4,0,.2,1);"></span>
           </a>
         </sc-for>
       </nav>
@@ -158,8 +162,9 @@
       </button>
     </div>
 
-    <!-- mega menu panel (always mounted; fades in/out via opacity + visibility) -->
-      <div style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid hsl(212,32%,91%); box-shadow: 0 30px 60px -24px rgba(15,28,70,0.32); opacity: {{ megaOpacity }}; visibility: {{ megaVisibility }}; pointer-events: {{ megaPointer }}; transition: {{ megaTransition }}; will-change: opacity; transform: translateZ(0);">
+    <!-- mega menu panel -->
+    <sc-if value="{{ megaOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: saturate(180%) blur(14px); border-top: 1px solid hsl(212,32%,91%); box-shadow: 0 30px 60px -24px rgba(15,28,70,0.32); animation: spaMegaIn .12s linear both;">
         <div style="max-width: 1240px; margin: 0 auto; padding: 38px 28px 42px; display: flex; gap: 56px; align-items: flex-start;">
           <div style="display: flex; gap: 60px; flex: 1; flex-wrap: wrap;">
             <sc-for list="{{ megaColumns }}" as="col" hint-placeholder-count="2">
@@ -188,6 +193,7 @@
           </sc-if>
         </div>
       </div>
+    </sc-if>
   </header>
 
   <!-- ============ MOBILE DRAWER ============ -->
@@ -268,13 +274,6 @@
           </a>
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 64px); margin-top: 64px;" data-hero-anim="1">
-          <div><div style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: hsl(45,92%,62%);">60<span style="font-size: 26px;">+</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 4px;">Years of Excellence</div></div>
-          <div style="width: 1px; background: rgba(255,255,255,0.16);"></div>
-          <div><div style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: hsl(45,92%,62%);">2,400</div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 4px;">Students &amp; Growing</div></div>
-          <div style="width: 1px; background: rgba(255,255,255,0.16);"></div>
-          <div><div style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: hsl(45,92%,62%);">98.7<span style="font-size: 26px;">%</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 4px;">Board First Division</div></div>
-        </div>
       </div>
     </div>
 
@@ -283,8 +282,21 @@
     </div>
   </section>
 
+  <!-- ============ STATS COUNTER ============ -->
+  <section style="background: hsl(221,80%,12%); color: #fff; padding: clamp(48px, 6vw, 72px) 0;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(28px, 5vw, 64px);">
+        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">60<span style="font-size: 28px;">+</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Years of Excellence</div></div>
+        <div style="width: 1px; align-self: stretch; background: rgba(255,255,255,0.16);"></div>
+        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">2,400</div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Students &amp; Growing</div></div>
+        <div style="width: 1px; align-self: stretch; background: rgba(255,255,255,0.16);"></div>
+        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">98.7<span style="font-size: 28px;">%</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Board First Division</div></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ WELCOME ============ -->
-  <section style="background: hsl(210,40%,98%); padding: clamp(72px, 9vw, 120px) 0; color: hsl(220,80%,25%); content-visibility: auto; contain-intrinsic-size: auto 800px;">
+  <section style="background: hsl(210,40%,98%); padding: clamp(72px, 9vw, 120px) 0; color: hsl(220,80%,25%);">
     <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
       <div style="max-width: 720px; margin: 0 auto; text-align: center;">
         <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: hsl(45,78%,42%);">Welcome to St. Patrick's</span>
@@ -307,7 +319,7 @@
   </section>
 
   <!-- ============ ABOUT US ============ -->
-  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: clamp(72px, 9vw, 118px) 0; overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 800px;">
+  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: clamp(72px, 9vw, 118px) 0; overflow: hidden;">
     <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0); background-size: 26px 26px; opacity: 0.5;"></div>
     <div style="position: absolute; top: -140px; left: -120px; width: 440px; height: 440px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.16), transparent 65%); animation: spaGlow 10s ease-in-out infinite;"></div>
 
@@ -323,7 +335,7 @@
             </svg>
             <div style="position: absolute; inset: 26px; border-radius: 50%; border: 1.5px dashed rgba(241,196,48,0.4); animation: spaSpinRev 32s linear infinite;"></div>
             <div style="position: absolute; inset: 30px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.2), transparent 70%);"></div>
-            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: auto; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.45)); animation: spaLoaderFloat 4.2s ease-in-out infinite;">
+            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: auto; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.45)); animation: spaCrestFloat 4.2s ease-in-out infinite;">
           </div>
           <div style="min-width: 200px;">
             <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: hsl(45,92%,66%);">About Us</span>
@@ -376,7 +388,7 @@
   </section>
 
   <!-- ============ ICSE 2025 HIGH SCORERS ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 900px;">
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
     <div style="position: absolute; top: -120px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.14), transparent 68%);"></div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -394,13 +406,6 @@
         <div ref="{{ trackRef }}" data-carousel-track="1" style="display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding: 26px 4px 30px; scroll-padding-left: 4px;">
           <sc-for list="{{ achievers }}" as="a" hint-placeholder-count="6">
             <div style="position: relative; flex: 0 0 auto; width: clamp(238px, 76vw, 268px); scroll-snap-align: start; background: #fff; border: 1px solid hsl(44,40%,88%); border-radius: 22px; padding: 36px 24px 28px; text-align: center; box-shadow: 0 22px 44px -30px rgba(15,28,70,0.32); transition: transform .3s ease, box-shadow .3s ease;" style-hover="transform: translateY(-6px); box-shadow: 0 34px 56px -28px rgba(15,28,70,0.4);">
-              <sc-if value="{{ a.isTopper }}" hint-placeholder-val="{{ false }}">
-                <div style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: hsl(45,90%,52%); color: hsl(220,74%,15%); font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; box-shadow: 0 12px 24px -10px rgba(196,150,20,0.8);">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.8 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
-                  School Topper
-                </div>
-              </sc-if>
-              <div style="position: absolute; top: 16px; left: 18px; width: 30px; height: 30px; border-radius: 50%; background: hsl(220,80%,20%); color: #fff; display: grid; place-items: center; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 14px;">{{ a.rank }}</div>
               <div style="position: relative; width: 120px; height: 120px; margin: 6px auto 0;">
                 <div style="position: absolute; inset: -5px; border-radius: 50%; background: conic-gradient(from 0deg, hsl(45,92%,58%), hsl(45,80%,46%), hsl(45,92%,58%));"></div>
                 <div style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: hsl(212,30%,90%);">
@@ -435,7 +440,7 @@
   </section>
 
   <!-- ============ OUR FACILITIES ============ -->
-  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 118px) 0; overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 800px;">
+  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 118px) 0; overflow: hidden;">
     <div style="position: absolute; top: -120px; right: -100px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.1), transparent 68%);"></div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -514,7 +519,7 @@
   </section>
 
   <!-- ============ OUR MOTTO / PRINCIPAL ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 1000px;">
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(300px, 40vw, 620px); line-height: 0.8; color: hsl(45,60%,46%); opacity: 0.04; pointer-events: none; user-select: none;">&#10039;</div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -590,7 +595,6 @@ class Component extends DCLogic {
   state = {
     scrolled: false,
     activeMenu: null,
-    menuVisible: false,
     mobileOpen: false,
     mobileExpanded: null,
     isMobile: (typeof window !== 'undefined' ? window.innerWidth < 1080 : false),
@@ -765,25 +769,6 @@ class Component extends DCLogic {
     clearInterval(this._progTimer);
     clearInterval(this._tagTimer);
     clearTimeout(this._introFallback);
-    clearTimeout(this._openTimer);
-    clearTimeout(this._closeTimer);
-  }
-
-  // Mega-menu open/close with hover intent + a symmetric fade. The panel
-  // stays mounted; we toggle visibility and keep the active content during
-  // the fade-out (via _closeTimer) so it never pops empty mid-transition.
-  // DIAGNOSTIC: animation removed — menu opens/closes instantly (no fade,
-  // no hover-intent delay) to isolate whether the CSS animation or the
-  // React re-render is what makes the dropdown feel clunky.
-  openMenu(k) {
-    if (this.state.isMobile) return;
-    if (this.state.activeMenu === k && this.state.menuVisible) return;
-    this.setState({ activeMenu: k, menuVisible: true });
-  }
-
-  closeMenu() {
-    if (!this.state.menuVisible && !this.state.activeMenu) return;
-    this.setState({ menuVisible: false, activeMenu: null });
   }
 
   renderVals() {
@@ -791,7 +776,7 @@ class Component extends DCLogic {
     const navyDeep = 'hsl(220,74%,14%)';
     const gold = 'hsl(45,90%,50%)';
     const slate = 'hsl(220,16%,42%)';
-    const { scrolled, activeMenu, menuVisible, mobileOpen, mobileExpanded, isMobile, loaderProgress, taglineIndex, loaderFading, loaderGone } = this.state;
+    const { scrolled, activeMenu, mobileOpen, mobileExpanded, isMobile, loaderProgress, taglineIndex, loaderFading, loaderGone } = this.state;
     const taglines = this._taglines.map((t, i) => ({ text: t, opacity: i === taglineIndex ? 1 : 0 }));
 
     const DATA = [
@@ -843,23 +828,23 @@ class Component extends DCLogic {
       { key: 'contact', label: 'Contact' },
     ];
 
-    const openMenu = (k) => this.openMenu(k);
-    const closeMenu = () => this.closeMenu();
+    const setMenu = (k) => { if (!isMobile) this.setState({ activeMenu: k }); };
+    const clearMenu = () => { if (this.state.activeMenu) this.setState({ activeMenu: null }); };
 
     const active = DATA.find((n) => n.key === activeMenu && n.columns);
-    const megaShown = !!active && menuVisible && !isMobile;
-    const solid = scrolled || megaShown;
+    const megaOpen = !!active && !isMobile;
+    const solid = scrolled || megaOpen;
 
     const navColor = solid ? navy : '#ffffff';
 
     const navItems = DATA.map((n) => {
-      const open = activeMenu === n.key && menuVisible && !!n.columns;
+      const open = activeMenu === n.key && !!n.columns;
       return {
         key: n.key, label: n.label, href: '#', hasMega: !!n.columns, open,
         color: open ? gold : navColor,
         underline: open ? 1 : 0,
         chevron: open ? 'rotate(180deg)' : 'rotate(0deg)',
-        onEnter: n.columns ? () => openMenu(n.key) : () => closeMenu(),
+        onEnter: n.columns ? () => setMenu(n.key) : () => clearMenu(),
       };
     });
 
@@ -896,11 +881,7 @@ class Component extends DCLogic {
     });
 
     return {
-      navItems, megaColumns, megaFeatured,
-      megaOpacity: megaShown ? 1 : 0,
-      megaVisibility: megaShown ? 'visible' : 'hidden',
-      megaPointer: megaShown ? 'auto' : 'none',
-      megaTransition: 'none',
+      navItems, megaOpen, megaColumns, megaFeatured,
       headerBg: solid ? 'rgba(255,255,255,0.94)' : 'transparent',
       headerBlur: solid ? 'saturate(180%) blur(14px)' : 'blur(0px)',
       headerShadow: solid ? '0 12px 40px -14px rgba(15,28,70,0.24)' : '0 0 0 rgba(0,0,0,0)',
@@ -930,7 +911,7 @@ class Component extends DCLogic {
       scrollNext: () => { const el = this.trackRef.current; if (el) el.scrollBy({ left: el.clientWidth * 0.8, behavior: 'smooth' }); },
       desktopDisplay: isMobile ? 'none' : 'flex',
       hamburgerDisplay: isMobile ? 'flex' : 'none',
-      clearMenu: closeMenu,
+      clearMenu,
       mobileItems, mobileOpen,
       line1: mobileOpen ? 'translateY(7.5px) rotate(45deg)' : 'none',
       line2Opacity: mobileOpen ? 0 : 1,
