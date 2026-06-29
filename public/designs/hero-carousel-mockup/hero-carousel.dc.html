@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: hsl(221,80%,12%); }
+  @keyframes hcKen { from { transform: scale(1.04); } to { transform: scale(1.14); } }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: hsl(221,80%,12%); font-family: 'Plus Jakarta Sans', sans-serif;">
+
+  <!-- slides -->
+  <sc-for list="{{ slides }}" as="s" hint-placeholder-count="1">
+    <div style="position: absolute; inset: 0; opacity: {{ s.op }}; z-index: {{ s.z }}; transition: opacity 1s ease;">
+      <div style="position: absolute; inset: 0; overflow: hidden;">
+        <div style="position: absolute; inset: 0; background-image: url('{{ s.img }}'); background-size: cover; background-position: center; animation: hcKen 14s ease-in-out infinite alternate;"></div>
+      </div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6,13,38,0.92) 0%, rgba(6,13,38,0.7) 38%, rgba(6,13,38,0.28) 70%, rgba(6,13,38,0.12) 100%);"></div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(6,13,38,0.55) 0%, transparent 42%);"></div>
+
+      <div style="position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);">
+        <div style="max-width: 1240px; margin: 0 auto; padding: 0 56px;">
+          <div style="max-width: 640px; opacity: {{ s.cop }}; transform: {{ s.ct }}; transition: opacity .9s ease .15s, transform .9s ease .15s;">
+            <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: hsl(45,92%,64%);">
+              <span style="width: 26px; height: 1px; background: hsl(45,92%,62%);"></span>{{ s.eyebrow }}
+            </span>
+            <h1 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(40px, 5.4vw, 76px); line-height: 1.04; letter-spacing: -0.015em; color: #fff; margin: 22px 0 0; text-wrap: balance;">{{ s.title }}</h1>
+            <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 24px 0 0; max-width: 500px;">{{ s.text }}</p>
+            <a href="#" style="display: inline-flex; align-items: center; gap: 11px; margin-top: 36px; padding: 15px 30px; border-radius: 999px; background: hsl(45,90%,52%); color: hsl(220,74%,14%); font-size: 15px; font-weight: 700; transition: transform .25s ease, background .25s ease;" style-hover="{ transform: 'translateY(-3px)', background: 'hsl(45,94%,57%)' }">
+              {{ s.cta }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+
+  <!-- minimal transparent header (context) -->
+  <header style="position: absolute; top: 0; left: 0; right: 0; z-index: 20;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 26px 56px; display: flex; align-items: center; justify-content: space-between;">
+      <span style="display: flex; align-items: center; gap: 13px;">
+        <img src="assets/crest.png" alt="crest" style="height: 56px; width: auto; display: block; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));">
+        <span style="display: flex; flex-direction: column; line-height: 1; color: #fff;">
+          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px;">St. Patrick's Academy</span>
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.72; margin-top: 5px;">Meerut &middot; Estd 1965</span>
+        </span>
+      </span>
+      <nav style="display: flex; align-items: center; gap: 30px;">
+        <sc-for list="{{ navLabels }}" as="l" hint-placeholder-count="5">
+          <span style="font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.86);">{{ l }}</span>
+        </sc-for>
+      </nav>
+    </div>
+  </header>
+
+  <!-- quick links (right side) -->
+  <aside style="position: absolute; z-index: 20; right: 56px; top: 50%; transform: translateY(-50%); width: 260px; border-radius: 16px; overflow: hidden; background: rgba(8,16,46,0.42); backdrop-filter: saturate(150%) blur(14px); -webkit-backdrop-filter: saturate(150%) blur(14px); border: 1px solid rgba(255,255,255,0.16);">
+    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+      <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: hsl(45,92%,64%);">Quick Links</span>
+    </div>
+    <sc-for list="{{ quickLinks }}" as="q" hint-placeholder-count="6">
+      <a href="#" style="display: flex; align-items: center; gap: 13px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); color: #fff; transition: background .22s ease, padding .22s ease;" style-hover="{ background: 'rgba(255,255,255,0.08)', paddingLeft: '24px' }">
+        <span style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: rgba(241,196,48,0.16); color: hsl(45,92%,64%); flex-shrink: 0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg>
+        </span>
+        <span style="flex: 1; font-size: 14px; font-weight: 600;">{{ q.label }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+      </a>
+    </sc-for>
+  </aside>
+
+  <!-- bottom-right navigation -->
+  <div style="position: absolute; z-index: 20; right: 56px; bottom: 44px; display: flex; align-items: center; gap: 22px;">
+    <div style="display: flex; align-items: baseline; gap: 7px; color: #fff; font-family: 'Playfair Display', serif;">
+      <span style="font-size: 26px; font-weight: 700; color: hsl(45,92%,64%);">{{ idxLabel }}</span>
+      <span style="font-size: 14px; color: rgba(255,255,255,0.5);">/ {{ totalLabel }}</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+        <button type="button" onClick="{{ d.go }}" aria-label="Go to slide" style="width: {{ d.w }}; height: 4px; border-radius: 999px; border: none; padding: 0; cursor: pointer; background: {{ d.bg }}; transition: width .4s ease, background .4s ease;"></button>
+      </sc-for>
+    </div>
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <button type="button" onClick="{{ prev }}" aria-label="Previous" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.34); background: rgba(255,255,255,0.06); color: #fff; display: grid; place-items: center; cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="{ transform: 'translateY(-2px)', background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)' }">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button type="button" onClick="{{ next }}" aria-label="Next" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.34); background: rgba(255,255,255,0.06); color: #fff; display: grid; place-items: center; cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="{ transform: 'translateY(-2px)', background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)' }">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { idx: 0 };
+
+  _slides = [
+    { eyebrow: "Welcome to St. Patrick's", title: 'Where tradition meets tomorrow.', text: 'Six decades of nurturing confident, curious and compassionate learners on a green twelve-acre campus.', cta: 'Discover the school', img: 'assets/banner1.jpg' },
+    { eyebrow: 'Admissions 2026–27', title: "Begin your child's journey.", text: 'Applications are now open for the new academic year. Limited seats across all classes.', cta: 'Apply online', img: 'assets/banner5.jpg' },
+    { eyebrow: 'Our Campus', title: 'Room to be curious.', text: 'Labs, studios, courts and quiet libraries — spaces designed for every kind of learner.', cta: 'Take a tour', img: 'assets/banner1.jpg' },
+  ];
+
+  _navLabels = ['About', 'Academics', 'Admissions', 'Campus', 'Contact'];
+
+  _quickLinks = [
+    { label: 'Apply Online', d: 'M5 12h14M13 6l6 6-6 6' },
+    { label: 'Fee Payment', d: 'M3 10h18M3 6h18v12H3zM7 15h4' },
+    { label: 'Parent Portal', d: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-4 4-6 8-6s8 2 8 6' },
+    { label: 'Results', d: 'M9 11l3 3 8-8M21 12v7H3V5h12' },
+    { label: 'Calendar', d: 'M3 9h18M7 3v4M17 3v4M4 5h16v15H4z' },
+    { label: 'Careers', d: 'M3 8h18v12H3zM8 8V5h8v3' },
+  ];
+
+  componentDidMount() {
+    this._timer = setInterval(() => {
+      this.setState((s) => ({ idx: (s.idx + 1) % this._slides.length }));
+    }, 6000);
+  }
+  componentWillUnmount() { clearInterval(this._timer); }
+
+  _go = (i) => { this.setState({ idx: i }); clearInterval(this._timer); this._timer = setInterval(() => this.setState((s) => ({ idx: (s.idx + 1) % this._slides.length })), 6000); };
+
+  renderVals() {
+    const idx = this.state.idx;
+    const total = this._slides.length;
+    const pad = (n) => String(n).padStart(2, '0');
+    return {
+      navLabels: this._navLabels,
+      quickLinks: this._quickLinks,
+      idxLabel: pad(idx + 1),
+      totalLabel: pad(total),
+      slides: this._slides.map((s, i) => ({
+        ...s,
+        op: i === idx ? 1 : 0,
+        z: i === idx ? 2 : 1,
+        cop: i === idx ? 1 : 0,
+        ct: i === idx ? 'translateY(0)' : 'translateY(20px)',
+      })),
+      dots: this._slides.map((s, i) => ({
+        go: () => this._go(i),
+        w: i === idx ? '34px' : '14px',
+        bg: i === idx ? 'hsl(45,92%,60%)' : 'rgba(255,255,255,0.35)',
+      })),
+      next: () => this._go((idx + 1) % total),
+      prev: () => this._go((idx - 1 + total) % total),
+    };
+  }
+}
+</script>
+</body>
+</html>

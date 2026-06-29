@@ -26,6 +26,11 @@
   @keyframes spaArrow { 0%,100% { transform: translate(-50%, 0); opacity: 0.5; } 50% { transform: translate(-50%, 10px); opacity: 1; } }
   @keyframes spaGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.12); } }
   @keyframes spaTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  [data-notice-list]::-webkit-scrollbar { width: 6px; }
+  [data-notice-list]::-webkit-scrollbar-track { background: transparent; }
+  [data-notice-list]::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.28); border-radius: 6px; }
+  [data-notice-list]::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.45); }
+  @media (max-width: 1040px) { [data-notice-board] { display: none !important; } }
   @keyframes spaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(120,220,150,0.7); } 70% { box-shadow: 0 0 0 6px rgba(120,220,150,0); } }
   @keyframes spaSpinRev { to { transform: rotate(-360deg); } }
   @keyframes spaPlayPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.45); } 70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); } }
@@ -35,10 +40,19 @@
   @keyframes spaCrestFloat { 0%,100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%,calc(-50% - 8px)); } }
   @keyframes spaLoaderRing { to { transform: rotate(360deg); } }
   [data-carousel-track]::-webkit-scrollbar { display: none; }
+  .owl-carousel .owl-item { padding: 26px 0; }
+  .owl-carousel .owl-item img { width: auto; }
+  .owl-carousel.owl-loaded { display: block; }
+  .sp-card:hover { transform: translateY(-6px); box-shadow: 0 34px 56px -26px rgba(15,28,70,0.42); }
+  .sp-notice:hover { transform: translateY(-5px); box-shadow: 0 30px 52px -26px rgba(15,28,70,0.36); }
   @media (prefers-reduced-motion: reduce) {
     [style*="spaFadeUp"], [style*="spaItemIn"], [style*="spaMegaIn"], [style*="spaDrawerIn"] { animation: none !important; opacity: 1 !important; transform: none !important; }
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="image-slot.js"></script>
 </helmet>
 
@@ -80,64 +94,40 @@
   </sc-if>
 
   <!-- ============ HEADER ============ -->
-  <header onMouseLeave="{{ clearMenu }}" style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: {{ headerBg }}; backdrop-filter: {{ headerBlur }}; -webkit-backdrop-filter: {{ headerBlur }}; box-shadow: {{ headerShadow }}; border-bottom: {{ headerBorder }}; transition: background .45s ease, box-shadow .45s ease, border-color .45s ease, backdrop-filter .45s ease;">
-
-    <!-- announcement ticker -->
-    <div style="height: {{ tickerHeight }}; opacity: {{ tickerOpacity }}; overflow: hidden; transition: height .4s cubic-bezier(.4,0,.2,1), opacity .3s ease; background: rgba(8,16,46,0.62); backdrop-filter: saturate(160%) blur(8px); -webkit-backdrop-filter: saturate(160%) blur(8px); border-bottom: 1px solid rgba(241,196,48,0.22);">
-      <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 38px; display: flex; align-items: center; gap: 16px;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 5px 13px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-          Latest
-        </div>
-        <div style="position: relative; flex: 1; height: 38px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 93%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 93%, transparent 100%);">
-          <div style="position: absolute; top: 0; left: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; animation: spaTicker 38s linear infinite; will-change: transform;" style-hover="animation-play-state: paused;">
-            <sc-for list="{{ tickerLoop }}" as="a" hint-placeholder-count="8">
-              <span style="display: inline-flex; align-items: center; gap: 11px; padding: 0 22px; font-size: 13px; color: rgba(255,255,255,0.9);">
-                <sc-if value="{{ a.isNew }}" hint-placeholder-val="{{ false }}">
-                  <span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 5px; background: hsl(145,55%,45%); color: #fff; font-size: 9.5px; font-weight: 800; letter-spacing: 0.1em;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #fff; animation: spaPulse 1.8s ease-out infinite;"></span>NEW</span>
-                </sc-if>
-                <span style="color: hsl(45,92%,66%); font-weight: 700; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;">{{ a.date }}</span>
-                <span style="font-weight: 500;">{{ a.text }}</span>
-                <span style="display: inline-block; width: 5px; height: 5px; margin-left: 11px; transform: rotate(45deg); background: hsl(45,90%,55%); opacity: 0.7;"></span>
-              </span>
-            </sc-for>
-          </div>
-        </div>
-      </div>
-    </div>
+  <header onMouseLeave="{{ clearMenu }}" style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: {{ headerBg }}; box-shadow: {{ headerShadow }}; border-bottom: {{ headerBorder }}; transform: translateZ(0); will-change: background; isolation: isolate; transition: background .45s ease, box-shadow .45s ease, border-color .45s ease;">
 
     <!-- utility bar -->
     <div style="height: {{ utilHeight }}; opacity: {{ utilOpacity }}; overflow: hidden; transition: height .4s cubic-bezier(.4,0,.2,1), opacity .3s ease; color: {{ utilColor }};">
-      <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 40px; display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; font-weight: 500; letter-spacing: 0.01em;">
-        <div style="display: flex; align-items: center; gap: 22px;">
-          <span style="display: inline-flex; align-items: center; gap: 7px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 121 264 0000</span>
-          <span style="display: inline-flex; align-items: center; gap: 7px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>admissions@stpatricks.edu.in</span>
+      <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 60px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 18px; font-weight: 500; letter-spacing: 0.01em;">
+        <div style="display: flex; align-items: center; gap: 26px;">
+          <span style="display: inline-flex; align-items: center; gap: 9px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 121 264 0000</span>
+          <span style="display: inline-flex; align-items: center; gap: 9px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>admissions@stpatricks.edu.in</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 22px;">
+        <div style="display: flex; align-items: center; gap: 26px;">
           <a href="#" style="opacity: .9;">Alumni</a>
           <a href="#" style="opacity: .9;">Careers</a>
-          <a href="#" style="display: inline-flex; align-items: center; gap: 6px; opacity: .9;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Parent Portal</a>
-          <a href="#" style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 15px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 12px; letter-spacing: 0.02em; box-shadow: 0 4px 12px -4px rgba(196,150,20,0.55); transition: transform .2s ease, background .2s ease;" style-hover="{ transform: 'translateY(-1px)', background: 'hsl(45,93%,55%)' }">Apply for Admission<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 8px; opacity: .9;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Parent Portal</a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 9px 22px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 17px; letter-spacing: 0.02em; box-shadow: 0 4px 12px -4px rgba(196,150,20,0.55); transition: transform .2s ease, background .2s ease;" style-hover="{ transform: 'translateY(-1px)', background: 'hsl(45,93%,55%)' }">Apply for Admission<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </div>
     </div>
 
     <!-- main bar -->
-    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
 
       <!-- brand -->
       <a href="#" style="display: flex; align-items: center; gap: 14px; transform: {{ brandScale }}; transform-origin: left center; transition: transform .4s cubic-bezier(.4,0,.2,1);">
-        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 64px; width: auto; display: block; flex-shrink: 0; filter: {{ crestShadow }}; transition: filter .45s ease;">
+        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 78px; width: auto; display: block; flex-shrink: 0; filter: {{ crestShadow }}; transition: filter .45s ease;">
         <span style="display: flex; flex-direction: column; line-height: 1; color: {{ brandColor }}; transition: color .45s ease;">
-          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 24px; letter-spacing: 0.01em; white-space: nowrap;">St. Patrick's Academy</span>
-          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 5px; opacity: .72;">Meerut &middot; Estd 1965</span>
+          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 29px; letter-spacing: 0.01em; white-space: nowrap;">St. Patrick's Academy</span>
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 5px; opacity: .72;">Meerut &middot; Estd 1965</span>
         </span>
       </a>
 
       <!-- desktop nav -->
       <nav style="display: {{ desktopDisplay }}; align-items: center; gap: 4px; height: 100%;">
         <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
-          <a href="{{ item.href }}" onMouseEnter="{{ item.onEnter }}" style="position: relative; display: inline-flex; align-items: center; gap: 6px; height: 76px; padding: 0 16px; font-size: 14.5px; font-weight: 600; color: {{ item.color }}; transition: color .25s ease;" style-hover="{ color: 'hsl(45,90%,50%)' }">
+          <a href="{{ item.href }}" onMouseEnter="{{ item.onEnter }}" style="position: relative; display: inline-flex; align-items: center; gap: 6px; height: 88px; padding: 0 18px; font-size: 16.5px; font-weight: 600; color: {{ item.color }}; transition: color .25s ease;" style-hover="{ color: 'hsl(45,90%,50%)' }">
             {{ item.label }}
             <sc-if value="{{ item.hasMega }}" hint-placeholder-val="{{ false }}">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }}; transition: transform .3s ease;"><path d="m6 9 6 6 6-6"/></svg>
@@ -257,28 +247,39 @@
 
     <div style="position: relative; z-index: 3; max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 28px;">
       <div style="max-width: 760px;">
-        <h1 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(44px, 6.4vw, 82px); line-height: 1.04; letter-spacing: -0.01em; margin: 0; text-wrap: balance;" data-hero-anim="1">
+        <h1 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 44px; line-height: 1.08; letter-spacing: -0.01em; margin: 0; text-wrap: balance;" data-hero-anim="1">
           Where tradition<br>meets <span style="font-style: italic; color: hsl(45,92%,62%);">tomorrow</span>.
         </h1>
         <p style="font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; max-width: 560px; color: rgba(255,255,255,0.82); margin: 26px 0 0;" data-hero-anim="1">
           For six decades we have nurtured confident, curious and compassionate learners &mdash; blending timeless values with a future-ready education on a green twelve-acre campus.
         </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px;" data-hero-anim="1">
-          <a href="#" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-size: 15px; font-weight: 700; box-shadow: 0 14px 34px -10px rgba(241,196,48,0.6); transition: transform .25s ease, box-shadow .25s ease, background .25s ease;" style-hover="transform: translateY(-3px); background: hsl(45,94%,56%); box-shadow: 0 22px 48px -10px rgba(241,196,48,0.85);">
-            Apply for Admission
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a href="#" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 26px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 15px; font-weight: 600; background: rgba(255,255,255,0); transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, backdrop-filter .25s ease;" style-hover="transform: translateY(-3px); background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 18px 40px -16px rgba(0,0,0,0.55);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-            Take a Campus Tour
-          </a>
-        </div>
 
       </div>
     </div>
 
-    <div style="position: absolute; z-index: 3; bottom: 30px; left: 50%; color: rgba(255,255,255,0.7); animation: spaArrow 1.6s ease-in-out infinite;">
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </section>
+
+  <!-- ============ NOTICE BOARD ============ -->
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(56px, 7vw, 84px) 0; overflow: hidden;">
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,80%,42%);">
+            <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(145,60%,45%); box-shadow: 0 0 0 0 rgba(80,200,130,0.6); animation: spaPulse 1.8s ease-out infinite;"></span>Live updates</span>
+          </span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0 0;">Notice Board</h2>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button type="button" onClick="{{ scrollPrev }}" aria-label="Previous" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid hsl(44,40%,82%); background: #fff; color: hsl(220,80%,22%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(15,28,70,0.5); transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="transform: translateY(-2px); background: hsl(220,80%,20%); color: #fff;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" onClick="{{ scrollNext }}" aria-label="Next" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid hsl(44,40%,82%); background: #fff; color: hsl(220,80%,22%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(15,28,70,0.5); transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="transform: translateY(-2px); background: hsl(220,80%,20%); color: #fff;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div ref="{{ noticeMount }}" style="min-height: 180px; margin-top: 36px;"></div>
     </div>
   </section>
 
@@ -395,32 +396,15 @@
       <div style="text-align: center; max-width: 680px; margin: 0 auto;">
         <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 16px; border-radius: 999px; border: 1px solid hsl(45,70%,62%); background: rgba(241,196,48,0.1); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,78%,38%);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
-          ICSE Class X &middot; 2025
+          ICSE Class X &middot; 2026
         </span>
-        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(30px, 4vw, 48px); line-height: 1.1; margin: 18px 0 0; text-wrap: balance;">Our High Scorers of ICSE 2025</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(30px, 4vw, 48px); line-height: 1.1; margin: 18px 0 0; text-wrap: balance;">Our High Scorers of ICSE 2026</h2>
         <p style="font-size: 16.5px; line-height: 1.7; color: hsl(220,14%,44%); margin: 16px 0 0;">Celebrating the dedication and brilliance of our Class X achievers &mdash; a proud moment for every Patrician.</p>
       </div>
 
       <!-- achievers carousel -->
       <div style="position: relative; margin-top: 56px;">
-        <div ref="{{ trackRef }}" data-carousel-track="1" style="display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding: 26px 4px 30px; scroll-padding-left: 4px;">
-          <sc-for list="{{ achievers }}" as="a" hint-placeholder-count="6">
-            <div style="position: relative; flex: 0 0 auto; width: clamp(238px, 76vw, 268px); scroll-snap-align: start; background: #fff; border: 1px solid hsl(44,40%,88%); border-radius: 22px; padding: 36px 24px 28px; text-align: center; box-shadow: 0 22px 44px -30px rgba(15,28,70,0.32); transition: transform .3s ease, box-shadow .3s ease;" style-hover="transform: translateY(-6px); box-shadow: 0 34px 56px -28px rgba(15,28,70,0.4);">
-              <div style="position: relative; width: 120px; height: 120px; margin: 6px auto 0;">
-                <div style="position: absolute; inset: -5px; border-radius: 50%; background: conic-gradient(from 0deg, hsl(45,92%,58%), hsl(45,80%,46%), hsl(45,92%,58%));"></div>
-                <div style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: hsl(212,30%,90%);">
-                  <image-slot id="{{ a.slot }}" shape="circle" placeholder="Photo" style="display: block; width: 110px; height: 110px;"></image-slot>
-                </div>
-              </div>
-              <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; margin: 18px 0 0;">{{ a.name }}</h3>
-              <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.05em; color: hsl(220,12%,52%); margin-top: 3px;">{{ a.stream }}</div>
-              <div style="display: inline-flex; align-items: baseline; gap: 4px; margin-top: 14px; padding: 8px 18px; border-radius: 999px; background: hsl(220,80%,20%); color: #fff;">
-                <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 25px; line-height: 1;">{{ a.score }}</span>
-                <span style="font-size: 13px; font-weight: 700;">%</span>
-              </div>
-            </div>
-          </sc-for>
-        </div>
+        <div ref="{{ icseMount }}" style="min-height: 360px;"></div>
 
         <!-- edge fades -->
         <div style="position: absolute; top: 26px; bottom: 30px; left: 0; width: 56px; background: linear-gradient(90deg, hsl(44,46%,97%), transparent); pointer-events: none;"></div>
@@ -432,6 +416,41 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
           <button type="button" onClick="{{ scrollNext }}" aria-label="Next" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid hsl(44,40%,82%); background: #fff; color: hsl(220,80%,22%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(15,28,70,0.5); transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="transform: translateY(-2px); background: hsl(220,80%,20%); color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ISC 2026 HIGH SCORERS (Class XII) ============ -->
+  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
+    <div style="position: absolute; top: -120px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.16), transparent 68%);"></div>
+
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="text-align: center; max-width: 680px; margin: 0 auto;">
+        <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 16px; border-radius: 999px; border: 1px solid rgba(241,196,48,0.5); background: rgba(241,196,48,0.12); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,90%,64%);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          ISC Class XII &middot; 2026
+        </span>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(30px, 4vw, 48px); line-height: 1.1; margin: 18px 0 0; text-wrap: balance;">Our High Scorers of ISC 2026</h2>
+        <p style="font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.78); margin: 16px 0 0;">Saluting our Class XII achievers whose discipline and brilliance lit up the ISC boards &mdash; the pride of St. Patrick's.</p>
+      </div>
+
+      <!-- achievers carousel -->
+      <div style="position: relative; margin-top: 56px;">
+        <div ref="{{ iscMount }}" style="min-height: 360px;"></div>
+
+        <!-- edge fades -->
+        <div style="position: absolute; top: 26px; bottom: 30px; left: 0; width: 56px; background: linear-gradient(90deg, hsl(221,80%,12%), transparent); pointer-events: none;"></div>
+        <div style="position: absolute; top: 26px; bottom: 30px; right: 0; width: 56px; background: linear-gradient(270deg, hsl(221,80%,12%), transparent); pointer-events: none;"></div>
+
+        <!-- controls -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 8px;">
+          <button type="button" onClick="{{ scrollPrev }}" aria-label="Previous" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); color: #fff; display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(0,0,0,0.7); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-2px); background: hsl(45,90%,52%); color: hsl(220,74%,14%);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" onClick="{{ scrollNext }}" aria-label="Next" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); color: #fff; display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(0,0,0,0.7); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-2px); background: hsl(45,90%,52%); color: hsl(220,74%,14%);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
           </button>
         </div>
@@ -529,10 +548,10 @@
         <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: hsl(45,78%,42%);">Our Motto</span>
         <div style="display: flex; align-items: center; justify-content: center; gap: 22px; margin: 22px 0 0;">
           <span style="flex: 1; max-width: 110px; height: 1px; background: linear-gradient(90deg, transparent, hsl(45,70%,55%));"></span>
-          <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 62px; width: auto; display: block; filter: drop-shadow(0 6px 14px rgba(15,28,70,0.18));">
+          <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 104px; width: auto; display: block; filter: drop-shadow(0 6px 14px rgba(15,28,70,0.18));">
           <span style="flex: 1; max-width: 110px; height: 1px; background: linear-gradient(90deg, hsl(45,70%,55%), transparent);"></span>
         </div>
-        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; font-size: clamp(40px, 6vw, 76px); line-height: 1.05; margin: 20px 0 0; letter-spacing: -0.01em; color: hsl(220,80%,20%);">For God<br>and Country</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.08; margin: 20px 0 0; letter-spacing: -0.01em; color: hsl(220,80%,20%);">For God<br>and Country</h2>
         <p style="font-size: 16.5px; line-height: 1.7; color: hsl(220,14%,42%); margin: 22px auto 0; max-width: 560px;">Three words that have guided every Patrician since 1965 &mdash; a call to live with faith, integrity and service, and to give the best of ourselves to others.</p>
       </div>
 
@@ -612,27 +631,83 @@ class Component extends DCLogic {
   ];
 
   trackRef = React.createRef();
+  icseMount = React.createRef();
+  iscMount = React.createRef();
+  noticeMount = React.createRef();
 
-  _achievers = [
-    { rank: 1, name: 'Diya Verma', stream: 'Science', score: '99.2', slot: 'topper-1', isTopper: true },
-    { rank: 2, name: 'Aarav Sharma', stream: 'Science', score: '98.4', slot: 'topper-2', isTopper: false },
-    { rank: 3, name: 'Kabir Singh', stream: 'Commerce', score: '98.0', slot: 'topper-3', isTopper: false },
-    { rank: 4, name: 'Ananya Gupta', stream: 'Science', score: '97.8', slot: 'topper-4', isTopper: false },
-    { rank: 5, name: 'Rohan Mehta', stream: 'Commerce', score: '97.4', slot: 'topper-5', isTopper: false },
-    { rank: 6, name: 'Ishaan Khanna', stream: 'Science', score: '97.0', slot: 'topper-6', isTopper: false },
-    { rank: 7, name: 'Saanvi Reddy', stream: 'Humanities', score: '96.6', slot: 'topper-7', isTopper: false },
-    { rank: 8, name: 'Arjun Nair', stream: 'Science', score: '96.2', slot: 'topper-8', isTopper: false },
-    { rank: 9, name: 'Myra Joshi', stream: 'Commerce', score: '95.8', slot: 'topper-9', isTopper: false },
-    { rank: 10, name: 'Vivaan Kapoor', stream: 'Science', score: '95.4', slot: 'topper-10', isTopper: false },
-    { rank: 11, name: 'Aadhya Iyer', stream: 'Humanities', score: '95.1', slot: 'topper-11', isTopper: false },
-  ];
+  _noticeCardHTML = (a) => {
+    const tone = a.tone === 'gold' ? 'hsl(45,90%,52%)' : a.tone === 'green' ? 'hsl(145,55%,42%)' : 'hsl(212,70%,52%)';
+    const tagFg = a.tone === 'gold' ? 'hsl(220,74%,14%)' : '#fff';
+    const parts = a.date.split(' ');
+    const mon = parts[0], day = parts[1];
+    return '<div class="sp-notice" style="display: flex; gap: 16px; height: 100%; background: #fff; border: 1px solid hsl(44,40%,88%); border-left: 4px solid ' + tone + '; border-radius: 14px; padding: 22px; box-shadow: 0 18px 40px -28px rgba(15,28,70,0.3); transition: transform .3s ease, box-shadow .3s ease;">'
+      + '<div style="flex-shrink: 0; width: 56px; text-align: center;">'
+      + '<div style="font-family: \'Playfair Display\', serif; font-weight: 800; font-size: 30px; line-height: 1; color: hsl(220,80%,22%);">' + day + '</div>'
+      + '<div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(45,80%,42%); margin-top: 4px;">' + mon + '</div>'
+      + '</div>'
+      + '<div style="min-width: 0; flex: 1; display: flex; flex-direction: column;">'
+      + '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 9px;">'
+      + '<span style="display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: ' + tone + '; color: ' + tagFg + ';">' + a.tag + '</span>'
+      + (a.isNew ? '<span style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; color: hsl(145,58%,40%);">NEW</span>' : '')
+      + '</div>'
+      + '<p style="font-size: 14.5px; line-height: 1.5; color: hsl(220,28%,30%); margin: 0 0 14px; font-weight: 500;">' + a.text + '</p>'
+      + '<span style="margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: hsl(220,80%,25%);">Read more<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'
+      + '</div>'
+      + '</div>';
+  };
+
+  _cardHTML = (a, variant) => {
+    const border = variant === 'isc' ? 'hsl(220,30%,30%)' : 'hsl(44,40%,88%)';
+    const shadow = variant === 'isc' ? '0 22px 44px -26px rgba(0,0,0,0.55)' : '0 22px 44px -30px rgba(15,28,70,0.32)';
+    return '<div class="sp-card" style="position: relative; background: #fff; border: 1px solid ' + border + '; border-radius: 22px; padding: 36px 24px 28px; text-align: center; color: hsl(220,80%,22%); box-shadow: ' + shadow + '; transition: transform .3s ease, box-shadow .3s ease;">'
+      + '<div style="position: relative; width: 120px; height: 120px; margin: 6px auto 0;">'
+      + '<div style="position: absolute; inset: -5px; border-radius: 50%; background: conic-gradient(from 0deg, hsl(45,92%,58%), hsl(45,80%,46%), hsl(45,92%,58%));"></div>'
+      + '<div style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: hsl(212,30%,90%); display: grid; place-items: center;">'
+      + '<image-slot id="' + a.slot + '" shape="circle" placeholder="Photo" style="display: block; width: 110px; height: 110px;"></image-slot>'
+      + '</div></div>'
+      + '<h3 style="font-family: \'Playfair Display\', serif; font-weight: 700; font-size: 20px; margin: 18px 0 0;">' + a.name + '</h3>'
+      + '<div style="font-size: 13px; font-weight: 600; letter-spacing: 0.05em; color: hsl(220,12%,52%); margin-top: 3px;">' + a.stream + '</div>'
+      + '<div style="display: inline-flex; align-items: baseline; gap: 4px; margin-top: 14px; padding: 8px 18px; border-radius: 999px; background: hsl(220,80%,20%); color: #fff;">'
+      + '<span style="font-family: \'Playfair Display\', serif; font-weight: 800; font-size: 25px; line-height: 1;">' + a.score + '</span>'
+      + '<span style="font-size: 13px; font-weight: 700;">%</span>'
+      + '</div></div>';
+  };
+
+  _achievers = (() => {
+    const first = ['Diya','Aarav','Kabir','Ananya','Rohan','Ishaan','Saanvi','Arjun','Myra','Vivaan','Aadhya','Reyansh','Anika','Vihaan','Ira','Kiaan','Navya','Aryan','Pari','Atharv','Sara','Dhruv','Riya','Kayra','Shaurya','Tara','Veer','Mishka','Yuvan','Zara','Advik','Nyra','Krish','Ahana','Laksh','Siya','Ojas','Eva','Reyan','Mira','Hridaan','Anvi','Ranveer','Kiara','Devansh','Aisha','Parth','Nitya','Samar','Tisha'];
+    const last = ['Verma','Sharma','Singh','Gupta','Mehta','Khanna','Reddy','Nair','Joshi','Kapoor','Iyer','Malhotra','Bose','Chopra','Rao','Sethi','Menon','Bhat','Saxena','Pillai'];
+    const streams = ['Science','Commerce','Humanities'];
+    return Array.from({ length: 50 }, (_, i) => ({
+      rank: i + 1,
+      name: first[i % first.length] + ' ' + last[i % last.length],
+      stream: streams[i % streams.length],
+      score: (99.4 - i * 0.12).toFixed(1),
+      slot: 'topper-' + (i + 1),
+      isTopper: i === 0,
+    }));
+  })();
+
+  _achievers12 = (() => {
+    const first = ['Aanya','Vihaan','Ishita','Rudra','Tanvi','Kabir','Meera','Aryan','Diya','Shourya','Naina','Aditya','Prisha','Yug','Avni','Reyansh','Kashvi','Daksh','Khushi','Nakul','Trisha','Vivaan','Mahira','Rishaan','Saira','Aarush','Ahaana','Madhav','Ridhi','Kian'];
+    const last = ['Verma','Sharma','Singh','Gupta','Mehta','Khanna','Reddy','Nair','Joshi','Kapoor','Iyer','Malhotra','Bose','Chopra','Rao','Sethi','Menon','Bhat','Saxena','Pillai'];
+    const streams = ['Science','Commerce','Humanities'];
+    return Array.from({ length: 30 }, (_, i) => ({
+      rank: i + 1,
+      name: first[i % first.length] + ' ' + last[i % last.length],
+      stream: streams[i % streams.length],
+      score: (99.2 - i * 0.14).toFixed(1),
+      slot: 'isc12-' + (i + 1),
+      isTopper: i === 0,
+    }));
+  })();
 
   _announcements = [
-    { date: 'Jun 12', text: 'Admissions open for 2026\u201327 \u2014 apply online by 30 June' },
-    { date: 'Jun 09', text: 'Half-yearly results are now live on the Parent Portal' },
-    { date: 'Jun 02', text: 'Investiture Ceremony 2026 photo gallery now available' },
-    { date: 'May 28', text: 'Inter-house Athletics Meet \u2014 finals on 22 February, main ground' },
-    { date: 'May 20', text: 'Summer enrichment camp registrations close this Friday' },
+    { date: 'Jun 12', tag: 'Admissions', tone: 'gold', text: 'Admissions open for 2026\u201327 \u2014 apply online by 30 June', isNew: true },
+    { date: 'Jun 09', tag: 'Results', tone: 'green', text: 'Half-yearly results are now live on the Parent Portal', isNew: true },
+    { date: 'Jun 02', tag: 'Events', tone: 'blue', text: 'Investiture Ceremony 2026 photo gallery now available', isNew: false },
+    { date: 'May 28', tag: 'Sports', tone: 'blue', text: 'Inter-house Athletics Meet \u2014 finals on 22 June, main ground', isNew: false },
+    { date: 'May 20', tag: 'Camp', tone: 'gold', text: 'Summer enrichment camp registrations close this Friday', isNew: false },
+    { date: 'May 14', tag: 'Notice', tone: 'green', text: 'Revised school bus routes effective from the new term', isNew: false },
   ];
 
   componentDidMount() {
@@ -731,13 +806,47 @@ class Component extends DCLogic {
     requestAnimationFrame(this._startHeroBg);
     document.addEventListener('visibilitychange', this._startHeroBg);
 
+    // Achievers carousels — powered by Owl Carousel. Each track renders into a
+    // manually-created child of an empty ref div the DC reconciler ignores.
+    // Self-healing: a short poll (re)builds any carousel whose Owl instance is
+    // missing — so the loader's early setState storm can wipe an attempt and the
+    // next tick simply rebuilds it (invisibly, behind the loader overlay).
+    this._owls = [];
+    this._ensureOwl = () => {
+      const $ = window.jQuery;
+      if (!$ || !$.fn || !$.fn.owlCarousel) return;
+      const mounts = [
+        { el: this.icseMount.current, data: this._achievers, variant: 'icse', kind: 'card' },
+        { el: this.iscMount.current, data: this._achievers12, variant: 'isc', kind: 'card' },
+        { el: this.noticeMount.current, data: this._announcements, variant: 'notice', kind: 'notice' },
+      ];
+      mounts.forEach(({ el, data, variant, kind }) => {
+        if (!el) return;
+        const existing = el.querySelector('.owl-carousel');
+        if (existing && $(existing).data('owl.carousel')) return; // healthy
+        el.innerHTML = '';
+        const inner = document.createElement('div');
+        inner.className = 'owl-carousel owl-theme';
+        inner.innerHTML = data.map((a) => kind === 'notice' ? this._noticeCardHTML(a) : this._cardHTML(a, variant)).join('');
+        el.appendChild(inner);
+        const $o = $(inner);
+        const opts = kind === 'notice'
+          ? { loop: true, margin: 22, autoplay: true, autoplayTimeout: 3200, autoplayHoverPause: true, smartSpeed: 600, dots: false, nav: false, slideBy: 1, responsive: { 0: { items: 1 }, 640: { items: 2 }, 1000: { items: 3 } } }
+          : { loop: true, margin: 22, autoplay: true, autoplayTimeout: 2600, autoplayHoverPause: true, smartSpeed: 540, dots: false, nav: false, slideBy: 1, responsive: { 0: { items: 1 }, 560: { items: 2 }, 900: { items: 3 }, 1200: { items: 4 } } };
+        $o.owlCarousel(opts);
+        this._owls.push($o);
+      });
+    };
+    this._owlHeal = setInterval(this._ensureOwl, 600);
+    this._ensureOwl();
+
     // Loader: drive 0 → 100% with JS timers (not CSS) so it always completes,
     // then fade out and replay the hero entrance as the page is revealed.
     this._progTimer = setInterval(() => {
       this.setState((s) => {
         if (s.loaderProgress >= 100) return null;
         const remaining = 100 - s.loaderProgress;
-        const inc = Math.min(remaining, Math.max(1.5, remaining * 0.08) + Math.random() * 4);
+        const inc = Math.min(remaining, Math.max(1.0, remaining * 0.055) + Math.random() * 2.6);
         return { loaderProgress: Math.min(100, s.loaderProgress + inc) };
       }, () => {
         if (this.state.loaderProgress >= 100 && !this._loaderFinishing) {
@@ -754,7 +863,7 @@ class Component extends DCLogic {
           }, 1220);
         }
       });
-    }, 95);
+    }, 130);
 
     this._tagTimer = setInterval(() => {
       this.setState((s) => ({ taglineIndex: (s.taglineIndex + 1) % this._taglines.length }));
@@ -768,6 +877,8 @@ class Component extends DCLogic {
     if (this._playIntro) document.removeEventListener('visibilitychange', this._playIntro);
     clearInterval(this._progTimer);
     clearInterval(this._tagTimer);
+    clearInterval(this._owlHeal);
+    if (this._owls) { this._owls.forEach(($o) => { try { $o.trigger('destroy.owl.carousel'); } catch (e) {} }); }
     clearTimeout(this._introFallback);
   }
 
@@ -882,8 +993,8 @@ class Component extends DCLogic {
 
     return {
       navItems, megaOpen, megaColumns, megaFeatured,
-      headerBg: solid ? 'rgba(255,255,255,0.94)' : 'transparent',
-      headerBlur: solid ? 'saturate(180%) blur(14px)' : 'blur(0px)',
+      headerBg: solid ? '#ffffff' : 'transparent',
+      headerBlur: 'none',
       headerShadow: solid ? '0 12px 40px -14px rgba(15,28,70,0.24)' : '0 0 0 rgba(0,0,0,0)',
       headerBorder: solid ? '1px solid hsl(212,32%,90%)' : '1px solid rgba(255,255,255,0.14)',
       navColor,
@@ -897,18 +1008,25 @@ class Component extends DCLogic {
       progressWidth: loaderProgress + '%',
       taglines,
       utilColor: solid ? slate : 'rgba(255,255,255,0.82)',
-      utilHeight: scrolled || isMobile ? '0px' : '40px',
+      utilHeight: scrolled || isMobile ? '0px' : '68px',
       utilOpacity: scrolled || isMobile ? 0 : 1,
-      tickerHeight: scrolled ? '0px' : '38px',
-      tickerOpacity: scrolled ? 0 : 1,
-      tickerLoop: [...this._announcements, ...this._announcements].map((a, i) => ({
+      notices: this._announcements.map((a) => ({
         date: a.date,
+        day: a.date.split(' ')[1],
+        mon: a.date.split(' ')[0],
+        tag: a.tag,
         text: a.text,
-        isNew: (i % this._announcements.length) === 0,
+        isNew: a.isNew,
+        tagBg: a.tone === 'gold' ? 'hsl(45,90%,52%)' : a.tone === 'green' ? 'hsl(145,55%,42%)' : 'hsl(212,70%,52%)',
+        tagFg: a.tone === 'gold' ? 'hsl(220,74%,14%)' : '#fff',
       })),
       achievers: this._achievers,
-      scrollPrev: () => { const el = this.trackRef.current; if (el) el.scrollBy({ left: -(el.clientWidth * 0.8), behavior: 'smooth' }); },
-      scrollNext: () => { const el = this.trackRef.current; if (el) el.scrollBy({ left: el.clientWidth * 0.8, behavior: 'smooth' }); },
+      achievers12: this._achievers12,
+      icseMount: this.icseMount,
+      iscMount: this.iscMount,
+      noticeMount: this.noticeMount,
+      scrollPrev: (e) => { const sec = e && e.currentTarget && e.currentTarget.closest('section'); const ow = sec && sec.querySelector('.owl-carousel'); if (ow && window.jQuery) window.jQuery(ow).trigger('prev.owl.carousel'); },
+      scrollNext: (e) => { const sec = e && e.currentTarget && e.currentTarget.closest('section'); const ow = sec && sec.querySelector('.owl-carousel'); if (ow && window.jQuery) window.jQuery(ow).trigger('next.owl.carousel'); },
       desktopDisplay: isMobile ? 'none' : 'flex',
       hamburgerDisplay: isMobile ? 'flex' : 'none',
       clearMenu,

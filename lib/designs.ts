@@ -95,6 +95,22 @@ export const designs: Design[] = [
     ],
     source: "Theme",
   },
+  {
+    slug: "hero-carousel-mockup",
+    title: "Hero Carousel Mockup",
+    description:
+      "A full-bleed, auto-advancing hero carousel for St. Patrick's Academy in the “Academic Excellence & Prestige” language (Royal Navy + Academic Gold, Playfair Display + Plus Jakarta Sans). Three Ken-Burns slides rotate every 6s with a left-aligned eyebrow, headline, lede and gold CTA; a transparent crest header sits up top, a frosted-glass Quick Links panel floats on the right, and a bottom-right control cluster pairs an index counter with expanding progress dots and prev/next arrows.",
+    file: "/designs/hero-carousel-mockup/hero-carousel.dc.html?v=design",
+    sections: [
+      "Transparent crest header — St. Patrick's Academy · Meerut · Estd 1965",
+      "Hero slide 1 — “Where tradition meets tomorrow.”",
+      "Hero slide 2 — “Begin your child's journey.” (Admissions 2026–27)",
+      "Hero slide 3 — “Room to be curious.” (Our Campus)",
+      "Quick Links panel — Apply, Fee Payment, Parent Portal, Results, Calendar, Careers",
+      "Bottom-right controls — index counter + progress dots + prev/next arrows",
+    ],
+    source: "Theme",
+  },
 ];
 
 export function getDesign(slug: string): Design | undefined {
