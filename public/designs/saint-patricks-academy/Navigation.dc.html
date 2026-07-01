@@ -31,6 +31,7 @@
   [data-notice-list]::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.28); border-radius: 6px; }
   [data-notice-list]::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.45); }
   @media (max-width: 1040px) { [data-notice-board] { display: none !important; } }
+  @media (max-width: 860px) { [data-notice-grid] { grid-template-columns: 1fr !important; } [data-notice-grid] aside { position: static !important; } }
   @keyframes spaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(120,220,150,0.7); } 70% { box-shadow: 0 0 0 6px rgba(120,220,150,0); } }
   @keyframes spaSpinRev { to { transform: rotate(-360deg); } }
   @keyframes spaPlayPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.45); } 70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); } }
@@ -262,36 +263,72 @@
   <!-- ============ NOTICE BOARD ============ -->
   <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(56px, 7vw, 84px) 0; overflow: hidden;">
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <div data-notice-grid style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: start;">
+
+        <!-- LEFT: vertical notice list -->
         <div>
           <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,80%,42%);">
             <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(145,60%,45%); box-shadow: 0 0 0 0 rgba(80,200,130,0.6); animation: spaPulse 1.8s ease-out infinite;"></span>Live updates</span>
           </span>
-          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0 0;">Notice Board</h2>
-        </div>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <button type="button" onClick="{{ scrollPrev }}" aria-label="Previous" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid hsl(44,40%,82%); background: #fff; color: hsl(220,80%,22%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(15,28,70,0.5); transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="transform: translateY(-2px); background: hsl(220,80%,20%); color: #fff;">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <button type="button" onClick="{{ scrollNext }}" aria-label="Next" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid hsl(44,40%,82%); background: #fff; color: hsl(220,80%,22%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 12px 26px -16px rgba(15,28,70,0.5); transition: transform .2s ease, background .2s ease, color .2s ease;" style-hover="transform: translateY(-2px); background: hsl(220,80%,20%); color: #fff;">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-        </div>
-      </div>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0 28px;">Notice Board</h2>
 
-      <div ref="{{ noticeMount }}" style="min-height: 180px; margin-top: 36px;"></div>
-    </div>
-  </section>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <sc-for list="{{ notices }}" as="n" hint-placeholder-count="6">
+              <div class="sp-notice" style="display: flex; gap: 16px; background: #fff; border: 1px solid hsl(44,40%,88%); border-left: 4px solid {{ n.tagBg }}; border-radius: 14px; padding: 20px 22px; box-shadow: 0 18px 40px -28px rgba(15,28,70,0.3); transition: transform .3s ease, box-shadow .3s ease;">
+                <div style="flex-shrink: 0; width: 56px; text-align: center;">
+                  <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 30px; line-height: 1; color: hsl(220,80%,22%);">{{ n.day }}</div>
+                  <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(45,80%,42%); margin-top: 4px;">{{ n.mon }}</div>
+                </div>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 9px;">
+                    <span style="display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: {{ n.tagBg }}; color: {{ n.tagFg }};">{{ n.tag }}</span>
+                    <sc-if value="{{ n.isNew }}" hint-placeholder-val="{{ true }}"><span style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; color: hsl(145,58%,40%);">NEW</span></sc-if>
+                  </div>
+                  <p style="font-size: 14.5px; line-height: 1.5; color: hsl(220,28%,30%); margin: 0 0 12px; font-weight: 500;">{{ n.text }}</p>
+                  <a href="#" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: hsl(220,80%,25%);" style-hover="{ color: 'hsl(45,80%,42%)' }">Read more<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
 
-  <!-- ============ STATS COUNTER ============ -->
-  <section style="background: hsl(221,80%,12%); color: #fff; padding: clamp(48px, 6vw, 72px) 0;">
-    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(28px, 5vw, 64px);">
-        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">60<span style="font-size: 28px;">+</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Years of Excellence</div></div>
-        <div style="width: 1px; align-self: stretch; background: rgba(255,255,255,0.16);"></div>
-        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">2,400</div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Students &amp; Growing</div></div>
-        <div style="width: 1px; align-self: stretch; background: rgba(255,255,255,0.16);"></div>
-        <div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: hsl(45,92%,62%);">98.7<span style="font-size: 28px;">%</span></div><div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-top: 6px;">Board First Division</div></div>
+        <!-- RIGHT: admissions / student stats -->
+        <aside style="position: sticky; top: 96px; background: hsl(221,80%,13%); color: #fff; border-radius: 22px; padding: clamp(28px, 3vw, 38px); box-shadow: 0 40px 80px -40px rgba(15,28,70,0.55); overflow: hidden;">
+          <div style="position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(245,200,90,0.18), transparent 70%);"></div>
+          <span style="position: relative; display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,92%,64%);">Admissions 2026&ndash;27</span>
+          <h3 style="position: relative; font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.15; margin: 12px 0 26px;">A community built on excellence</h3>
+
+          <div style="position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 18px 16px;">
+              <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(30px, 4vw, 40px); line-height: 1; color: hsl(45,92%,64%);">2,450</div>
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.74); margin-top: 8px;">Students on roll</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 18px 16px;">
+              <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(30px, 4vw, 40px); line-height: 1; color: hsl(45,92%,64%);">1,280</div>
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.74); margin-top: 8px;">Applications received</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 18px 16px;">
+              <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(30px, 4vw, 40px); line-height: 1; color: hsl(45,92%,64%);">320</div>
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.74); margin-top: 8px;">Seats available</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 18px 16px;">
+              <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(30px, 4vw, 40px); line-height: 1; color: hsl(45,92%,64%);">1:14</div>
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.74); margin-top: 8px;">Teacher&ndash;student ratio</div>
+            </div>
+          </div>
+
+          <div style="position: relative; margin-top: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.74);">
+              <span>Seats filled</span><span style="color: #fff; font-weight: 700;">74%</span>
+            </div>
+            <div style="margin-top: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.14); overflow: hidden;">
+              <div style="width: 74%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, hsl(45,92%,58%), hsl(45,80%,48%));"></div>
+            </div>
+          </div>
+
+          <a href="#" style="position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 24px; padding: 14px 20px; border-radius: 999px; background: hsl(45,92%,58%); color: hsl(221,80%,13%); font-size: 14px; font-weight: 800; letter-spacing: 0.02em;" style-hover="{ background: 'hsl(45,96%,64%)' }">Apply now<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </aside>
+
       </div>
     </div>
   </section>
@@ -398,7 +435,7 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
           ICSE Class X &middot; 2026
         </span>
-        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(30px, 4vw, 48px); line-height: 1.1; margin: 18px 0 0; text-wrap: balance;">Our High Scorers of ICSE 2026</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(30px, 4vw, 48px); line-height: 1.1; margin: 18px 0 0; text-wrap: balance; white-space: nowrap;">Our High Scorers of ICSE 2026</h2>
         <p style="font-size: 16.5px; line-height: 1.7; color: hsl(220,14%,44%); margin: 16px 0 0;">Celebrating the dedication and brilliance of our Class X achievers &mdash; a proud moment for every Patrician.</p>
       </div>
 
@@ -478,8 +515,26 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 248px), 1fr)); gap: 22px; margin-top: 48px;">
 
         <div style="position: relative; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 20px; overflow: hidden; animation: spaFloat 4.6s ease-in-out infinite; animation-delay: 0s; transition: box-shadow .3s ease, border-color .3s ease;" style-hover="box-shadow: 0 30px 52px -24px rgba(15,28,70,0.28); border-color: hsl(45,90%,55%);">
-          <div style="position: relative; line-height: 0;">
-            <image-slot id="fac-library" shape="rect" placeholder="Drop a library photo" style="display: block; width: 100%; height: 184px; background: hsl(212,30%,90%);"></image-slot>
+          <div style="position: relative; line-height: 0; height: 184px;">
+            <svg viewBox="0 0 280 184" preserveAspectRatio="xMidYMid slice" style="display: block; width: 100%; height: 184px;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a library reading nook">
+              <rect width="280" height="184" fill="#F6A93B"/>
+              <circle cx="222" cy="40" r="46" fill="#FFC56B" opacity="0.55"/>
+              <rect x="0" y="150" width="280" height="34" fill="#C8801F"/>
+              <rect x="28" y="60" width="62" height="90" rx="4" fill="#2E5BBF"/>
+              <rect x="36" y="70" width="46" height="11" rx="2" fill="#A7C2F2"/>
+              <rect x="36" y="88" width="46" height="11" rx="2" fill="#E8553A"/>
+              <rect x="36" y="106" width="46" height="11" rx="2" fill="#F2D34E"/>
+              <rect x="36" y="124" width="46" height="11" rx="2" fill="#A7C2F2"/>
+              <g transform="rotate(-7 128 96)">
+                <rect x="104" y="58" width="50" height="92" rx="4" fill="#16A37C"/>
+                <rect x="112" y="68" width="34" height="9" rx="2" fill="#BFF0DC"/>
+                <rect x="112" y="84" width="34" height="9" rx="2" fill="#0C7A5A"/>
+              </g>
+              <path d="M158 150 L158 112 Q200 100 238 112 L238 150 Z" fill="#E8553A"/>
+              <path d="M198 150 L198 110 L200 110 L200 150 Z" fill="#B33B26"/>
+              <path d="M158 112 Q179 104 198 110 L198 150 L158 150 Z" fill="#F2785E"/>
+              <circle cx="222" cy="44" r="14" fill="#FFF1CE"/>
+            </svg>
             <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(8,16,46,0.34)); pointer-events: none;"></div>
             <div style="position: absolute; left: 16px; bottom: -22px; z-index: 1; width: 46px; height: 46px; border-radius: 13px; background: linear-gradient(135deg, hsl(45,92%,58%), hsl(45,86%,47%)); display: grid; place-items: center; box-shadow: 0 10px 22px -8px rgba(0,0,0,0.55);">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(220,74%,15%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -492,8 +547,23 @@
         </div>
 
         <div style="position: relative; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 20px; overflow: hidden; animation: spaFloat 5.2s ease-in-out infinite; animation-delay: .5s; transition: box-shadow .3s ease, border-color .3s ease;" style-hover="box-shadow: 0 30px 52px -24px rgba(15,28,70,0.28); border-color: hsl(45,90%,55%);">
-          <div style="position: relative; line-height: 0;">
-            <image-slot id="fac-science" shape="rect" placeholder="Drop a labs photo" style="display: block; width: 100%; height: 184px; background: hsl(212,30%,90%);"></image-slot>
+          <div style="position: relative; line-height: 0; height: 184px;">
+            <svg viewBox="0 0 280 184" preserveAspectRatio="xMidYMid slice" style="display: block; width: 100%; height: 184px;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of science laboratory glassware">
+              <rect width="280" height="184" fill="#1FA39A"/>
+              <circle cx="58" cy="42" r="40" fill="#46C8BE" opacity="0.5"/>
+              <rect x="0" y="150" width="280" height="34" fill="#127067"/>
+              <circle cx="208" cy="58" r="9" fill="#FFE08A"/>
+              <circle cx="234" cy="92" r="6" fill="#FF9C6B"/>
+              <circle cx="190" cy="110" r="5" fill="#C9A6F2"/>
+              <path d="M120 58 L120 92 L98 142 Q95 150 104 150 L156 150 Q165 150 162 142 L140 92 L140 58 Z" fill="#EAF7F5" opacity="0.95"/>
+              <path d="M108 124 L152 124 L162 142 Q165 150 156 150 L104 150 Q95 150 98 142 Z" fill="#F25C8A"/>
+              <rect x="116" y="50" width="28" height="9" rx="3" fill="#0E5C54"/>
+              <circle cx="120" cy="135" r="4" fill="#FFD2E2"/>
+              <circle cx="140" cy="140" r="3" fill="#FFD2E2"/>
+              <path d="M182 78 L182 100 L168 142 Q166 150 174 150 L206 150 Q214 150 212 142 L198 100 L198 78 Z" fill="#EAF7F5" opacity="0.95"/>
+              <path d="M174 120 L206 120 L212 142 Q214 150 206 150 L174 150 Q166 150 168 142 Z" fill="#F2D34E"/>
+              <rect x="178" y="72" width="24" height="8" rx="3" fill="#0E5C54"/>
+            </svg>
             <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(8,16,46,0.34)); pointer-events: none;"></div>
             <div style="position: absolute; left: 16px; bottom: -22px; z-index: 1; width: 46px; height: 46px; border-radius: 13px; background: linear-gradient(135deg, hsl(45,92%,58%), hsl(45,86%,47%)); display: grid; place-items: center; box-shadow: 0 10px 22px -8px rgba(0,0,0,0.55);">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(220,74%,15%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.4L4.6 18.4A2 2 0 0 0 6.3 21.4h11.4a2 2 0 0 0 1.7-3l-5.4-9V3"/></svg>
@@ -506,8 +576,21 @@
         </div>
 
         <div style="position: relative; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 20px; overflow: hidden; animation: spaFloat 4.9s ease-in-out infinite; animation-delay: 1s; transition: box-shadow .3s ease, border-color .3s ease;" style-hover="box-shadow: 0 30px 52px -24px rgba(15,28,70,0.28); border-color: hsl(45,90%,55%);">
-          <div style="position: relative; line-height: 0;">
-            <image-slot id="fac-sports" shape="rect" placeholder="Drop a sports photo" style="display: block; width: 100%; height: 184px; background: hsl(212,30%,90%);"></image-slot>
+          <div style="position: relative; line-height: 0; height: 184px;">
+            <svg viewBox="0 0 280 184" preserveAspectRatio="xMidYMid slice" style="display: block; width: 100%; height: 184px;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a sports field and track">
+              <rect width="280" height="184" fill="#3FA9F5"/>
+              <circle cx="220" cy="40" r="26" fill="#FFE08A"/>
+              <path d="M0 104 Q140 84 280 104 L280 184 L0 184 Z" fill="#2BB673"/>
+              <path d="M0 122 Q140 104 280 122 L280 184 L0 184 Z" fill="#1F9A5F"/>
+              <ellipse cx="140" cy="150" rx="92" ry="24" fill="none" stroke="#F2785E" stroke-width="9"/>
+              <ellipse cx="140" cy="150" rx="62" ry="15" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.7"/>
+              <circle cx="92" cy="128" r="16" fill="#FFFFFF"/>
+              <path d="M92 112 L98 124 L92 132 L86 124 Z" fill="#1B2A4A"/>
+              <path d="M76 128 L88 124 L92 132 L84 140 Z" fill="#1B2A4A"/>
+              <path d="M108 128 L96 124 L92 132 L100 140 Z" fill="#1B2A4A"/>
+              <rect x="196" y="96" width="6" height="52" rx="3" fill="#E8553A"/>
+              <path d="M202 98 L226 106 L202 116 Z" fill="#F2D34E"/>
+            </svg>
             <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(8,16,46,0.34)); pointer-events: none;"></div>
             <div style="position: absolute; left: 16px; bottom: -22px; z-index: 1; width: 46px; height: 46px; border-radius: 13px; background: linear-gradient(135deg, hsl(45,92%,58%), hsl(45,86%,47%)); display: grid; place-items: center; box-shadow: 0 10px 22px -8px rgba(0,0,0,0.55);">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(220,74%,15%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 12 0V3H6z"/><path d="M6 5H3.5a2 2 0 0 0 0 4H6M18 5h2.5a2 2 0 0 1 0 4H18"/><path d="M12 15v4M8 21h8"/></svg>
@@ -520,8 +603,21 @@
         </div>
 
         <div style="position: relative; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 20px; overflow: hidden; animation: spaFloat 5.4s ease-in-out infinite; animation-delay: 1.5s; transition: box-shadow .3s ease, border-color .3s ease;" style-hover="box-shadow: 0 30px 52px -24px rgba(15,28,70,0.28); border-color: hsl(45,90%,55%);">
-          <div style="position: relative; line-height: 0;">
-            <image-slot id="fac-auditorium" shape="rect" placeholder="Drop an auditorium photo" style="display: block; width: 100%; height: 184px; background: hsl(212,30%,90%);"></image-slot>
+          <div style="position: relative; line-height: 0; height: 184px;">
+            <svg viewBox="0 0 280 184" preserveAspectRatio="xMidYMid slice" style="display: block; width: 100%; height: 184px;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of an auditorium stage with spotlights">
+              <rect width="280" height="184" fill="#6C4BD8"/>
+              <path d="M118 0 L60 150 L176 150 Z" fill="#9B7BF0" opacity="0.55"/>
+              <path d="M168 0 L132 150 L240 150 L228 0 Z" fill="#8763EC" opacity="0.5"/>
+              <rect x="0" y="150" width="280" height="34" fill="#4A2FA8"/>
+              <path d="M0 0 L0 96 Q24 110 40 96 Q24 78 40 60 Q24 44 40 26 Q24 12 0 0 Z" fill="#E8553A"/>
+              <path d="M280 0 L280 96 Q256 110 240 96 Q256 78 240 60 Q256 44 240 26 Q256 12 280 0 Z" fill="#E8553A"/>
+              <circle cx="140" cy="96" r="30" fill="#FFE08A"/>
+              <circle cx="140" cy="96" r="18" fill="#FFF4CE"/>
+              <rect x="116" y="150" width="48" height="0" fill="none"/>
+              <path d="M132 96 L148 96 L156 150 L124 150 Z" fill="#2A1A6B"/>
+              <circle cx="140" cy="84" r="9" fill="#2A1A6B"/>
+              <rect x="48" y="150" width="184" height="6" fill="#F2D34E"/>
+            </svg>
             <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(8,16,46,0.34)); pointer-events: none;"></div>
             <div style="position: absolute; left: 16px; bottom: -22px; z-index: 1; width: 46px; height: 46px; border-radius: 13px; background: linear-gradient(135deg, hsl(45,92%,58%), hsl(45,86%,47%)); display: grid; place-items: center; box-shadow: 0 10px 22px -8px rgba(0,0,0,0.55);">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(220,74%,15%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10a7 7 0 0 1-14 0M12 19v3M8 22h8"/></svg>
@@ -551,7 +647,7 @@
           <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 104px; width: auto; display: block; filter: drop-shadow(0 6px 14px rgba(15,28,70,0.18));">
           <span style="flex: 1; max-width: 110px; height: 1px; background: linear-gradient(90deg, hsl(45,70%,55%), transparent);"></span>
         </div>
-        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.08; margin: 20px 0 0; letter-spacing: -0.01em; color: hsl(220,80%,20%);">For God<br>and Country</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.08; margin: 20px 0 0; letter-spacing: -0.01em; color: hsl(220,80%,20%); white-space: nowrap;">For God and Country</h2>
         <p style="font-size: 16.5px; line-height: 1.7; color: hsl(220,14%,42%); margin: 22px auto 0; max-width: 560px;">Three words that have guided every Patrician since 1965 &mdash; a call to live with faith, integrity and service, and to give the best of ourselves to others.</p>
       </div>
 
@@ -592,17 +688,79 @@
   </section>
 
   <!-- ============ FOOTER ============ -->
-  <footer style="background: hsl(221,80%,11%); color: rgba(255,255,255,0.7); padding: 48px 0;">
-    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
-      <span style="display: flex; align-items: center; gap: 12px; color: #fff;">
-        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 48px; width: auto; display: block; flex-shrink: 0; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.35));">
-        <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px;">St. Patrick's Academy, Meerut</span>
-      </span>
-      <div style="display: flex; flex-wrap: wrap; gap: 24px; font-size: 13.5px; font-weight: 500;">
-        <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Privacy</a>
-        <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Mandatory Disclosure</a>
-        <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Contact</a>
-        <span style="color: rgba(255,255,255,0.4);">&copy; {{ year }} St. Patrick's Academy</span>
+  <footer style="position: relative; background: hsl(221,80%,11%); color: rgba(255,255,255,0.72); overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: url('assets/banner1.jpg'); background-size: cover; background-position: center; opacity: 0.50;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,18,48,0.86) 0%, rgba(9,18,48,0.93) 100%);"></div>
+
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 64px 28px 0;">
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; align-items: start;">
+
+        <!-- brand + contact -->
+        <div>
+          <span style="display: flex; align-items: center; gap: 14px; color: #fff;">
+            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 76px; width: auto; display: block; flex-shrink: 0; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.4));">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 25px; line-height: 1.15;">St. Patrick's Academy,<br>Meerut</span>
+          </span>
+          <div style="margin-top: 24px;">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Get in Touch</span>
+            <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 16px; font-size: 14.5px; line-height: 1.5;">
+              <span style="display: flex; align-items: flex-start; gap: 11px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Cantt Road, Meerut &mdash; 250001, Uttar Pradesh (India)
+              </span>
+              <a href="tel:+911212640000" style="display: flex; align-items: center; gap: 11px;" style-hover="{ color: 'hsl(45,92%,64%)' }">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                +91 121 264 0000
+              </a>
+              <a href="mailto:admissions@stpatricks.edu.in" style="display: flex; align-items: center; gap: 11px;" style-hover="{ color: 'hsl(45,92%,64%)' }">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>
+                admissions@stpatricks.edu.in
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- quick links -->
+        <div>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Quick Links</span>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 18px; font-size: 14.5px; font-weight: 500;">
+            <sc-for list="{{ footerLinks }}" as="l" hint-placeholder-count="6">
+              <a href="#" style="display: inline-flex; align-items: center; gap: 9px; width: fit-content;" style-hover="{ color: 'hsl(45,92%,64%)' }">
+                <span style="width: 5px; height: 5px; border-radius: 50%; background: hsl(45,82%,52%); flex-shrink: 0;"></span>{{ l }}
+              </a>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- follow us -->
+        <div>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Follow Us</span>
+          <div style="display: flex; gap: 12px; margin-top: 18px;">
+            <a href="#" aria-label="Facebook" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: background .22s ease, transform .22s ease, color .22s ease;" style-hover="{ background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)', transform: 'translateY(-3px)' }">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="#" aria-label="Instagram" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: background .22s ease, transform .22s ease, color .22s ease;" style-hover="{ background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)', transform: 'translateY(-3px)' }">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+            </a>
+            <a href="#" aria-label="YouTube" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: background .22s ease, transform .22s ease, color .22s ease;" style-hover="{ background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)', transform: 'translateY(-3px)' }">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2a2.7 2.7 0 0 0-1.9-1.9C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.7.4a2.7 2.7 0 0 0-1.9 1.9C1 8.5 1 12 1 12s0 3.5.4 5.2a2.7 2.7 0 0 0 1.9 1.9c1.8.4 8.7.4 8.7.4s6.9 0 8.7-.4a2.7 2.7 0 0 0 1.9-1.9C23 15.5 23 12 23 12zM9.8 15.3V8.7l5.7 3.3z"></path></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: background .22s ease, transform .22s ease, color .22s ease;" style-hover="{ background: 'hsl(45,90%,52%)', color: 'hsl(220,74%,14%)', transform: 'translateY(-3px)' }">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05a4.2 4.2 0 0 1 3.75-2c4 0 4.75 2.65 4.75 6.1V21h-4v-5.3c0-1.27-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21h-4z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- copyright bar -->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 52px; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px;">
+        <span style="color: rgba(255,255,255,0.5);">&copy; {{ year }} St. Patrick's Academy, Meerut. All rights reserved.</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 22px; font-weight: 500;">
+          <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Privacy</a>
+          <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Mandatory Disclosure</a>
+          <a href="#" style-hover="{ color: 'hsl(45,92%,62%)' }">Contact</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -818,7 +976,6 @@ class Component extends DCLogic {
       const mounts = [
         { el: this.icseMount.current, data: this._achievers, variant: 'icse', kind: 'card' },
         { el: this.iscMount.current, data: this._achievers12, variant: 'isc', kind: 'card' },
-        { el: this.noticeMount.current, data: this._announcements, variant: 'notice', kind: 'notice' },
       ];
       mounts.forEach(({ el, data, variant, kind }) => {
         if (!el) return;
@@ -1043,6 +1200,7 @@ class Component extends DCLogic {
         { num: '03', title: 'Campus Life', text: 'Sport, the arts, clubs and house spirit that bring learning to life every day.' },
       ],
       year: 2026,
+      footerLinks: ['Principal\u2019s Desk', 'Photo Gallery', 'Admissions', 'Fee Structure 2026', 'Academics', 'Contact Us'],
     };
   }
 }
