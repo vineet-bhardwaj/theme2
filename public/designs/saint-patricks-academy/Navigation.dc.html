@@ -31,7 +31,10 @@
   [data-notice-list]::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.28); border-radius: 6px; }
   [data-notice-list]::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.45); }
   @media (max-width: 1040px) { [data-notice-board] { display: none !important; } }
-  @media (max-width: 860px) { [data-notice-grid] { grid-template-columns: 1fr !important; } [data-notice-grid] aside { position: static !important; } }
+  @media (max-width: 860px) { [data-notice-grid] { grid-template-columns: 1fr !important; align-items: start !important; } [data-notice-grid] aside { position: static !important; } [data-notice-left] { min-height: 0 !important; } [data-notice-inner] { position: static !important; inset: auto !important; } [data-notice-scroll] { overflow: visible !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; } }
+  [data-notice-scroll]::-webkit-scrollbar { width: 8px; }
+  [data-notice-scroll]::-webkit-scrollbar-thumb { background: hsl(44,30%,78%); border-radius: 999px; }
+  [data-notice-scroll]::-webkit-scrollbar-track { background: transparent; }
   @keyframes spaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(120,220,150,0.7); } 70% { box-shadow: 0 0 0 6px rgba(120,220,150,0); } }
   @keyframes spaSpinRev { to { transform: rotate(-360deg); } }
   @keyframes spaPlayPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.45); } 70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); } }
@@ -234,7 +237,7 @@
   </sc-if>
 
   <!-- ============ HERO ============ -->
-  <section style="position: relative; min-height: 100vh; display: flex; align-items: center; padding: 184px 0 90px; background: hsl(221,80%,12%); color: #fff; overflow: hidden;">
+  <section style="position: relative; min-height: 100vh; display: flex; align-items: center; padding: 184px 0 50px; background: hsl(221,80%,12%); color: #fff; overflow: hidden;">
     <!-- Background image layer (fade-in + zoom-out crossfade, JS-driven so it never freezes blank) -->
     <div data-hero-bg-wrap="1" style="position: absolute; inset: 0; z-index: 0; overflow: hidden; background: hsl(221,80%,12%);">
       <div data-hero-bg="0" style="position: absolute; inset: 0; background: url('assets/hero/banner1.jpg') center/cover no-repeat; transform-origin: center; opacity: 1; will-change: opacity, transform;"></div>
@@ -261,18 +264,18 @@
   </section>
 
   <!-- ============ NOTICE BOARD ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(56px, 7vw, 84px) 0; overflow: hidden;">
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 50px 0; overflow: hidden;">
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div data-notice-grid style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: start;">
+      <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,80%,42%);">
+        <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(145,60%,45%); box-shadow: 0 0 0 0 rgba(80,200,130,0.6); animation: spaPulse 1.8s ease-out infinite;"></span>Live updates</span>
+      </span>
+      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0 28px;">Notice Board</h2>
+      <div data-notice-grid style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: stretch;">
 
         <!-- LEFT: vertical notice list -->
-        <div>
-          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,80%,42%);">
-            <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(145,60%,45%); box-shadow: 0 0 0 0 rgba(80,200,130,0.6); animation: spaPulse 1.8s ease-out infinite;"></span>Live updates</span>
-          </span>
-          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0 28px;">Notice Board</h2>
-
-          <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div data-notice-left style="position: relative; min-height: 400px;">
+         <div data-notice-inner style="position: absolute; inset: 0; display: flex; flex-direction: column; min-height: 0;">
+          <div data-notice-scroll style="display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 10px 4px 4px; margin: -4px -6px -4px -4px;">
             <sc-for list="{{ notices }}" as="n" hint-placeholder-count="6">
               <div class="sp-notice" style="display: flex; gap: 16px; background: #fff; border: 1px solid hsl(44,40%,88%); border-left: 4px solid {{ n.tagBg }}; border-radius: 14px; padding: 20px 22px; box-shadow: 0 18px 40px -28px rgba(15,28,70,0.3); transition: transform .3s ease, box-shadow .3s ease;">
                 <div style="flex-shrink: 0; width: 56px; text-align: center;">
@@ -290,10 +293,11 @@
               </div>
             </sc-for>
           </div>
+         </div>
         </div>
 
         <!-- RIGHT: admissions / student stats -->
-        <aside style="position: sticky; top: 96px; background: hsl(221,80%,13%); color: #fff; border-radius: 22px; padding: clamp(28px, 3vw, 38px); box-shadow: 0 40px 80px -40px rgba(15,28,70,0.55); overflow: hidden;">
+        <aside style="position: relative; align-self: start; background: hsl(221,80%,13%); color: #fff; border-radius: 22px; padding: clamp(28px, 3vw, 38px); box-shadow: 0 40px 80px -40px rgba(15,28,70,0.55); overflow: hidden;">
           <div style="position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(245,200,90,0.18), transparent 70%);"></div>
           <span style="position: relative; display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,92%,64%);">Admissions 2026&ndash;27</span>
           <h3 style="position: relative; font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.15; margin: 12px 0 26px;">A community built on excellence</h3>
@@ -334,7 +338,7 @@
   </section>
 
   <!-- ============ WELCOME ============ -->
-  <section style="background: hsl(210,40%,98%); padding: clamp(72px, 9vw, 120px) 0; color: hsl(220,80%,25%);">
+  <section style="background: hsl(210,40%,98%); padding: 50px 0; color: hsl(220,80%,25%);">
     <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
       <div style="max-width: 720px; margin: 0 auto; text-align: center;">
         <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: hsl(45,78%,42%);">Welcome to St. Patrick's</span>
@@ -357,7 +361,7 @@
   </section>
 
   <!-- ============ ABOUT US ============ -->
-  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: clamp(72px, 9vw, 118px) 0; overflow: hidden;">
+  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: 50px 0; overflow: hidden;">
     <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0); background-size: 26px 26px; opacity: 0.5;"></div>
     <div style="position: absolute; top: -140px; left: -120px; width: 440px; height: 440px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.16), transparent 65%); animation: spaGlow 10s ease-in-out infinite;"></div>
 
@@ -426,7 +430,7 @@
   </section>
 
   <!-- ============ ICSE 2025 HIGH SCORERS ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 50px 0; overflow: hidden;">
     <div style="position: absolute; top: -120px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.14), transparent 68%);"></div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -461,7 +465,7 @@
   </section>
 
   <!-- ============ ISC 2026 HIGH SCORERS (Class XII) ============ -->
-  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
+  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: 50px 0; overflow: hidden;">
     <div style="position: absolute; top: -120px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.16), transparent 68%);"></div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -496,7 +500,7 @@
   </section>
 
   <!-- ============ OUR FACILITIES ============ -->
-  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 118px) 0; overflow: hidden;">
+  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: 50px 0; overflow: hidden;">
     <div style="position: absolute; top: -120px; right: -100px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.1), transparent 68%);"></div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
@@ -634,7 +638,7 @@
   </section>
 
   <!-- ============ OUR MOTTO / PRINCIPAL ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden;">
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 50px 0; overflow: hidden;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(300px, 40vw, 620px); line-height: 0.8; color: hsl(45,60%,46%); opacity: 0.04; pointer-events: none; user-select: none;">&#10039;</div>
 
     <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
