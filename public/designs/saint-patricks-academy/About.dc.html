@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  #dc-root { height: 100vh !important; overflow-y: auto !important; overflow-x: hidden; }
+  body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: hsl(220,80%,25%); -webkit-font-smoothing: antialiased; background: #fff; }
+  a { text-decoration: none; color: inherit; }
+  @keyframes spaFadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes spaMegaIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes spaItemIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes spaDrawerIn { from { transform: translateX(108%); } to { transform: translateX(0); } }
+  @keyframes spaFadeBg { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes spaFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes spaTabBlink { 0%, 88%, 100% { color: #fff; text-shadow: none; } 94% { color: hsl(45,92%,68%); text-shadow: 0 0 10px rgba(247,203,69,0.55); } }
+  .sp-lead:hover { transform: translateY(-6px); box-shadow: 0 34px 56px -26px rgba(15,28,70,0.42); }
+  .sp-value:hover { transform: translateY(-5px); }
+  @media (max-width: 980px) { footer [style*="1.15fr 0.85fr 1fr 1.1fr"] { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important; } }
+  @media (max-width: 860px) { [data-about-split] { grid-template-columns: 1fr !important; } }
+  @media (prefers-reduced-motion: reduce) {
+    [style*="spaFadeUp"], [style*="spaItemIn"], [style*="spaMegaIn"], [style*="spaDrawerIn"], [data-hero-anim] { animation: none !important; opacity: 1 !important; transform: none !important; }
+  }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div style="position: relative; width: 100%;">
+
+  <!-- ============ HEADER ============ -->
+  <header onMouseLeave="{{ clearMenu }}" style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: {{ headerBg }}; box-shadow: {{ headerShadow }}; border-bottom: {{ headerBorder }}; transform: translateZ(0); will-change: background; isolation: isolate; transition: background .45s ease, box-shadow .45s ease, border-color .45s ease;">
+
+    <!-- utility bar -->
+    <div style="height: {{ utilHeight }}; opacity: {{ utilOpacity }}; overflow: hidden; transition: height .4s cubic-bezier(.4,0,.2,1), opacity .3s ease; color: {{ utilColor }}; background: hsl(221,72%,12%);">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 60px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 18px; font-size: 14px;">
+
+        <!-- tab pills -->
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; white-space: nowrap; transition: background .2s ease, border-color .2s ease, color .2s ease;" style-hover="background: rgba(255,255,255,0.1); border-color: hsl(45,75%,58%); color: hsl(45,92%,68%);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span style="animation: spaTabBlink 13s ease-in-out infinite; animation-delay: 0.6s;">Board Results</span>
+          </a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; white-space: nowrap; transition: background .2s ease, border-color .2s ease, color .2s ease;" style-hover="background: rgba(255,255,255,0.1); border-color: hsl(45,75%,58%); color: hsl(45,92%,68%);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style="animation: spaTabBlink 10.5s ease-in-out infinite; animation-delay: 3.2s;">Parent Portal</span>
+          </a>
+          <a href="#" style="display: inline-flex; align-items: center; height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; white-space: nowrap; transition: background .2s ease, border-color .2s ease, color .2s ease;" style-hover="background: rgba(255,255,255,0.1); border-color: hsl(45,75%,58%); color: hsl(45,92%,68%);"><span style="animation: spaTabBlink 14.3s ease-in-out infinite; animation-delay: 1.8s;">Notice Board</span></a>
+          <a href="#" style="display: inline-flex; align-items: center; height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; white-space: nowrap; transition: background .2s ease, border-color .2s ease, color .2s ease;" style-hover="background: rgba(255,255,255,0.1); border-color: hsl(45,75%,58%); color: hsl(45,92%,68%);"><span style="animation: spaTabBlink 11.8s ease-in-out infinite; animation-delay: 5.6s;">ICSE CLASS X &middot; 2026</span></a>
+          <a href="#" style="display: inline-flex; align-items: center; height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; white-space: nowrap; transition: background .2s ease, border-color .2s ease, color .2s ease;" style-hover="background: rgba(255,255,255,0.1); border-color: hsl(45,75%,58%); color: hsl(45,92%,68%);"><span style="animation: spaTabBlink 13.4s ease-in-out infinite; animation-delay: 8.2s;">ISC CLASS XII &middot; 2026</span></a>
+        </div>
+
+        <!-- right CTA -->
+        <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 9px 22px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; white-space: nowrap; box-shadow: 0 4px 12px -4px rgba(196,150,20,0.55); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-1px); background: hsl(45,93%,55%);">Apply for Admission<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <!-- main bar -->
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+
+      <!-- brand -->
+      <a href="Navigation.dc.html" style="display: flex; align-items: center; gap: 14px; transform: {{ brandScale }}; transform-origin: left center; transition: transform .4s cubic-bezier(.4,0,.2,1);">
+        <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 78px; width: auto; display: block; flex-shrink: 0; filter: {{ crestShadow }}; transition: filter .45s ease;">
+        <span style="display: flex; flex-direction: column; line-height: 1; color: {{ brandColor }}; transition: color .45s ease;">
+          <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 29px; letter-spacing: 0.01em; white-space: nowrap;">St. Patrick's Academy</span>
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 5px; opacity: .72;">Meerut &middot; Estd 1965</span>
+        </span>
+      </a>
+
+      <!-- desktop nav -->
+      <nav style="display: {{ desktopDisplay }}; align-items: center; gap: 4px; height: 100%;">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <a href="{{ item.href }}" onMouseEnter="{{ item.onEnter }}" style="position: relative; display: inline-flex; align-items: center; gap: 6px; height: 88px; padding: 0 18px; font-size: 16.5px; font-weight: 600; color: {{ item.color }}; transition: color .25s ease;" style-hover="color: hsl(45,90%,50%) !important;">
+            {{ item.label }}
+            <sc-if value="{{ item.hasMega }}" hint-placeholder-val="{{ false }}">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ item.chevron }}; transition: transform .3s ease;"><path d="m6 9 6 6 6-6"/></svg>
+            </sc-if>
+            <span style="position: absolute; left: 16px; right: 16px; bottom: 20px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px; transform: scaleX({{ item.underline }}); transform-origin: left; transition: transform .3s cubic-bezier(.4,0,.2,1);"></span>
+          </a>
+        </sc-for>
+      </nav>
+
+      <!-- right actions -->
+      <div style="display: {{ desktopDisplay }}; align-items: center; gap: 8px;">
+        <button style="width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; color: {{ navColor }}; display: grid; place-items: center; cursor: pointer; transition: color .25s ease;" style-hover="color: hsl(45,80%,45%) !important;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+      </div>
+
+      <!-- hamburger -->
+      <button onClick="{{ toggleMobile }}" aria-label="Menu" style="display: {{ hamburgerDisplay }}; flex-direction: column; justify-content: center; gap: 5px; width: 46px; height: 46px; border: none; background: transparent; cursor: pointer; padding: 0;">
+        <span style="display: block; width: 24px; height: 2.5px; border-radius: 3px; background: {{ navColor }}; transform: {{ line1 }}; transition: transform .35s cubic-bezier(.4,0,.2,1), background .4s ease;"></span>
+        <span style="display: block; width: 24px; height: 2.5px; border-radius: 3px; background: {{ navColor }}; opacity: {{ line2Opacity }}; transform: {{ line2Scale }}; transform-origin: left; transition: opacity .25s ease, transform .35s ease, background .4s ease;"></span>
+        <span style="display: block; width: 24px; height: 2.5px; border-radius: 3px; background: {{ navColor }}; transform: {{ line3 }}; transition: transform .35s cubic-bezier(.4,0,.2,1), background .4s ease;"></span>
+      </button>
+    </div>
+
+    <!-- mega menu panel -->
+    <sc-if value="{{ megaOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: saturate(180%) blur(14px); border-top: 1px solid hsl(212,32%,91%); box-shadow: 0 30px 60px -24px rgba(15,28,70,0.32); animation: spaMegaIn .12s linear both;">
+        <div style="max-width: 1240px; margin: 0 auto; padding: 38px 28px 42px; display: flex; gap: 56px; align-items: flex-start;">
+          <div style="display: flex; gap: 60px; flex: 1; flex-wrap: wrap;">
+            <sc-for list="{{ megaColumns }}" as="col" hint-placeholder-count="2">
+              <div style="min-width: 210px;">
+                <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid hsl(212,32%,91%);">{{ col.title }}</div>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <sc-for list="{{ col.links }}" as="link" hint-placeholder-count="4">
+                    <a href="{{ link.href }}" style="display: flex; flex-direction: column; gap: 2px; padding: 9px 12px; margin: 0 -12px; border-radius: 10px; color: hsl(220,80%,25%); transition: color .2s ease;" style-hover="color: hsl(45,80%,42%) !important;">
+                      <span style="font-size: 15px; font-weight: 600;">{{ link.label }}</span>
+                      <sc-if value="{{ link.desc }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; color: hsl(220,14%,52%);">{{ link.desc }}</span></sc-if>
+                    </a>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- featured card -->
+          <sc-if value="{{ megaFeatured }}" hint-placeholder-val="{{ false }}">
+            <a href="#" style="width: 300px; flex-shrink: 0; padding: 28px; border-radius: 18px; background: {{ megaFeatured.bg }}; color: {{ megaFeatured.color }}; display: block; transition: transform .3s ease, box-shadow .3s ease;" style-hover="{ transform: 'translateY(-4px)', boxShadow: '0 24px 44px -16px rgba(15,28,70,0.4)' }">
+              <span style="display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; background: rgba(255,255,255,0.18); margin-bottom: 16px;">{{ megaFeatured.eyebrow }}</span>
+              <div style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; line-height: 1.15; margin-bottom: 10px;">{{ megaFeatured.title }}</div>
+              <p style="font-size: 13.5px; line-height: 1.55; margin: 0 0 18px; color: {{ megaFeatured.sub }};">{{ megaFeatured.text }}</p>
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: {{ megaFeatured.ctaBg }}; color: {{ megaFeatured.ctaColor }}; font-size: 13px; font-weight: 700; white-space: nowrap;">{{ megaFeatured.cta }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- ============ MOBILE DRAWER ============ -->
+  <sc-if value="{{ mobileOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 110;">
+      <div onClick="{{ closeMobile }}" style="position: absolute; inset: 0; background: rgba(10,22,55,0.5); backdrop-filter: blur(3px); animation: spaFadeBg .3s ease both;"></div>
+      <aside style="position: absolute; top: 0; right: 0; bottom: 0; width: min(86vw, 380px); background: #fff; box-shadow: -20px 0 60px -20px rgba(10,22,55,0.5); display: flex; flex-direction: column; animation: spaDrawerIn .4s cubic-bezier(.2,.8,.2,1) both;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 22px; border-bottom: 1px solid hsl(212,32%,92%);">
+          <span style="display: flex; align-items: center; gap: 11px;">
+            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 44px; width: auto; display: block; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; color: hsl(220,80%,25%);">St. Patrick's</span>
+          </span>
+          <button onClick="{{ closeMobile }}" style="width: 40px; height: 40px; border-radius: 50%; border: none; background: hsl(210,40%,96%); display: grid; place-items: center; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="hsl(220,80%,25%)" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; padding: 12px 18px 24px;">
+          <sc-for list="{{ mobileItems }}" as="m" hint-placeholder-count="6">
+            <div style="border-bottom: 1px solid hsl(212,32%,94%); opacity: 0; animation: spaItemIn .45s ease forwards; animation-delay: {{ m.delay }};">
+              <button onClick="{{ m.onClick }}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 6px; border: none; background: transparent; cursor: pointer; font-family: inherit; font-size: 16.5px; font-weight: 600; color: hsl(220,80%,25%); text-align: left;">
+                {{ m.label }}
+                <sc-if value="{{ m.hasMega }}" hint-placeholder-val="{{ false }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(45,80%,42%)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transform: {{ m.chevron }}; transition: transform .3s ease;"><path d="m6 9 6 6 6-6"/></svg>
+                </sc-if>
+              </button>
+              <div style="max-height: {{ m.subMaxHeight }}; opacity: {{ m.subOpacity }}; overflow: hidden; transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease;">
+                <div style="display: flex; flex-direction: column; padding: 0 6px 12px;">
+                  <sc-for list="{{ m.subLinks }}" as="s" hint-placeholder-count="4">
+                    <a href="{{ s.href }}" style="padding: 10px 14px; font-size: 14.5px; font-weight: 500; color: hsl(220,14%,46%); border-left: 2px solid hsl(212,32%,90%); transition: color .2s ease, border-color .2s ease;" style-hover="{ color: 'hsl(45,80%,42%)', borderColor: 'hsl(45,90%,50%)' }">{{ s.label }}</a>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+
+          <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 22px; padding: 16px; border-radius: 14px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-size: 15px; font-weight: 700; box-shadow: 0 10px 24px -10px rgba(196,150,20,0.7);">
+            Apply for Admission
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <div style="display: flex; justify-content: center; gap: 24px; margin-top: 20px; font-size: 13px; font-weight: 600; color: hsl(220,14%,50%);">
+            <a href="#">Parent Portal</a><a href="#">Alumni</a><a href="#">Careers</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section style="position: relative; display: flex; align-items: flex-end; min-height: 62vh; padding: 184px 0 64px; background: hsl(221,80%,12%); color: #fff; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: url('assets/hero/collage1.jpg'); background-size: cover; background-position: center; opacity: 0.20;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(160deg, hsl(221,84%,11%) 0%, rgba(13,26,66,0.72) 60%, hsl(222,72%,15%) 100%);"></div>
+    <div style="position: absolute; top: -80px; right: -60px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.14), transparent 62%);"></div>
+
+    <div style="position: relative; max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 28px;">
+      <!-- breadcrumb -->
+      <div data-hero-anim="1" style="display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.66); margin-bottom: 22px;">
+        <a href="Navigation.dc.html" style="color: rgba(255,255,255,0.66);" style-hover="color: hsl(45,92%,66%);">Home</a>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span style="color: hsl(45,92%,66%);">About</span>
+      </div>
+
+      <span data-hero-anim="1" style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: hsl(45,92%,66%);">
+        <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>Our Story
+      </span>
+      <h1 data-hero-anim="1" style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; letter-spacing: -0.01em; margin: 18px 0 0; max-width: 900px; text-wrap: balance;">
+        Six decades of shaping<br>confident, compassionate minds.
+      </h1>
+      <p data-hero-anim="1" style="font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; max-width: 640px; color: rgba(255,255,255,0.82); margin: 24px 0 0;">
+        Founded in 1965 by the Patrician Brothers, St. Patrick's Academy has grown into one of Meerut's most respected schools &mdash; blending timeless values with a future-ready education on a green twelve-acre campus.
+      </p>
+
+      <!-- stat chips -->
+      <div data-hero-anim="1" style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px;">
+        <sc-for list="{{ heroStats }}" as="st" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; gap: 3px; padding: 14px 22px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 26px; color: hsl(45,92%,64%); line-height: 1;">{{ st.num }}</span>
+            <span style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.72);">{{ st.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HERITAGE & HISTORY ============ -->
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div data-about-split style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
+            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Heritage &amp; History
+          </span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">A legacy built on faith, learning and service</h2>
+          <p style="font-size: 16px; line-height: 1.7; color: hsl(220,20%,36%); margin: 20px 0 0;">
+            What began in 1965 as a modest schoolhouse with a handful of pupils has, over six decades, become a thriving community of more than two thousand learners. Through every era, our purpose has stayed the same &mdash; to form young people of character, curiosity and conscience.
+          </p>
+          <p style="font-size: 16px; line-height: 1.7; color: hsl(220,20%,36%); margin: 14px 0 0;">
+            Guided by the Patrician tradition and our motto <em>&ldquo;For God and Country,&rdquo;</em> we pair academic rigour with the arts, sport and service, so that every child leaves us ready for the world beyond the school gate.
+          </p>
+
+          <!-- timeline -->
+          <div style="display: flex; flex-direction: column; gap: 0; margin-top: 30px; border-left: 2px solid hsl(44,40%,84%); padding-left: 24px;">
+            <sc-for list="{{ milestones }}" as="ml" hint-placeholder-count="4">
+              <div style="position: relative; padding: 0 0 22px;">
+                <span style="position: absolute; left: -33px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: hsl(45,90%,52%); border: 3px solid hsl(44,46%,97%); box-shadow: 0 0 0 1px hsl(44,40%,80%);"></span>
+                <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 18px; color: hsl(220,80%,22%);">{{ ml.year }}</div>
+                <div style="font-size: 14.5px; line-height: 1.5; color: hsl(220,20%,40%); margin-top: 3px;">{{ ml.text }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div style="position: absolute; inset: 18px -18px -18px 18px; border-radius: 22px; border: 2px solid hsl(45,80%,60%); opacity: 0.5;"></div>
+          <image-slot id="about-heritage" src="assets/hero/collage2.jpg" shape="rounded" radius="22" placeholder="Drop a campus photo" style="position: relative; display: block; width: 100%; height: 460px; box-shadow: 0 34px 60px -30px rgba(15,28,70,0.4);"></image-slot>
+          <div style="position: absolute; left: -18px; bottom: -22px; display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-radius: 16px; background: #fff; box-shadow: 0 24px 46px -22px rgba(15,28,70,0.34);">
+            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 52px; width: auto; display: block;">
+            <span style="display: flex; flex-direction: column; line-height: 1.2;">
+              <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 22px; color: hsl(220,80%,20%);">Estd 1965</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: hsl(220,14%,50%);">Meerut, Uttar Pradesh</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VISION & MISSION ============ -->
+  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: 84px 0; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 26px 26px;"></div>
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="text-align: center; max-width: 680px; margin: 0 auto;">
+        <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,66%);">
+          <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>What Guides Us<span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>
+        </span>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">Our Vision &amp; Mission</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin-top: 48px;">
+        <sc-for list="{{ pillars }}" as="p" hint-placeholder-count="2">
+          <div class="sp-value" style="position: relative; padding: 36px 32px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform .3s ease;">
+            <div style="display: grid; place-items: center; width: 56px; height: 56px; border-radius: 15px; background: linear-gradient(150deg, hsl(45,92%,58%), hsl(43,90%,47%)); color: hsl(220,74%,14%); margin-bottom: 20px;">
+              <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 24px;">{{ p.icon }}</span>
+            </div>
+            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 23px; margin: 0 0 12px;">{{ p.title }}</h3>
+            <p style="font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.78); margin: 0;">{{ p.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- core values -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 40px;">
+        <sc-for list="{{ values }}" as="v" hint-placeholder-count="5">
+          <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9);">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: hsl(45,90%,58%);"></span>{{ v }}
+          </span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LEADERSHIP & FACULTY ============ -->
+  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
+            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Leadership &amp; Faculty
+          </span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">The people who lead the way</h2>
+        </div>
+        <p style="font-size: 15.5px; line-height: 1.6; color: hsl(220,20%,40%); max-width: 420px; margin: 0;">
+          A dedicated team of educators and administrators, many with us for decades, who know every student by name.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 26px; margin-top: 44px;">
+        <sc-for list="{{ leaders }}" as="ld" hint-placeholder-count="4">
+          <div class="sp-lead" style="position: relative; background: #fff; border: 1px solid hsl(44,40%,88%); border-radius: 22px; padding: 30px 24px 26px; text-align: center; box-shadow: 0 22px 44px -30px rgba(15,28,70,0.32); transition: transform .3s ease, box-shadow .3s ease;">
+            <div style="position: relative; width: 128px; height: 128px; margin: 0 auto;">
+              <div style="position: absolute; inset: -5px; border-radius: 50%; background: conic-gradient(from 0deg, hsl(45,92%,58%), hsl(45,80%,46%), hsl(45,92%,58%));"></div>
+              <div style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: hsl(212,30%,90%); display: grid; place-items: center;">
+                <image-slot id="{{ ld.slot }}" shape="circle" placeholder="Photo" style="display: block; width: 118px; height: 118px;"></image-slot>
+              </div>
+            </div>
+            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; margin: 18px 0 0;">{{ ld.name }}</h3>
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: hsl(45,80%,42%); margin-top: 5px; text-transform: uppercase;">{{ ld.role }}</div>
+            <p style="font-size: 13.5px; line-height: 1.55; color: hsl(220,16%,48%); margin: 12px 0 0;">{{ ld.note }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACCREDITATIONS ============ -->
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 72px 0; overflow: hidden;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; text-align: center;">
+      <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
+        <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Accreditations &amp; Affiliations<span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>
+      </span>
+      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(26px, 3vw, 36px); line-height: 1.12; margin: 16px 0 40px;">Recognised for standards we never compromise</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <sc-for list="{{ accreditations }}" as="ac" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px 22px; border-radius: 18px; background: #fff; border: 1px solid hsl(44,40%,88%); box-shadow: 0 18px 40px -30px rgba(15,28,70,0.28);">
+            <div style="display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: hsl(220,80%,20%); color: hsl(45,92%,64%);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <div style="font-weight: 700; font-size: 16px; color: hsl(220,80%,22%);">{{ ac.name }}</div>
+            <div style="font-size: 13px; line-height: 1.5; color: hsl(220,16%,50%);">{{ ac.detail }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA BAND ============ -->
+  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: 74px 0; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: url('assets/hero/collage3.jpg'); background-size: cover; background-position: center; opacity: 0.16;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(160deg, rgba(11,22,58,0.92), rgba(13,26,66,0.86));"></div>
+    <div style="position: relative; max-width: 900px; margin: 0 auto; padding: 0 28px; text-align: center;">
+      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.1; margin: 0;">Come see our campus for yourself</h2>
+      <p style="font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.8); max-width: 560px; margin: 18px auto 0;">
+        Book a personal tour, meet our faculty, and discover why families have trusted St. Patrick's for generations.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 30px;">
+        <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 15.5px; box-shadow: 0 12px 28px -12px rgba(196,150,20,0.7); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-2px); background: hsl(45,93%,55%);">
+          Book a Campus Tour
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.3); color: #fff; font-weight: 700; font-size: 15.5px; transition: background .2s ease, border-color .2s ease;" style-hover="background: rgba(255,255,255,0.16); border-color: hsl(45,75%,58%);">
+          Contact Admissions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="position: relative; background: hsl(221,80%,11%); color: rgba(255,255,255,0.72); overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: url('assets/banner1.jpg'); background-size: cover; background-position: center; opacity: 0.50;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,18,48,0.86) 0%, rgba(9,18,48,0.93) 100%);"></div>
+
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 64px 28px 0;">
+      <div style="display: grid; grid-template-columns: 1.15fr 0.85fr 1fr 1.1fr; gap: 40px; align-items: start;">
+
+        <!-- brand + contact -->
+        <div>
+          <span style="display: flex; align-items: center; gap: 14px; color: #fff; cursor: default;">
+            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 76px; width: auto; display: block; flex-shrink: 0; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.4));">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 25px; line-height: 1.15;">St. Patrick's Academy,<br>Meerut</span>
+          </span>
+          <div style="margin-top: 24px;">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Get in Touch</span>
+            <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 16px; font-size: 14.5px; line-height: 1.5;">
+              <span style="display: flex; align-items: flex-start; gap: 11px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Cantt Road, Meerut &mdash; 250001, Uttar Pradesh (India)
+              </span>
+              <a href="tel:+911212640000" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                +91 121 264 0000
+              </a>
+              <a href="mailto:admissions@stpatricks.edu.in" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>
+                admissions@stpatricks.edu.in
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- quick links -->
+        <div>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Quick Links</span>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 18px; font-size: 14.5px; font-weight: 500;">
+            <sc-for list="{{ footerLinks }}" as="l" hint-placeholder-count="6">
+              <a href="#" style="display: inline-flex; align-items: center; gap: 9px; width: fit-content;" style-hover="color: hsl(45,92%,64%);">
+                <span style="width: 5px; height: 5px; border-radius: 50%; background: hsl(45,82%,52%); flex-shrink: 0;"></span>{{ l }}
+              </a>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- follow us -->
+        <div>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Follow Us</span>
+          <div style="display: flex; gap: 12px; margin-top: 18px;">
+            <a href="#" aria-label="Facebook" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: border-color .22s ease, transform .22s ease, color .22s ease;" style-hover="border-color: hsl(45,90%,52%) !important; color: hsl(45,90%,60%) !important; transform: translateY(-3px);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="#" aria-label="Instagram" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: border-color .22s ease, transform .22s ease, color .22s ease;" style-hover="border-color: hsl(45,90%,52%) !important; color: hsl(45,90%,60%) !important; transform: translateY(-3px);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+            </a>
+            <a href="#" aria-label="YouTube" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: border-color .22s ease, transform .22s ease, color .22s ease;" style-hover="border-color: hsl(45,90%,52%) !important; color: hsl(45,90%,60%) !important; transform: translateY(-3px);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2a2.7 2.7 0 0 0-1.9-1.9C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.7.4a2.7 2.7 0 0 0-1.9 1.9C1 8.5 1 12 1 12s0 3.5.4 5.2a2.7 2.7 0 0 0 1.9 1.9c1.8.4 8.7.4 8.7.4s6.9 0 8.7-.4a2.7 2.7 0 0 0 1.9-1.9C23 15.5 23 12 23 12zM9.8 15.3V8.7l5.7 3.3z"></path></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: border-color .22s ease, transform .22s ease, color .22s ease;" style-hover="border-color: hsl(45,90%,52%) !important; color: hsl(45,90%,60%) !important; transform: translateY(-3px);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05a4.2 4.2 0 0 1 3.75-2c4 0 4.75 2.65 4.75 6.1V21h-4v-5.3c0-1.27-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21h-4z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- school map -->
+        <div>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">School Map</span>
+          <h4 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: #fff; margin: 10px 0 16px;">Reach us</h4>
+          <div style="position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 20px 40px -24px rgba(0,0,0,0.6); height: 168px; background: rgba(255,255,255,0.06);">
+            <iframe title="St. Patrick's Academy location map" src="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001&output=embed" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.15) contrast(1.05);" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a href="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001" target="_blank" rel="noopener" style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.95); color: hsl(220,80%,20%); font-size: 12px; font-weight: 700;">
+              Open in Maps
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- copyright bar -->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 52px; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px;">
+        <span style="color: rgba(255,255,255,0.5);">&copy; {{ year }} St. Patrick's Academy, Meerut. All rights reserved.</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 22px; font-weight: 500;">
+          <a href="#" style-hover="color: hsl(45,92%,62%);">Privacy</a>
+          <a href="#" style-hover="color: hsl(45,92%,62%);">Mandatory Disclosure</a>
+          <a href="#" style-hover="color: hsl(45,92%,62%);">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    scrolled: false,
+    activeMenu: null,
+    navHover: null,
+    mobileOpen: false,
+    mobileExpanded: null,
+    isMobile: (typeof window !== 'undefined' ? window.innerWidth < 1080 : false),
+  };
+
+  componentDidMount() {
+    this._onScroll = (e) => {
+      let y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (!y && e && e.target && typeof e.target.scrollTop === 'number') y = e.target.scrollTop;
+      const s = y > 36;
+      if (s !== this.state.scrolled) this.setState({ scrolled: s });
+    };
+    this._onResize = () => {
+      const m = window.innerWidth < 1080;
+      if (m !== this.state.isMobile) {
+        this.setState({ isMobile: m, activeMenu: null, mobileOpen: m ? this.state.mobileOpen : false });
+      }
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    document.addEventListener('scroll', this._onScroll, { passive: true, capture: true });
+    window.addEventListener('resize', this._onResize);
+    this._onScroll();
+
+    // Hero entrance: content is visible by default; the fade-up plays via JS
+    // only when the tab is actually visible, with a guaranteed reveal fallback
+    // so the hero is never stuck blank when CSS animations are paused.
+    this._introDone = false;
+    this._playIntro = () => {
+      if (this._introDone) return;
+      const els = document.querySelectorAll('[data-hero-anim]');
+      if (!els.length) return;
+      clearTimeout(this._introFallback);
+      this._introFallback = setTimeout(() => {
+        els.forEach((el) => {
+          try { el.getAnimations().forEach((a) => a.cancel()); } catch (e) {}
+          el.style.opacity = '1'; el.style.transform = 'none';
+        });
+      }, 1800);
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
+      this._introDone = true;
+      els.forEach((el, i) => {
+        try {
+          el.getAnimations().forEach((a) => a.cancel());
+          el.animate(
+            [{ opacity: 0, transform: 'translateY(26px)' }, { opacity: 1, transform: 'translateY(0)' }],
+            { duration: 700, delay: 80 + i * 120, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' }
+          );
+        } catch (e) {}
+      });
+    };
+    requestAnimationFrame(this._playIntro);
+    setTimeout(this._playIntro, 280);
+    document.addEventListener('visibilitychange', this._playIntro);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    document.removeEventListener('scroll', this._onScroll, { capture: true });
+    window.removeEventListener('resize', this._onResize);
+    if (this._playIntro) document.removeEventListener('visibilitychange', this._playIntro);
+    clearTimeout(this._introFallback);
+  }
+
+  renderVals() {
+    const navy = 'hsl(220,80%,25%)';
+    const navyDeep = 'hsl(220,74%,14%)';
+    const gold = 'hsl(45,90%,50%)';
+    const slate = 'hsl(220,16%,42%)';
+    const { scrolled, activeMenu, mobileOpen, mobileExpanded, isMobile } = this.state;
+
+    // Shared page-link map — keeps the nav identical to the home page.
+    const pageHref = (label) => (
+      label === 'About School' ? 'About.dc.html' :
+      label === 'Patrician Brothers' ? 'Patrician Brothers.dc.html' :
+      label === 'Our Vision' ? 'Our Vision.dc.html' :
+      label === 'School Song & School Prayer' ? 'School Song and Prayer.dc.html' :
+      label === 'Working Hours' ? 'Working Hours.dc.html' :
+      label === 'Teaching Staff' ? 'Teaching Staff.dc.html' :
+      label === 'Administrative Staff' ? 'Administrative Staff.dc.html' :
+      label === 'Ancillary Staff' ? 'Ancillary Staff.dc.html' :
+      label === 'Alumni' ? 'Alumini.dc.html' :
+      label === 'Alumni of SPA' ? 'Alumini of SPA.dc.html' : '#'
+    );
+
+    const DATA = [
+      { key: 'about', label: 'About', columns: [
+        { title: 'About Us', links: [
+          { label: 'About School' },
+          { label: 'Patrician Brothers' },
+          { label: 'Our Vision' },
+          { label: 'School Song & School Prayer' },
+          { label: 'Working Hours' },
+        ] },
+        { title: 'People', links: [
+          { label: 'Teaching Staff' },
+          { label: 'Administrative Staff' },
+          { label: 'Ancillary Staff' },
+          { label: 'Alumni' },
+          { label: 'Alumni of SPA' },
+        ] },
+      ], featured: { eyebrow: 'Featured', title: 'A campus built for curiosity', text: 'Explore our twelve-acre green campus and modern learning spaces.', cta: 'Take a virtual tour' } },
+
+      { key: 'academics', label: 'Academics', columns: [
+        { title: 'Our Schools', links: [
+          { label: 'Primary School', desc: 'Grades I – V' },
+          { label: 'Middle School', desc: 'Grades VI – VIII' },
+          { label: 'Senior School', desc: 'Grades IX – XII' },
+        ] },
+        { title: 'Programs', links: [
+          { label: 'CBSE Curriculum' },
+          { label: 'STEM & Innovation' },
+          { label: 'Arts, Music & Theatre' },
+          { label: 'Sports & Athletics' },
+        ] },
+      ], featured: { eyebrow: 'Results 2025', title: '98.7% first division', text: 'See how our students performed in the board examinations.', cta: 'View results' } },
+
+      { key: 'admissions', label: 'Admissions', columns: [
+        { title: 'How to Apply', links: [
+          { label: 'Admission Process' },
+          { label: 'Eligibility & Age Criteria' },
+          { label: 'Fee Structure' },
+          { label: 'Important Dates' },
+        ] },
+        { title: 'Resources', links: [
+          { label: 'Download Prospectus' },
+          { label: 'Scholarships' },
+          { label: 'Frequently Asked Questions' },
+        ] },
+      ], featured: { eyebrow: 'Admissions open', title: 'Enrolment 2026–27', text: 'Applications for the new session are now open. Limited seats per grade.', cta: 'Start your application', gold: true } },
+
+      { key: 'campus', label: 'Learning' },
+      { key: 'news', label: 'Facilities' },
+      { key: 'contact', label: 'Contact' },
+    ];
+
+    const setMenu = (k) => { if (!isMobile) this.setState({ activeMenu: k, navHover: null }); };
+    const clearMenu = () => { const patch = {}; if (this.state.activeMenu) patch.activeMenu = null; if (this.state.navHover) patch.navHover = null; if (Object.keys(patch).length) this.setState(patch); };
+    const hoverPlain = (k) => { if (!isMobile) this.setState({ navHover: k }); };
+
+    const active = DATA.find((n) => n.key === activeMenu && n.columns);
+    const megaOpen = !!active && !isMobile;
+    const solid = scrolled || megaOpen;
+
+    const navColor = solid ? navy : '#ffffff';
+
+    const navItems = DATA.map((n) => {
+      const open = activeMenu === n.key && !!n.columns;
+      const hovered = !n.columns && this.state.navHover === n.key;
+      return {
+        key: n.key, label: n.label, href: '#', hasMega: !!n.columns, open,
+        color: (open || hovered) ? gold : navColor,
+        underline: (open || hovered) ? 1 : 0,
+        chevron: open ? 'rotate(180deg)' : 'rotate(0deg)',
+        onEnter: n.columns ? () => setMenu(n.key) : () => hoverPlain(n.key),
+      };
+    });
+
+    let gi = 0;
+    const megaColumns = active ? active.columns.map((c) => ({
+      title: c.title,
+      links: c.links.map((l) => ({ label: l.label, desc: l.desc || null, href: pageHref(l.label), delay: (0.04 * (gi++) + 0.05).toFixed(2) + 's' })),
+    })) : [];
+
+    const f = active && active.featured;
+    const megaFeatured = f ? {
+      eyebrow: f.eyebrow, title: f.title, text: f.text, cta: f.cta,
+      bg: f.gold ? 'linear-gradient(140deg, hsl(45,92%,58%), hsl(43,90%,47%))' : 'linear-gradient(150deg, hsl(220,74%,19%), hsl(222,80%,30%))',
+      color: f.gold ? navyDeep : '#fff',
+      sub: f.gold ? 'rgba(25,35,70,0.74)' : 'rgba(255,255,255,0.80)',
+      ctaBg: f.gold ? navyDeep : gold,
+      ctaColor: f.gold ? gold : navyDeep,
+    } : null;
+
+    const mobileItems = DATA.map((n, i) => {
+      const expanded = mobileExpanded === n.key && !!n.columns;
+      const subLinks = n.columns ? n.columns.flatMap((c) => c.links.map((l) => ({ label: l.label, href: pageHref(l.label) }))) : [];
+      return {
+        key: n.key, label: n.label, href: '#', hasMega: !!n.columns, expanded,
+        chevron: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+        subLinks,
+        subMaxHeight: expanded ? (subLinks.length * 44 + 16) + 'px' : '0px',
+        subOpacity: expanded ? 1 : 0,
+        delay: (0.05 * i + 0.12).toFixed(2) + 's',
+        onClick: n.columns
+          ? () => this.setState({ mobileExpanded: expanded ? null : n.key })
+          : () => this.setState({ mobileOpen: false, mobileExpanded: null }),
+      };
+    });
+
+    return {
+      navItems, megaOpen, megaColumns, megaFeatured,
+      headerBg: solid ? '#ffffff' : 'transparent',
+      headerShadow: solid ? '0 12px 40px -14px rgba(15,28,70,0.24)' : '0 0 0 rgba(0,0,0,0)',
+      headerBorder: solid ? '1px solid hsl(212,32%,90%)' : '1px solid rgba(255,255,255,0.14)',
+      navColor,
+      brandColor: navColor,
+      crestShadow: solid ? 'drop-shadow(0 2px 6px rgba(15,28,70,0.18))' : 'drop-shadow(0 3px 9px rgba(0,0,0,0.4))',
+      brandScale: scrolled ? 'scale(0.92)' : 'scale(1)',
+      utilColor: solid ? slate : 'rgba(255,255,255,0.82)',
+      utilHeight: scrolled || isMobile ? '0px' : '68px',
+      utilOpacity: scrolled || isMobile ? 0 : 1,
+      desktopDisplay: isMobile ? 'none' : 'flex',
+      hamburgerDisplay: isMobile ? 'flex' : 'none',
+      clearMenu,
+      mobileItems, mobileOpen,
+      line1: mobileOpen ? 'translateY(7.5px) rotate(45deg)' : 'none',
+      line2Opacity: mobileOpen ? 0 : 1,
+      line2Scale: mobileOpen ? 'scaleX(0.2)' : 'scaleX(1)',
+      line3: mobileOpen ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
+      toggleMobile: () => this.setState({ mobileOpen: !this.state.mobileOpen, mobileExpanded: null }),
+      closeMobile: () => this.setState({ mobileOpen: false, mobileExpanded: null }),
+
+      // ---- About page content ----
+      heroStats: [
+        { num: '1965', label: 'Established' },
+        { num: '2,000+', label: 'Students' },
+        { num: '12 acres', label: 'Green campus' },
+        { num: '98.7%', label: 'First division 2025' },
+      ],
+      milestones: [
+        { year: '1965', text: 'The Patrician Brothers found St. Patrick’s Academy in Meerut with a single building.' },
+        { year: '1982', text: 'Senior school wing and science laboratories open as enrolment crosses 800.' },
+        { year: '2004', text: 'The twelve-acre campus is expanded with a sports complex and auditorium.' },
+        { year: '2020', text: 'A digital learning programme brings smart classrooms to every grade.' },
+      ],
+      pillars: [
+        { icon: 'V', title: 'Our Vision', text: 'To be a school where every child discovers their strengths, and grows into a confident, compassionate citizen ready to serve a changing world.' },
+        { icon: 'M', title: 'Our Mission', text: 'To deliver a values-led, inquiry-based education that balances academic excellence with character, creativity and care for the community.' },
+      ],
+      values: ['Faith', 'Excellence', 'Integrity', 'Compassion', 'Service', 'Curiosity'],
+      leaders: [
+        { name: 'Bro. Thomas Fernandes', role: 'Principal', note: 'Leading the academy with three decades in Patrician education.', slot: 'leader-principal' },
+        { name: 'Mrs. Anita Mathew', role: 'Vice Principal', note: 'Oversees academics and the senior school curriculum.', slot: 'leader-vp' },
+        { name: 'Mr. Rajesh Kumar', role: 'Headmaster, Primary', note: 'Champions play-based learning in the early years.', slot: 'leader-head' },
+        { name: 'Ms. Fiona D’Souza', role: 'Dean of Students', note: 'Guides pastoral care, houses and student life.', slot: 'leader-dean' },
+      ],
+      accreditations: [
+        { name: 'CBSE Affiliated', detail: 'Central Board of Secondary Education' },
+        { name: 'ISO 9001:2015', detail: 'Certified quality management' },
+        { name: 'British Council', detail: 'International School Award' },
+        { name: 'Green School', detail: 'Certified sustainable campus' },
+      ],
+
+      year: 2026,
+      footerLinks: ['Principal’s Desk', 'Photo Gallery', 'Admissions', 'Fee Structure 2026', 'Academics', 'Contact Us'],
+    };
+  }
+}
+</script>
+</body>
+</html>
