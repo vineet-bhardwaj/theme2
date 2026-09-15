@@ -184,9 +184,10 @@
     </div>
   </sc-if>
 
+
   <!-- ============ PAGE HERO ============ -->
   <section style="position: relative; display: flex; align-items: flex-end; min-height: 62vh; padding: 184px 0 64px; background: hsl(221,80%,12%); color: #fff; overflow: hidden;">
-    <div style="position: absolute; inset: 0; background-image: url('assets/hero/collage1.jpg'); background-size: cover; background-position: center; opacity: 0.20;"></div>
+    <div style="position: absolute; inset: 0; background-image: url('assets/hero/banner6-dignitaries.jpg'); background-size: cover; background-position: center; opacity: 0.20;"></div>
     <div style="position: absolute; inset: 0; background: linear-gradient(160deg, hsl(221,84%,11%) 0%, rgba(13,26,66,0.72) 60%, hsl(222,72%,15%) 100%);"></div>
     <div style="position: absolute; top: -80px; right: -60px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,48,0.14), transparent 62%);"></div>
 
@@ -195,17 +196,19 @@
       <div data-hero-anim="1" style="display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.66); margin-bottom: 22px;">
         <a href="Navigation.dc.html" style="color: rgba(255,255,255,0.66);" style-hover="color: hsl(45,92%,66%);">Home</a>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        <span style="color: hsl(45,92%,66%);">About</span>
+        <a href="About.dc.html" style="color: rgba(255,255,255,0.66);" style-hover="color: hsl(45,92%,66%);">About</a>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span style="color: hsl(45,92%,66%);">Patrician Brothers</span>
       </div>
 
       <span data-hero-anim="1" style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: hsl(45,92%,66%);">
-        <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>Our Story
+        <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>Our Founding Congregation
       </span>
       <h1 data-hero-anim="1" style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; letter-spacing: -0.01em; margin: 18px 0 0; max-width: 900px; text-wrap: balance;">
-        Six decades of shaping<br>confident, compassionate minds.
+        The Patrician Brothers<br>&mdash; teachers by vocation.
       </h1>
-      <p data-hero-anim="1" style="font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; max-width: 640px; color: rgba(255,255,255,0.82); margin: 24px 0 0;">
-        Founded in 1965 by the Patrician Brothers, St. Patrick's Academy has grown into one of Meerut's most respected schools &mdash; blending timeless values with a future-ready education on a green twelve-acre campus.
+      <p data-hero-anim="1" style="font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; max-width: 660px; color: rgba(255,255,255,0.82); margin: 24px 0 0;">
+        Founded in Ireland in 1808 by Bishop Daniel Delany, the Brothers of St. Patrick have carried one conviction across five continents: that education, offered freely and with affection, is the surest way to lift a young life. St. Patrick&rsquo;s Academy, Meerut, is part of that story.
       </p>
 
       <!-- stat chips -->
@@ -220,132 +223,170 @@
     </div>
   </section>
 
-  <!-- ============ HERITAGE & HISTORY ============ -->
+  <!-- ============ THE FOUNDER ============ -->
   <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
     <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div data-about-split style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center;">
+      <div data-about-split style="display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px; align-items: center;">
+
+        <!-- founder portrait -->
+        <div style="position: relative;">
+          <div style="position: absolute; inset: 18px -18px -18px 18px; border-radius: 22px; border: 2px solid hsl(45,80%,60%); opacity: 0.5;"></div>
+          <div style="position: relative; border-radius: 22px; overflow: hidden; border: 1px solid hsl(44,40%,86%); box-shadow: 0 30px 60px -32px rgba(15,28,70,0.45); background: hsl(212,30%,92%);">
+            <image-slot id="patrician-founder" shape="portrait" placeholder="Bishop Daniel Delany" style="display: block; width: 100%; aspect-ratio: 4 / 5;"></image-slot>
+          </div>
+          <div style="position: relative; display: inline-flex; flex-direction: column; margin-top: 22px; padding: 14px 20px; border-radius: 14px; background: #fff; border: 1px solid hsl(44,40%,88%); box-shadow: 0 18px 40px -30px rgba(15,28,70,0.28);">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px;">Bishop Daniel Delany</span>
+            <span style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: hsl(45,80%,42%); text-transform: uppercase; margin-top: 4px;">Founder &middot; 1747&ndash;1814</span>
+          </div>
+        </div>
+
+        <!-- founder story -->
         <div>
           <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
-            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Heritage &amp; History
+            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>The Founder
           </span>
-          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">A legacy built on faith, learning and service</h2>
-          <p style="font-size: 16px; line-height: 1.7; color: hsl(220,20%,36%); margin: 20px 0 0;">
-            What began in 1965 as a modest schoolhouse with a handful of pupils has, over six decades, become a thriving community of more than two thousand learners. Through every era, our purpose has stayed the same &mdash; to form young people of character, curiosity and conscience.
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">A bishop who began with a Sunday school</h2>
+          <p style="font-size: 16.5px; line-height: 1.75; color: hsl(220,20%,40%); margin: 20px 0 0;">
+            Daniel Delany returned to an Ireland where Catholic schooling was barely permitted and most children grew up unable to read. He did not begin with a building or an endowment &mdash; he began with a Sunday school in Tullow, County Carlow, taught by volunteers he trained himself.
           </p>
-          <p style="font-size: 16px; line-height: 1.7; color: hsl(220,20%,36%); margin: 14px 0 0;">
-            Guided by the Patrician tradition and our motto <em>&ldquo;For God and Country,&rdquo;</em> we pair academic rigour with the arts, sport and service, so that every child leaves us ready for the world beyond the school gate.
+          <p style="font-size: 16.5px; line-height: 1.75; color: hsl(220,20%,40%); margin: 16px 0 0;">
+            From that work grew two congregations: the Brigidine Sisters in 1807, and in 1808 the Brothers of St. Patrick &mdash; the Patrician Brothers. Their purpose was plain and it has not changed: to teach the young, especially the poor, and to do it with patience, discipline and genuine warmth.
           </p>
 
-          <!-- timeline -->
-          <div style="display: flex; flex-direction: column; gap: 0; margin-top: 30px; border-left: 2px solid hsl(44,40%,84%); padding-left: 24px;">
-            <sc-for list="{{ milestones }}" as="ml" hint-placeholder-count="4">
-              <div style="position: relative; padding: 0 0 22px;">
-                <span style="position: absolute; left: -33px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: hsl(45,90%,52%); border: 3px solid hsl(44,46%,97%); box-shadow: 0 0 0 1px hsl(44,40%,80%);"></span>
-                <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 18px; color: hsl(220,80%,22%);">{{ ml.year }}</div>
-                <div style="font-size: 14.5px; line-height: 1.5; color: hsl(220,20%,40%); margin-top: 3px;">{{ ml.text }}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 30px;">
+            <sc-for list="{{ founderFacts }}" as="ff" hint-placeholder-count="3">
+              <div style="padding: 18px 20px; border-radius: 16px; background: #fff; border: 1px solid hsl(44,40%,88%);">
+                <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; color: hsl(220,80%,22%);">{{ ff.title }}</div>
+                <div style="font-size: 13.5px; line-height: 1.55; color: hsl(220,16%,48%); margin-top: 6px;">{{ ff.text }}</div>
               </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE JOURNEY ============ -->
+  <section style="position: relative; background: #fff; color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
+            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Tullow to Meerut
+          </span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">Two centuries, five continents</h2>
+        </div>
+        <p style="font-size: 15.5px; line-height: 1.6; color: hsl(220,20%,40%); max-width: 420px; margin: 0;">
+          The Brothers followed need rather than opportunity &mdash; which is how a congregation born in a Carlow market town came to open a school on the Meerut cantonment.
+        </p>
+      </div>
+
+      <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; margin-top: 48px;">
+        <sc-for list="{{ journey }}" as="jm" hint-placeholder-count="5">
+          <div style="position: relative; padding: 28px 24px; border-radius: 20px; background: hsl(44,46%,97%); border: 1px solid hsl(44,40%,88%);">
+            <div style="display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: hsl(220,80%,20%); color: hsl(45,92%,64%); font-family: 'Playfair Display', serif; font-weight: 800; font-size: 15px;">{{ jm.badge }}</div>
+            <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 22px; color: hsl(220,80%,22%); margin-top: 18px;">{{ jm.year }}</div>
+            <div style="font-size: 14.5px; font-weight: 700; letter-spacing: 0.03em; color: hsl(45,80%,42%); margin-top: 4px;">{{ jm.place }}</div>
+            <p style="font-size: 14px; line-height: 1.6; color: hsl(220,20%,42%); margin: 12px 0 0;">{{ jm.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHARISM ============ -->
+  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: 88px 0; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 26px 26px;"></div>
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="text-align: center;">
+        <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">
+          <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>The Patrician Charism<span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>
+        </span>
+        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.12; margin: 16px 0 0;">What the Brothers teach us to teach</h2>
+        <p style="font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.78); max-width: 620px; margin: 18px auto 0;">
+          A charism is not a syllabus. It is the temperament a school takes on &mdash; and these four marks run through every classroom, corridor and playing field at St. Patrick&rsquo;s.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 46px;">
+        <sc-for list="{{ charism }}" as="ch" hint-placeholder-count="4">
+          <div class="sp-value" style="padding: 32px 26px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform .3s ease;">
+            <div style="display: grid; place-items: center; width: 52px; height: 52px; border-radius: 15px; background: hsl(45,90%,52%); color: hsl(220,74%,14%); font-family: 'Playfair Display', serif; font-weight: 800; font-size: 22px;">{{ ch.initial }}</div>
+            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 21px; margin: 20px 0 0;">{{ ch.title }}</h3>
+            <p style="font-size: 14.5px; line-height: 1.65; color: rgba(255,255,255,0.75); margin: 10px 0 0;">{{ ch.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- founder's words -->
+      <figure style="margin: 52px auto 0; max-width: 780px; text-align: center;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="hsl(45,90%,55%)" style="opacity: 0.85;"><path d="M9.5 5C6.5 6.6 4.7 9.4 4.7 12.7c0 3.3 1.9 5.6 4.6 5.6 2.2 0 3.9-1.6 3.9-3.8 0-2.1-1.5-3.6-3.4-3.6-.4 0-.8.1-1 .2.4-1.7 2-3.3 4-4.2zm9.3 0c-3 1.6-4.8 4.4-4.8 7.7 0 3.3 1.9 5.6 4.6 5.6 2.2 0 3.9-1.6 3.9-3.8 0-2.1-1.5-3.6-3.4-3.6-.4 0-.8.1-1 .2.4-1.7 2-3.3 4-4.2z"/></svg>
+        <blockquote style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(21px, 2.4vw, 28px); line-height: 1.45; margin: 18px 0 0; color: #fff;">
+          Teach them first to be good, and everything else you teach them will be worth having.
+        </blockquote>
+        <figcaption style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,92%,64%); margin-top: 20px;">Attributed to Bishop Daniel Delany</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ THE BROTHERS IN INDIA ============ -->
+  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div data-about-split style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
+            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>In India
+          </span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">A long innings on Indian soil</h2>
+          <p style="font-size: 16.5px; line-height: 1.75; color: hsl(220,20%,40%); margin: 20px 0 0;">
+            The Brothers came to India in the 1870s and never left. Today their schools, hostels and outreach centres run from Tamil Nadu to Uttar Pradesh &mdash; many of them in towns where a good school was, and often still is, the only ladder available to a child.
+          </p>
+          <p style="font-size: 16.5px; line-height: 1.75; color: hsl(220,20%,40%); margin: 16px 0 0;">
+            St. Patrick&rsquo;s Academy, Meerut, opened in 1965 on land that was then largely orchard. Six decades later the founding intent is unchanged: rigorous academics, an open door, and a house culture that teaches children to look after one another.
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;">
+            <sc-for list="{{ ministries }}" as="mn" hint-placeholder-count="6">
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: #fff; border: 1px solid hsl(212,32%,88%); font-size: 14px; font-weight: 600; color: hsl(220,80%,25%);">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: hsl(45,88%,52%);"></span>{{ mn }}
+              </span>
             </sc-for>
           </div>
         </div>
 
         <div style="position: relative;">
-          <div style="position: absolute; inset: 18px -18px -18px 18px; border-radius: 22px; border: 2px solid hsl(45,80%,60%); opacity: 0.5;"></div>
-          <image-slot id="about-heritage" src="assets/hero/collage2.jpg" shape="rounded" radius="22" placeholder="Drop a campus photo" style="position: relative; display: block; width: 100%; height: 460px; box-shadow: 0 34px 60px -30px rgba(15,28,70,0.4);"></image-slot>
-          <div style="position: absolute; left: -18px; bottom: -22px; display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-radius: 16px; background: #fff; box-shadow: 0 24px 46px -22px rgba(15,28,70,0.34);">
-            <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 52px; width: auto; display: block;">
-            <span style="display: flex; flex-direction: column; line-height: 1.2;">
-              <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 22px; color: hsl(220,80%,20%);">Estd 1965</span>
-              <span style="font-size: 12.5px; font-weight: 600; color: hsl(220,14%,50%);">Meerut, Uttar Pradesh</span>
-            </span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div style="border-radius: 18px; overflow: hidden; border: 1px solid hsl(212,32%,88%); box-shadow: 0 24px 48px -30px rgba(15,28,70,0.4); aspect-ratio: 3 / 4; background-image: url('assets/hero/banner7-staffwalk.jpg'); background-size: cover; background-position: center;"></div>
+            <div style="border-radius: 18px; overflow: hidden; border: 1px solid hsl(212,32%,88%); box-shadow: 0 24px 48px -30px rgba(15,28,70,0.4); aspect-ratio: 3 / 4; margin-top: 30px; background-image: url('assets/hero/banner2-investiture.jpg'); background-size: cover; background-position: center;"></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: 20px; padding: 18px 22px; border-radius: 16px; background: hsl(220,80%,20%); color: #fff;">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 34px; color: hsl(45,92%,64%); line-height: 1;">1965</span>
+            <span style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.8);">The year the Brothers opened St. Patrick&rsquo;s Academy in Meerut.</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ VISION & MISSION ============ -->
-  <section style="position: relative; background: linear-gradient(160deg, hsl(221,80%,13%) 0%, hsl(220,74%,20%) 55%, hsl(222,72%,15%) 100%); color: #fff; padding: 84px 0; overflow: hidden;">
-    <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 26px 26px;"></div>
-    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div style="text-align: center; max-width: 680px; margin: 0 auto;">
-        <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,66%);">
-          <span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>What Guides Us<span style="width: 26px; height: 2px; background: hsl(45,90%,55%); border-radius: 2px;"></span>
-        </span>
-        <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">Our Vision &amp; Mission</h2>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin-top: 48px;">
-        <sc-for list="{{ pillars }}" as="p" hint-placeholder-count="2">
-          <div class="sp-value" style="position: relative; padding: 36px 32px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform .3s ease;">
-            <div style="display: grid; place-items: center; width: 56px; height: 56px; border-radius: 15px; background: linear-gradient(150deg, hsl(45,92%,58%), hsl(43,90%,47%)); color: hsl(220,74%,14%); margin-bottom: 20px;">
-              <span style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 24px;">{{ p.icon }}</span>
-            </div>
-            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 23px; margin: 0 0 12px;">{{ p.title }}</h3>
-            <p style="font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.78); margin: 0;">{{ p.text }}</p>
-          </div>
-        </sc-for>
-      </div>
-
-      <!-- core values -->
-      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 40px;">
-        <sc-for list="{{ values }}" as="v" hint-placeholder-count="5">
-          <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9);">
-            <span style="width: 6px; height: 6px; border-radius: 50%; background: hsl(45,90%,58%);"></span>{{ v }}
-          </span>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ LEADERSHIP & FACULTY ============ -->
-  <section style="position: relative; background: hsl(210,40%,98%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
-    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
-      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px;">
-        <div>
-          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
-            <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Leadership &amp; Faculty
-          </span>
-          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">The people who lead the way</h2>
-        </div>
-        <p style="font-size: 15.5px; line-height: 1.6; color: hsl(220,20%,40%); max-width: 420px; margin: 0;">
-          A dedicated team of educators and administrators, many with us for decades, who know every student by name.
-        </p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 26px; margin-top: 44px;">
-        <sc-for list="{{ leaders }}" as="ld" hint-placeholder-count="4">
-          <div class="sp-lead" style="position: relative; background: #fff; border: 1px solid hsl(44,40%,88%); border-radius: 22px; padding: 30px 24px 26px; text-align: center; box-shadow: 0 22px 44px -30px rgba(15,28,70,0.32); transition: transform .3s ease, box-shadow .3s ease;">
-            <div style="position: relative; width: 128px; height: 128px; margin: 0 auto;">
-              <div style="position: absolute; inset: -5px; border-radius: 50%; background: conic-gradient(from 0deg, hsl(45,92%,58%), hsl(45,80%,46%), hsl(45,92%,58%));"></div>
-              <div style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: hsl(212,30%,90%); display: grid; place-items: center;">
-                <image-slot id="{{ ld.slot }}" shape="circle" placeholder="Photo" style="display: block; width: 118px; height: 118px;"></image-slot>
-              </div>
-            </div>
-            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; margin: 18px 0 0;">{{ ld.name }}</h3>
-            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: hsl(45,80%,42%); margin-top: 5px; text-transform: uppercase;">{{ ld.role }}</div>
-            <p style="font-size: 13.5px; line-height: 1.55; color: hsl(220,16%,48%); margin: 12px 0 0;">{{ ld.note }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ACCREDITATIONS ============ -->
-  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 72px 0; overflow: hidden;">
+  <!-- ============ THE PATRICIAN WAY AT SPA ============ -->
+  <section style="position: relative; background: hsl(44,46%,97%); color: hsl(220,80%,22%); padding: 84px 0; overflow: hidden;">
     <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px; text-align: center;">
       <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);">
-        <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Accreditations &amp; Affiliations<span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>
+        <span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>Here at the Academy<span style="width: 26px; height: 2px; background: hsl(45,90%,52%); border-radius: 2px;"></span>
       </span>
-      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(26px, 3vw, 36px); line-height: 1.12; margin: 16px 0 40px;">Recognised for standards we never compromise</h2>
+      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(26px, 3vw, 36px); line-height: 1.12; margin: 16px 0 12px;">How the tradition shows up on a Tuesday</h2>
+      <p style="font-size: 16px; line-height: 1.7; color: hsl(220,20%,42%); max-width: 600px; margin: 0 auto 40px;">
+        Not in ceremonies &mdash; in ordinary practice. These are the habits a Patrician school keeps.
+      </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-        <sc-for list="{{ accreditations }}" as="ac" hint-placeholder-count="4">
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px 22px; border-radius: 18px; background: #fff; border: 1px solid hsl(44,40%,88%); box-shadow: 0 18px 40px -30px rgba(15,28,70,0.28);">
-            <div style="display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: hsl(220,80%,20%); color: hsl(45,92%,64%);">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; text-align: left;">
+        <sc-for list="{{ practices }}" as="pr" hint-placeholder-count="4">
+          <div class="sp-lead" style="padding: 30px 26px; border-radius: 20px; background: #fff; border: 1px solid hsl(44,40%,88%); box-shadow: 0 22px 44px -32px rgba(15,28,70,0.3); transition: transform .3s ease, box-shadow .3s ease;">
+            <div style="display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: hsl(220,80%,20%); color: hsl(45,92%,64%);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <div style="font-weight: 700; font-size: 16px; color: hsl(220,80%,22%);">{{ ac.name }}</div>
-            <div style="font-size: 13px; line-height: 1.5; color: hsl(220,16%,50%);">{{ ac.detail }}</div>
+            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; margin: 18px 0 0;">{{ pr.title }}</h3>
+            <p style="font-size: 14px; line-height: 1.6; color: hsl(220,16%,48%); margin: 10px 0 0;">{{ pr.text }}</p>
           </div>
         </sc-for>
       </div>
@@ -357,17 +398,17 @@
     <div style="position: absolute; inset: 0; background-image: url('assets/hero/collage3.jpg'); background-size: cover; background-position: center; opacity: 0.16;"></div>
     <div style="position: absolute; inset: 0; background: linear-gradient(160deg, rgba(11,22,58,0.92), rgba(13,26,66,0.86));"></div>
     <div style="position: relative; max-width: 900px; margin: 0 auto; padding: 0 28px; text-align: center;">
-      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.1; margin: 0;">Come see our campus for yourself</h2>
+      <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.1; margin: 0;">See the tradition at work</h2>
       <p style="font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.8); max-width: 560px; margin: 18px auto 0;">
-        Book a personal tour, meet our faculty, and discover why families have trusted St. Patrick's for generations.
+        Read the academy&rsquo;s own story, or come and spend a morning with us &mdash; classrooms open, no appointment theatre.
       </p>
       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 30px;">
-        <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 15.5px; box-shadow: 0 12px 28px -12px rgba(196,150,20,0.7); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-2px); background: hsl(45,93%,55%);">
-          Book a Campus Tour
+        <a href="About.dc.html" style="display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px; border-radius: 999px; background: hsl(45,90%,50%); color: hsl(220,74%,14%); font-weight: 700; font-size: 15.5px; box-shadow: 0 12px 28px -12px rgba(196,150,20,0.7); transition: transform .2s ease, background .2s ease;" style-hover="transform: translateY(-2px); background: hsl(45,93%,55%);">
+          About the Academy
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a href="#" style="display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.3); color: #fff; font-weight: 700; font-size: 15.5px; transition: background .2s ease, border-color .2s ease;" style-hover="background: rgba(255,255,255,0.16); border-color: hsl(45,75%,58%);">
-          Contact Admissions
+          Book a Campus Tour
         </a>
       </div>
     </div>
@@ -684,35 +725,45 @@ class Component extends DCLogic {
       toggleMobile: () => this.setState({ mobileOpen: !this.state.mobileOpen, mobileExpanded: null }),
       closeMobile: () => this.setState({ mobileOpen: false, mobileExpanded: null }),
 
-      // ---- About page content ----
+
+      // ---- Patrician Brothers page content ----
       heroStats: [
-        { num: '1965', label: 'Established' },
-        { num: '2,000+', label: 'Students' },
-        { num: '12 acres', label: 'Green campus' },
-        { num: '98.7%', label: 'First division 2025' },
+        { num: '1808', label: 'Congregation founded' },
+        { num: 'Tullow', label: 'Co. Carlow, Ireland' },
+        { num: '1870s', label: 'Arrived in India' },
+        { num: '1965', label: 'St. Patrick’s, Meerut' },
       ],
-      milestones: [
-        { year: '1965', text: 'The Patrician Brothers found St. Patrick’s Academy in Meerut with a single building.' },
-        { year: '1982', text: 'Senior school wing and science laboratories open as enrolment crosses 800.' },
-        { year: '2004', text: 'The twelve-acre campus is expanded with a sports complex and auditorium.' },
-        { year: '2020', text: 'A digital learning programme brings smart classrooms to every grade.' },
+      founderFacts: [
+        { title: 'Tullow, 1777', text: 'Delany returns from France to a parish where most children cannot read, and starts a Sunday school.' },
+        { title: 'Brigidines, 1807', text: 'He founds the Brigidine Sisters — the first new Irish congregation of women in centuries.' },
+        { title: 'Patricians, 1808', text: 'The Brothers of St. Patrick follow a year later, dedicated wholly to teaching the young.' },
       ],
-      pillars: [
-        { icon: 'V', title: 'Our Vision', text: 'To be a school where every child discovers their strengths, and grows into a confident, compassionate citizen ready to serve a changing world.' },
-        { icon: 'M', title: 'Our Mission', text: 'To deliver a values-led, inquiry-based education that balances academic excellence with character, creativity and care for the community.' },
+      journey: [
+        { badge: 'IE', year: '1808', place: 'Tullow, Ireland', text: 'The first Brothers take their vows and open free schools for boys across Carlow and Kildare.' },
+        { badge: 'AU', year: '1882', place: 'Sydney, Australia', text: 'Brothers sail for New South Wales, beginning a presence that still runs schools today.' },
+        { badge: 'IN', year: '1875', place: 'Madras, India', text: 'The congregation’s first Indian foundation — the start of its largest province.' },
+        { badge: 'AF', year: '1950s', place: 'Kenya & Ghana', text: 'Teaching missions open in East and West Africa, following the same brief: schools where there are none.' },
+        { badge: 'UP', year: '1965', place: 'Meerut, India', text: 'St. Patrick’s Academy opens its gates on the Cantt Road campus with a single building.' },
       ],
-      values: ['Faith', 'Excellence', 'Integrity', 'Compassion', 'Service', 'Curiosity'],
-      leaders: [
-        { name: 'Bro. Thomas Fernandes', role: 'Principal', note: 'Leading the academy with three decades in Patrician education.', slot: 'leader-principal' },
-        { name: 'Mrs. Anita Mathew', role: 'Vice Principal', note: 'Oversees academics and the senior school curriculum.', slot: 'leader-vp' },
-        { name: 'Mr. Rajesh Kumar', role: 'Headmaster, Primary', note: 'Champions play-based learning in the early years.', slot: 'leader-head' },
-        { name: 'Ms. Fiona D’Souza', role: 'Dean of Students', note: 'Guides pastoral care, houses and student life.', slot: 'leader-dean' },
+      charism: [
+        { initial: 'F', title: 'Faith in the ordinary', text: 'A quiet, practised faith that shows itself in how people are treated rather than in how much is said about it.' },
+        { initial: 'E', title: 'Education as service', text: 'Teaching is the ministry, not a means to one. The classroom is where the Brothers’ vocation is actually lived.' },
+        { initial: 'C', title: 'Care for the overlooked', text: 'A deliberate bias towards the student who is struggling, shy or short of means — the reason the congregation exists.' },
+        { initial: 'C', title: 'Community before self', text: 'Houses, teams, choirs and service groups: children learn early that they belong to something larger than themselves.' },
       ],
-      accreditations: [
-        { name: 'CBSE Affiliated', detail: 'Central Board of Secondary Education' },
-        { name: 'ISO 9001:2015', detail: 'Certified quality management' },
-        { name: 'British Council', detail: 'International School Award' },
-        { name: 'Green School', detail: 'Certified sustainable campus' },
+      ministries: [
+        'Schools & academies',
+        'Boarding & hostels',
+        'Teacher formation',
+        'Rural outreach',
+        'Technical training',
+        'Student welfare funds',
+      ],
+      practices: [
+        { title: 'Every child known by name', text: 'Class sizes and house structures are kept small enough that no student passes through anonymously.' },
+        { title: 'The door stays open', text: 'Scholarships and fee concessions are quietly maintained so that means never decides admission.' },
+        { title: 'Character is assessed too', text: 'Conduct, service and reliability are recorded and discussed alongside marks, every term.' },
+        { title: 'Service is timetabled', text: 'Community work is part of the school week from Grade VI upward — not an optional badge.' },
       ],
 
       year: 2026,

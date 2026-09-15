@@ -1412,7 +1412,7 @@ class Component extends DCLogic {
     let gi = 0;
     const megaColumns = active ? active.columns.map((c) => ({
       title: c.title,
-      links: c.links.map((l) => ({ label: l.label, desc: l.desc || null, href: l.label === 'About School' ? 'About.dc.html' : (l.label === 'Patrician Brothers' ? 'Patrician Brothers.dc.html' : (l.label === 'Our Vision' ? 'Our Vision.dc.html' : (l.label === 'School Song & School Prayer' ? 'School Song and Prayer.dc.html' : (l.label === 'Working Hours' ? 'Working Hours.dc.html' : (l.label === 'Teaching Staff' ? 'Teaching Staff.dc.html' : (l.label === 'Administrative Staff' ? 'Administrative Staff.dc.html' : (l.label === 'Ancillary Staff' ? 'Ancillary Staff.dc.html' : (l.label === 'Alumni' ? 'Alumini.dc.html' : (l.label === 'Alumni of SPA' ? 'Alumini of SPA.dc.html' : '#'))))))))), delay: (0.04 * (gi++) + 0.05).toFixed(2) + 's' })),
+      links: c.links.map((l) => ({ label: l.label, desc: l.desc || null, href: l.label === 'About School' ? 'About.dc.html' : (l.label === 'Patrician Brothers' ? 'Patrician.dc.html' : (l.label === 'Our Vision' ? 'Our Vision.dc.html' : (l.label === 'School Song & School Prayer' ? 'School Song and Prayer.dc.html' : (l.label === 'Working Hours' ? 'Working Hours.dc.html' : (l.label === 'Teaching Staff' ? 'Teaching Staff.dc.html' : (l.label === 'Administrative Staff' ? 'Administrative Staff.dc.html' : (l.label === 'Ancillary Staff' ? 'Ancillary Staff.dc.html' : (l.label === 'Alumni' ? 'Alumini.dc.html' : (l.label === 'Alumni of SPA' ? 'Alumini of SPA.dc.html' : '#'))))))))), delay: (0.04 * (gi++) + 0.05).toFixed(2) + 's' })),
     })) : [];
 
     const f = active && active.featured;
@@ -1427,7 +1427,7 @@ class Component extends DCLogic {
 
     const mobileItems = DATA.map((n, i) => {
       const expanded = mobileExpanded === n.key && !!n.columns;
-      const subLinks = n.columns ? n.columns.flatMap((c) => c.links.map((l) => ({ label: l.label, href: l.label === 'About School' ? 'About.dc.html' : (l.label === 'Patrician Brothers' ? 'Patrician Brothers.dc.html' : (l.label === 'Our Vision' ? 'Our Vision.dc.html' : (l.label === 'School Song & School Prayer' ? 'School Song and Prayer.dc.html' : (l.label === 'Working Hours' ? 'Working Hours.dc.html' : (l.label === 'Teaching Staff' ? 'Teaching Staff.dc.html' : (l.label === 'Administrative Staff' ? 'Administrative Staff.dc.html' : (l.label === 'Ancillary Staff' ? 'Ancillary Staff.dc.html' : (l.label === 'Alumni' ? 'Alumini.dc.html' : (l.label === 'Alumni of SPA' ? 'Alumini of SPA.dc.html' : '#'))))))))) }))) : [];
+      const subLinks = n.columns ? n.columns.flatMap((c) => c.links.map((l) => ({ label: l.label, href: l.label === 'About School' ? 'About.dc.html' : (l.label === 'Patrician Brothers' ? 'Patrician.dc.html' : (l.label === 'Our Vision' ? 'Our Vision.dc.html' : (l.label === 'School Song & School Prayer' ? 'School Song and Prayer.dc.html' : (l.label === 'Working Hours' ? 'Working Hours.dc.html' : (l.label === 'Teaching Staff' ? 'Teaching Staff.dc.html' : (l.label === 'Administrative Staff' ? 'Administrative Staff.dc.html' : (l.label === 'Ancillary Staff' ? 'Ancillary Staff.dc.html' : (l.label === 'Alumni' ? 'Alumini.dc.html' : (l.label === 'Alumni of SPA' ? 'Alumini of SPA.dc.html' : '#'))))))))) }))) : [];
       return {
         key: n.key, label: n.label, href: '#', hasMega: !!n.columns, expanded,
         chevron: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
