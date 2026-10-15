@@ -23,11 +23,15 @@
   @keyframes spaDrawerIn { from { transform: translateX(108%); } to { transform: translateX(0); } }
   @keyframes spaFadeBg { from { opacity: 0; } to { opacity: 1; } }
   @keyframes spaFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes spaTickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes spaChatIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+  @keyframes spaTypingDot { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
   @keyframes spaTabBlink { 0%, 88%, 100% { color: #fff; text-shadow: none; } 94% { color: hsl(45,92%,68%); text-shadow: 0 0 10px rgba(247,203,69,0.55); } }
   .sp-lead:hover { transform: translateY(-6px); box-shadow: 0 34px 56px -26px rgba(15,28,70,0.42); }
   .sp-value:hover { transform: translateY(-5px); }
   @media (max-width: 980px) { footer [style*="1.15fr 0.85fr 1fr 1.1fr"] { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important; } }
   @media (max-width: 860px) { [data-about-split] { grid-template-columns: 1fr !important; } }
+  @media (max-width: 900px) { [data-events-grid] { grid-template-columns: 1fr !important; } }
   @media (prefers-reduced-motion: reduce) {
     [style*="spaFadeUp"], [style*="spaItemIn"], [style*="spaMegaIn"], [style*="spaDrawerIn"], [data-hero-anim] { animation: none !important; opacity: 1 !important; transform: none !important; }
   }
@@ -185,7 +189,7 @@
   </sc-if>
 
   <!-- ============ PAGE HERO ============ -->
-  <section style="position: relative; display: flex; align-items: flex-end; min-height: 62vh; padding: 184px 0 64px; background: hsl(218,60%,32%); color: #fff; overflow: hidden;">
+  <section style="position: relative; display: flex; align-items: flex-end; min-height: 62vh; padding: 184px 0 118px; background: hsl(218,60%,32%); color: #fff; overflow: hidden;">
     <div data-banner-wrap="1" style="position: absolute; inset: 0; overflow: hidden; opacity: 0.75;">
       <div data-banner-bg="0" style="position: absolute; inset: 0; background-image: url('assets/hero/banner1-opening.jpg'); background-size: cover; background-position: center; opacity: 1; will-change: transform, filter, opacity;"></div>
       <div data-banner-bg="1" style="position: absolute; inset: 0; background-image: url('assets/hero/banner3-sprint.jpg'); background-size: cover; background-position: center; opacity: 0; will-change: transform, filter, opacity;"></div>
@@ -215,6 +219,31 @@
         <sc-for list="{{ heroStats }}" as="st" hint-placeholder-count="4">
           
         </sc-for>
+      </div>
+    </div>
+
+    <!-- latest news ticker -->
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: stretch; background: rgba(10,22,58,0.78); backdrop-filter: blur(6px); border-top: 1px solid rgba(255,255,255,0.12);">
+      <div style="flex-shrink: 0; display: flex; align-items: center; gap: 9px; padding: 13px 26px 13px 22px; background: hsl(45,88%,58%); clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(220,74%,14%)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path><path d="M3.3 16.6c-.3.4 0 1 .5 1h16.4c.5 0 .8-.6.5-1C19.9 15 19 13 19 9a7 7 0 0 0-14 0c0 4-1 6-1.7 7.6z"></path></svg>
+        <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(220,74%,14%); white-space: nowrap;">Latest News</span>
+      </div>
+      <div style="position: relative; flex: 1; overflow: hidden; padding: 13px 0;">
+        <div style="display: flex; align-items: center; gap: 48px; white-space: nowrap; width: max-content; animation: spaTickerScroll 38s linear infinite;">
+          <sc-for list="{{ tickerItems }}" as="t" hint-placeholder-count="6">
+            <span style="display: inline-flex; align-items: center; gap: 48px; font-size: 14.5px; font-weight: 500; color: #fff;">
+              {{ t.text }}
+              <span style="color: hsl(45,88%,58%); font-size: 13px;">&#9679;</span>
+            </span>
+          </sc-for>
+          <sc-for list="{{ tickerItems }}" as="t2" hint-placeholder-count="6">
+            <span style="display: inline-flex; align-items: center; gap: 48px; font-size: 14.5px; font-weight: 500; color: #fff;">
+              {{ t2.text }}
+              <span style="color: hsl(45,88%,58%); font-size: 13px;">&#9679;</span>
+            </span>
+          </sc-for>
+        </div>
+        <div style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,22,58,0.9) 0%, transparent 5%, transparent 95%, rgba(10,22,58,0.9) 100%);"></div>
       </div>
     </div>
   </section>
@@ -269,7 +298,62 @@
           
         </div>
       <div style="position: absolute; inset: 18px -18px -18px 18px; border-radius: 22px; border: 2px solid hsl(45,80%,60%); opacity: 0.5; width: 577px; height: 505px; left: 587px; top: 66px"></div></div></div>
-  </section><section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: 74px 0; overflow: hidden;">
+  </section>
+
+  <!-- ============ FEATURED EVENTS ============ -->
+  <section style="position: relative; background: #fff; color: hsl(220,80%,22%); padding: 88px 0;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 28px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 40px;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,80%,42%);"><span style="width: 26px; height: 2px; background: hsl(45,90%,50%); border-radius: 2px;"></span>Featured Events</span>
+          <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 16px 0 0;">Life on campus at St. Patrick's</h2>
+        </div>
+        <a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 999px; border: 1.5px solid hsl(212,32%,86%); color: hsl(220,80%,25%); font-size: 14.5px; font-weight: 700; transition: border-color .2s ease, color .2s ease;" style-hover="border-color: hsl(45,85%,50%) !important; color: hsl(45,80%,36%) !important;">View all events<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+
+      <div data-events-grid="" style="display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 28px; align-items: stretch;">
+        <!-- spotlight -->
+        <div style="position: relative; min-height: 460px; border-radius: 22px; overflow: hidden; background: hsl(221,72%,12%); box-shadow: 0 34px 60px -30px rgba(15,28,70,0.45); color: #fff;">
+          <sc-for list="{{ eventSlides }}" as="es" hint-placeholder-count="4">
+            <div style="position: absolute; inset: 0; background-image: {{ es.bg }}; background-size: cover; background-position: center; opacity: {{ es.opacity }}; transform: {{ es.scale }}; transition: opacity .7s ease, transform 6s ease;"></div>
+          </sc-for>
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8,16,40,0.92) 0%, rgba(8,16,40,0.55) 42%, rgba(8,16,40,0.05) 75%);"></div>
+          <div style="position: absolute; top: 22px; left: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 72px; height: 76px; border-radius: 16px; background: #fff; color: hsl(220,80%,22%); box-shadow: 0 12px 28px -12px rgba(0,0,0,0.5);">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 30px; line-height: 1;">{{ spotlight.day }}</span>
+            <span style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(45,80%,40%); margin-top: 4px;">{{ spotlight.month }}</span>
+          </div>
+          <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 32px 32px;">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+              <span style="padding: 5px 12px; border-radius: 999px; background: {{ spotlight.statusBg }}; color: {{ spotlight.statusColor }}; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;">{{ spotlight.status }}</span>
+              <span style="font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(45,92%,66%);">{{ spotlight.category }}</span>
+            </div>
+            <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(26px, 2.8vw, 34px); line-height: 1.12; margin: 14px 0 0; text-wrap: balance;">{{ spotlight.title }}</h3>
+            <p style="font-size: 15.5px; line-height: 1.6; color: #fff; margin: 12px 0 0; max-width: 520px; text-wrap: pretty;">{{ spotlight.text }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 18px; font-size: 13.5px; font-weight: 600; color: #fff;">
+              <span style="display: inline-flex; align-items: center; gap: 7px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{ spotlight.time }}</span>
+              <span style="display: inline-flex; align-items: center; gap: 7px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{ spotlight.venue }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- event list -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ eventList }}" as="ev" hint-placeholder-count="4">
+            <button type="button" onClick="{{ ev.onClick }}" style="flex: 1; display: flex; align-items: center; gap: 16px; padding: 14px; border-radius: 18px; border: 1.5px solid {{ ev.border }}; background: {{ ev.bg }}; box-shadow: {{ ev.shadow }}; text-align: left; font-family: inherit; color: hsl(220,80%,22%); cursor: pointer; transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;" style-hover="border-color: hsl(45,85%,55%) !important;">
+              <span style="width: 92px; height: 80px; flex-shrink: 0; border-radius: 12px; background-image: {{ ev.bgImg }}; background-size: cover; background-position: center;"></span>
+              <span style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
+                <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(45,80%,38%);">{{ ev.date }} · {{ ev.category }}</span>
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; line-height: 1.2;">{{ ev.title }}</span>
+                <span style="font-size: 13px; color: hsl(220,16%,40%);">{{ ev.venue }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="position: relative; background: hsl(221,80%,12%); color: #fff; padding: 74px 0; overflow: hidden;">
     <div style="position: absolute; inset: 0; background-image: url('assets/hero/collage3.jpg'); background-size: cover; background-position: center; opacity: 0.16;"></div>
     <div style="position: absolute; inset: 0; background: linear-gradient(160deg, rgba(11,22,58,0.92), rgba(13,26,66,0.86));"></div>
     <div style="position: relative; max-width: 900px; margin: 0 auto; padding: 0 28px; text-align: center;">
@@ -308,15 +392,17 @@
             <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 16px; font-size: 14.5px; line-height: 1.5;">
               <span style="display: flex; align-items: flex-start; gap: 11px;">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Cantt Road, Meerut — 250001, Uttar Pradesh (India)
+                NH - 58 Delhi Meerut Bypass, Opp. Dewan Institute of Management, Meerut Uttar Pradesh 250103
               </span>
-              <a href="tel:+911212640000" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+              <span style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap;">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +91 121 264 0000
-              </a>
-              <a href="mailto:admissions@stpatricks.edu.in" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+                <a href="tel:+919084428226" style-hover="color: hsl(45,92%,64%);">9084428226</a>
+                <span style="opacity: 0.4;">/</span>
+                <a href="tel:+919412705414" style-hover="color: hsl(45,92%,64%);">9412705414</a>
+              </span>
+              <a href="mailto:stpatrickmeerut@gmail.com" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>
-                admissions@stpatricks.edu.in
+                stpatrickmeerut@gmail.com
               </a>
             </div>
           </div>
@@ -358,8 +444,8 @@
           <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">School Map</span>
           <h4 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: #fff; margin: 10px 0 16px;">Reach us</h4>
           <div style="position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 20px 40px -24px rgba(0,0,0,0.6); height: 168px; background: rgba(255,255,255,0.06);">
-            <iframe title="St. Patrick's Academy location map" src="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001&amp;output=embed" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.15) contrast(1.05);" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <a href="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001" target="_blank" rel="noopener" style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.95); color: hsl(220,80%,20%); font-size: 12px; font-weight: 700;">
+            <iframe title="St. Patrick's Academy location map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3491.8298219408093!2d77.6376904750781!3d28.93310207550187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390c614dd6c75f23%3A0x9ed39bf57cba3bdd!2sSt.%20Patrick%27s%20Academy%20School!5e0!3m2!1sen!2sin!4v1670608447974!5m2!1sen!2sin" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.15) contrast(1.05);" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=St.+Patrick%27s+Academy+School+Meerut" target="_blank" rel="noopener" style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.95); color: hsl(220,80%,20%); font-size: 12px; font-weight: 700;">
               Open in Maps
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>
             </a>
@@ -380,6 +466,79 @@
     </div>
   </footer>
 
+  <!-- ============ CHATBOT ============ -->
+  <div style="position: fixed; right: 24px; bottom: 24px; z-index: 95; display: flex; flex-direction: column; align-items: flex-end; gap: 14px;">
+    <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+      <div role="dialog" aria-label="Chat with St. Patrick's Academy" style="width: min(370px, calc(100vw - 32px)); height: min(560px, calc(100vh - 130px)); background: #fff; border-radius: 20px; border: 1px solid hsl(212,32%,90%); box-shadow: 0 30px 70px -20px rgba(10,22,55,0.45); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; animation: spaChatIn .28s cubic-bezier(.2,.8,.2,1) both;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 16px 16px 16px 18px; background: linear-gradient(150deg, hsl(220,74%,17%), hsl(222,80%,28%)); color: #fff;">
+          <span style="width: 42px; height: 42px; border-radius: 50%; background: #fff; display: grid; place-items: center; flex-shrink: 0;">
+            <img src="assets/crest.png" alt="" style="height: 32px; width: auto; display: block;">
+          </span>
+          <span style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0;">
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; line-height: 1.1;">St. Patrick's Help Desk</span>
+            <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.82);"><span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(145,63%,52%);"></span>Online · replies instantly</span>
+          </span>
+          <button type="button" onClick="{{ closeChat }}" aria-label="Close chat" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #fff; display: grid; place-items: center; cursor: pointer; transition: color .2s ease, border-color .2s ease;" style-hover="color: hsl(45,92%,64%) !important; border-color: hsl(45,92%,64%) !important;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <div ref="{{ chatListRef }}" style="flex: 1; overflow-y: auto; padding: 18px 16px; background: hsl(44,46%,97%); display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="1">
+            <div style="display: flex; flex-direction: column; align-items: {{ msg.align }}; gap: 6px;">
+              <div style="max-width: 84%; padding: 10px 14px; border-radius: {{ msg.radius }}; background: {{ msg.bg }}; color: {{ msg.color }}; border: {{ msg.border }}; font-size: 14px; line-height: 1.5; white-space: pre-line; text-wrap: pretty;">{{ msg.text }}</div>
+              <sc-if value="{{ msg.link }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ msg.link.href }}" target="{{ msg.link.target }}" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px; background: hsl(220,80%,25%); color: #fff; font-size: 12.5px; font-weight: 700; transition: background .2s ease;" style-hover="background: hsl(45,90%,50%) !important; color: hsl(220,74%,14%) !important;">{{ msg.link.label }}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ chatTyping }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 5px; align-self: flex-start; padding: 13px 16px; border-radius: 16px 16px 16px 4px; background: #fff; border: 1px solid hsl(212,32%,90%);">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(220,40%,55%); animation: spaTypingDot 1.1s ease-in-out infinite;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(220,40%,55%); animation: spaTypingDot 1.1s ease-in-out infinite; animation-delay: .15s;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: hsl(220,40%,55%); animation: spaTypingDot 1.1s ease-in-out infinite; animation-delay: .3s;"></span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 7px; padding: 12px 14px 4px; border-top: 1px solid hsl(212,32%,92%);">
+          <sc-for list="{{ chatQuick }}" as="q" hint-placeholder-count="6">
+            <button type="button" onClick="{{ q.onClick }}" style="padding: 7px 13px; border-radius: 999px; border: 1.5px solid hsl(212,32%,86%); background: #fff; color: hsl(220,80%,25%); font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: border-color .2s ease, color .2s ease;" style-hover="border-color: hsl(45,85%,50%) !important; color: hsl(45,80%,36%) !important;">{{ q.label }}</button>
+          </sc-for>
+        </div>
+
+        <form onSubmit="{{ chatSubmit }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px 14px;">
+          <input value="{{ chatInput }}" onChange="{{ chatInputChange }}" placeholder="Type your question…" aria-label="Your message" style="flex: 1; min-width: 0; height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid hsl(212,32%,88%); background: hsl(210,40%,98%); font-family: inherit; font-size: 14px; color: hsl(220,80%,22%); outline: none;" style-focus="border-color: hsl(45,85%,50%);">
+          <button type="submit" aria-label="Send" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; border: none; background: hsl(45,90%,50%); color: hsl(220,74%,14%); display: grid; place-items: center; cursor: pointer; transition: background .2s ease;" style-hover="background: hsl(45,93%,56%);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"></path><path d="M22 2 15 22l-4-9-9-4z"></path></svg>
+          </button>
+        </form>
+
+        <a href="https://wa.me/919084428226?text=Hello!%20I%27m%20interested" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; background: hsl(210,40%,97%); border-top: 1px solid hsl(212,32%,92%); color: hsl(220,80%,25%); font-size: 13px; font-weight: 700;" style-hover="color: hsl(145,63%,32%) !important;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"></path></svg>
+          Prefer WhatsApp? Chat with the school office
+        </a>
+      </div>
+    </sc-if>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <sc-if value="{{ chatNudge }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ openChat }}" style="padding: 10px 16px; border-radius: 999px; border: 1px solid hsl(212,32%,90%); background: #fff; color: hsl(220,80%,25%); font-family: inherit; font-size: 13.5px; font-weight: 700; box-shadow: 0 14px 30px -14px rgba(10,22,55,0.4); cursor: pointer; animation: spaChatIn .4s ease both; animation-delay: 1.2s;">Need help? Chat with us</button>
+      </sc-if>
+      <button type="button" onClick="{{ toggleChat }}" aria-label="{{ chatLauncherLabel }}" style="position: relative; width: 62px; height: 62px; border-radius: 50%; border: 2px solid hsl(45,90%,52%); background: linear-gradient(150deg, hsl(220,74%,19%), hsl(222,80%,30%)); color: hsl(45,92%,62%); display: grid; place-items: center; cursor: pointer; box-shadow: 0 16px 34px -12px rgba(10,22,55,0.6); transition: transform .2s ease;" style-hover="transform: translateY(-3px) scale(1.04);">
+        <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+        </sc-if>
+        <sc-if value="{{ chatClosed }}" hint-placeholder-val="{{ true }}">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"></path><path d="M8 10.5h8M8 14h5"></path></svg>
+        </sc-if>
+        <sc-if value="{{ chatNudge }}" hint-placeholder-val="{{ false }}">
+          <span style="position: absolute; top: -2px; right: -2px; width: 18px; height: 18px; border-radius: 50%; background: hsl(45,90%,52%); color: hsl(220,74%,14%); font-size: 11px; font-weight: 800; display: grid; place-items: center; border: 2px solid #fff;">1</span>
+        </sc-if>
+      </button>
+    </div>
+  </div>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -392,7 +551,60 @@ class Component extends DCLogic {
     mobileExpanded: null,
     isMobile: (typeof window !== 'undefined' ? window.innerWidth < 1080 : false),
     aboutIdx: 0,
+    eventIdx: 0,
+    chatOpen: false,
+    chatSeen: false,
+    chatTyping: false,
+    chatInput: '',
+    chatMessages: [{ from: 'bot', text: 'Hello! Welcome to St. Patrick\u2019s Academy, Meerut. How can I help you today? Pick a topic below or type your question.' }],
   };
+
+  _news = [
+    'Admissions open for 2026\u201327 \u2014 apply online by 30 June',
+    'Half-yearly results are now live on the Parent Portal',
+    'Investiture Ceremony 2026 photo gallery now available',
+    'Inter-house Athletics Meet \u2014 finals on 22 June, main ground',
+    'Summer enrichment camp registrations close this Friday',
+    'Revised school bus routes effective from the new term',
+  ];
+
+  _events = [
+    { day: '22', month: 'Jun', date: '22 Jun 2026', status: 'Upcoming', category: 'Sports', title: 'Inter-house Athletics Meet', text: 'Finals of the inter-house track and field events, with relays, sprints and the march past of all four houses.', time: '8:00 AM onwards', venue: 'Main Ground', img: 'assets/hero/banner3-sprint.jpg' },
+    { day: '02', month: 'Jun', date: '02 Jun 2026', status: 'Highlights', category: 'Ceremony', title: 'Investiture Ceremony 2026', text: 'The newly elected Student Council and house captains took their oath of office before staff, parents and guests.', time: '9:30 AM', venue: 'School Auditorium', img: 'assets/hero/banner2-investiture.jpg' },
+    { day: '14', month: 'Nov', date: '14 Nov 2025', status: 'Highlights', category: 'Culture', title: 'Euphoria — Annual Fest', text: 'An evening of dance, music and theatre presented by students from every section of the school.', time: '5:00 PM', venue: 'Open-air Stage', img: 'assets/hero/slide-euphoria.jpg' },
+    { day: '28', month: 'Feb', date: '28 Feb 2026', status: 'Highlights', category: 'Milestone', title: 'Graduation Day', text: 'Our senior batch celebrated the close of their school years with families, teachers and the Patrician Brothers.', time: '10:00 AM', venue: 'School Auditorium', img: 'assets/hero/slide-graduation1.jpg' },
+  ];
+
+  _wa = 'https://wa.me/919084428226?text=Hello!%20I%27m%20interested';
+  _chatListRef = React.createRef();
+  _kb = [
+    { label: 'Admissions', keys: ['admission', 'apply', 'enrol', 'lkg', 'seat', 'register'], text: 'Admissions for the 2026\u201327 session are open. The admission procedure and LKG admission details are on our Admissions pages. For guidance, call the office on 9084428226.', link: { label: 'Apply for Admission', href: '#' } },
+    { label: 'Fee Structure', keys: ['fee', 'fees', 'payment', 'cost'], text: 'The fee structure for the current session is published on the Fee Structure page. For payment queries, please call 9412705414.', link: { label: 'View Fee Structure', href: '#' } },
+    { label: 'School Timings', keys: ['time', 'timing', 'hour', 'working', 'open', 'close'], text: 'School and office timings are listed on our Working Hours page.', link: { label: 'See Working Hours', href: 'Working Hours.dc.html' } },
+    { label: 'Location', keys: ['where', 'address', 'location', 'map', 'reach', 'direction'], text: 'We are at NH - 58 Delhi Meerut Bypass, Opp. Dewan Institute of Management, Meerut Uttar Pradesh 250103.', link: { label: 'Open in Maps', href: 'https://www.google.com/maps/search/?api=1&query=St.+Patrick%27s+Academy+School+Meerut', ext: true } },
+    { label: 'Contact', keys: ['contact', 'phone', 'call', 'email', 'mail', 'number'], text: 'Phone: 9084428226 / 9412705414\nEmail: stpatrickmeerut@gmail.com', link: { label: 'Email the school', href: 'mailto:stpatrickmeerut@gmail.com' } },
+    { label: 'Talk to the office', keys: ['whatsapp', 'human', 'person', 'talk', 'speak', 'office'], text: 'You can reach the school office directly on WhatsApp during working hours.', link: { label: 'Chat on WhatsApp', href: 'https://wa.me/919084428226?text=Hello!%20I%27m%20interested', ext: true } },
+  ];
+
+  _ask = (q, label) => {
+    const text = (q || '').trim();
+    if (!text) return;
+    const t = text.toLowerCase();
+    const hit = this._kb.find((k) => k.label.toLowerCase() === t || k.keys.some((w) => t.includes(w)));
+    const reply = hit
+      ? { from: 'bot', text: hit.text, link: hit.link }
+      : { from: 'bot', text: 'I\u2019m not sure about that one. Please call 9084428226 / 9412705414 or write to stpatrickmeerut@gmail.com and the office will help you.', link: { label: 'Chat on WhatsApp', href: this._wa, ext: true } };
+    this.setState((s) => ({ chatMessages: [...s.chatMessages, { from: 'user', text: label || text }], chatInput: '', chatTyping: true }));
+    clearTimeout(this._typingTimer);
+    this._typingTimer = setTimeout(() => this.setState((s) => ({ chatTyping: false, chatMessages: [...s.chatMessages, reply] })), 700);
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const el = this._chatListRef.current;
+    if (el && (prevState.chatMessages !== this.state.chatMessages || prevState.chatTyping !== this.state.chatTyping || prevState.chatOpen !== this.state.chatOpen)) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }
 
   _aboutImgs = ['assets/hero/banner2-investiture.jpg', 'assets/hero/banner1-opening.jpg', 'assets/hero/banner4-stage.jpg', 'assets/hero/banner6-dignitaries.jpg', 'assets/hero/banner7-staffwalk.jpg'];
 
@@ -498,6 +710,7 @@ class Component extends DCLogic {
     clearTimeout(this._introFallback);
     clearInterval(this._aboutTimer);
     clearInterval(this._bannerTimer);
+    clearTimeout(this._typingTimer);
   }
 
   renderVals() {
@@ -631,7 +844,48 @@ class Component extends DCLogic {
       };
     });
 
+    const chatMessages = this.state.chatMessages.map((m) => {
+      const u = m.from === 'user';
+      return {
+        text: m.text,
+        align: u ? 'flex-end' : 'flex-start',
+        radius: u ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+        bg: u ? 'hsl(220,80%,25%)' : '#fff',
+        color: u ? '#fff' : 'hsl(220,60%,18%)',
+        border: u ? '1px solid hsl(220,80%,25%)' : '1px solid hsl(212,32%,90%)',
+        link: m.link ? { label: m.link.label, href: m.link.href, target: m.link.ext ? '_blank' : '_self' } : null,
+      };
+    });
+    const chatOpen = this.state.chatOpen;
+
+    const ei = this.state.eventIdx || 0;
+    const sp = this._events[ei];
+    const spotlight = { ...sp, statusBg: sp.status === 'Upcoming' ? 'hsl(45,90%,52%)' : 'rgba(255,255,255,0.18)', statusColor: sp.status === 'Upcoming' ? 'hsl(220,74%,14%)' : '#fff' };
+    const eventSlides = this._events.map((e, i) => ({ bg: `url('${e.img}')`, opacity: i === ei ? 1 : 0, scale: i === ei ? 'scale(1.06)' : 'scale(1)' }));
+    const eventList = this._events.map((e, i) => ({
+      ...e, bgImg: `url('${e.img}')`,
+      bg: i === ei ? 'hsl(44,46%,97%)' : '#fff',
+      border: i === ei ? 'hsl(45,85%,55%)' : 'hsl(212,32%,90%)',
+      shadow: i === ei ? '0 18px 34px -22px rgba(15,28,70,0.4)' : 'none',
+      onClick: () => this.setState({ eventIdx: i }),
+    }));
+
     return {
+      spotlight, eventSlides, eventList,
+      tickerItems: this._news.map((text) => ({ text })),
+      chatOpen, chatClosed: !chatOpen,
+      chatNudge: !chatOpen && !this.state.chatSeen,
+      chatLauncherLabel: chatOpen ? 'Close chat' : 'Open chat',
+      chatTyping: this.state.chatTyping,
+      chatMessages,
+      chatListRef: this._chatListRef,
+      chatInput: this.state.chatInput,
+      chatQuick: this._kb.map((k) => ({ label: k.label, onClick: () => this._ask(k.label, k.label) })),
+      openChat: () => this.setState({ chatOpen: true, chatSeen: true }),
+      closeChat: () => this.setState({ chatOpen: false }),
+      toggleChat: () => this.setState((s) => ({ chatOpen: !s.chatOpen, chatSeen: true })),
+      chatInputChange: (e) => this.setState({ chatInput: e.target.value }),
+      chatSubmit: (e) => { e.preventDefault(); this._ask(this.state.chatInput); },
       aboutSlides, aboutDots,
       aboutPrev: () => this._aboutGo(ai - 1),
       aboutNext: () => this._aboutGo(ai + 1),
@@ -696,4 +950,3 @@ class Component extends DCLogic {
 </script>
 </body>
 </html>
-
