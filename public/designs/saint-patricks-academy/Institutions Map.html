@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patrician Institutions Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: hsl(220,80%,20%); background: transparent; }
+  .mapbox { background: hsl(205,50%,96%); border-radius: 22px; overflow: hidden; border: 1px solid hsl(212,32%,90%); }
+  a { color: hsl(220,80%,25%); } a:hover { color: hsl(45,80%,38%); }
+  .mapbox { position: relative; height: 100%; }
+  #map { position: absolute; inset: 0; }
+  #map svg { display: block; width: 100%; height: 100%; }
+  .pin { cursor: pointer; }
+  .pin .drop { transition: transform .2s ease; transform-box: fill-box; transform-origin: 50% 100%; filter: drop-shadow(0 4px 5px rgba(10,22,55,0.35)); }
+  .pin:hover .drop, .pin.on .drop { transform: scale(1.18); }
+  .pin .lbl { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12.5px; fill: hsl(220,60%,18%); paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; opacity: 0; transition: opacity .2s ease; pointer-events: none; }
+  .pin:hover .lbl, .pin.on .lbl { opacity: 1; }
+  .pulse { animation: pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { 0% { transform: scale(0.4); opacity: 0.7; } 100% { transform: scale(2.6); opacity: 0; } }
+  .legend { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 16px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.92); border: 1px solid hsl(212,32%,90%); font-size: 12px; font-weight: 700; color: hsl(220,14%,40%); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .card { position: absolute; z-index: 5; width: 250px; background: #fff; border-radius: 14px; padding: 14px 16px; box-shadow: 0 20px 40px -16px rgba(10,22,55,0.45); border: 1px solid hsl(212,32%,90%); display: none; }
+  .card .x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border: none; border-radius: 50%; background: hsl(210,40%,96%); cursor: pointer; font-size: 15px; line-height: 1; color: hsl(220,60%,25%); }
+  .pp h4 { margin: 0 24px 8px 0; font-family: 'Playfair Display', serif; font-size: 17px; color: hsl(220,80%,20%); }
+  .pp ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .pp li { font-size: 13px; font-weight: 600; color: hsl(220,40%,22%); display: flex; flex-direction: column; gap: 2px; }
+  .pp em { font-style: normal; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: hsl(40,70%,34%); }
+  .pp em.t { color: hsl(220,60%,34%); }
+  .pp .note { font-size: 11.5px; font-weight: 700; color: hsl(45,78%,36%); }
+</style>
+</head>
+<body>
+<div class="mapbox">
+  <div id="map"></div>
+  <div class="legend"><span><i style="background:hsl(45,88%,50%)"></i>Founded</span><span><i style="background:hsl(221,70%,26%)"></i>Taken over</span></div>
+  <div class="card" id="card"><button class="x" id="cardx" aria-label="Close">&times;</button><div id="cardbody"></div></div>
+</div>
+<script>
+// [lng, lat]
+const COORDS = {
+  'Adyar': [80.2570, 13.0067], 'Coonoor': [76.7959, 11.3530], 'Mussoorie': [78.0644, 30.4598], 'Lahore': [74.3587, 31.5204],
+  'Dehradun': [78.0322, 30.3165], 'Meerut': [77.7064, 28.9845], 'Delhi': [77.2090, 28.6139], 'Binnaguri (West Bengal)': [89.0560, 26.7650],
+  'Trichy': [78.7047, 10.7905], 'Mananthavady (Kerala)': [76.0044, 11.8014], 'Pune': [73.8567, 18.5204], 'Dindigul': [77.9803, 10.3673],
+  'Angamaly (Kerala)': [76.3860, 10.1960], 'Bangalore': [77.5946, 12.9716]
+};
+const INST = [
+  { name: 'St. Patrick’s School', place: 'Adyar', type: 'founded', note: 'First foundation · 1857' },
+  { name: 'St. Joseph’s', place: 'Coonoor', type: 'taken' },
+  { name: 'St. George’s', place: 'Mussoorie', type: 'taken' },
+  { name: 'St. Antony’s', place: 'Lahore', type: 'taken' },
+  { name: 'St. Joseph’s Academy', place: 'Dehradun', type: 'founded' },
+  { name: 'St. Mary’s Academy', place: 'Meerut', type: 'founded', note: 'Our sister school' },
+  { name: 'St. Michael’s Academy', place: 'Adyar', type: 'founded' },
+  { name: 'Mount St. Mary’s School', place: 'Delhi', type: 'founded' },
+  { name: 'Nirmala Inter College', place: 'Mussoorie', type: 'founded' },
+  { name: 'St. James School', place: 'Binnaguri (West Bengal)', type: 'founded' },
+  { name: 'St. Patrick’s School', place: 'Binnaguri (West Bengal)', type: 'founded' },
+  { name: 'St. Patrick’s Higher Secondary School', place: 'Trichy', type: 'founded' },
+  { name: 'St. Patrick’s School', place: 'Mananthavady (Kerala)', type: 'founded' },
+  { name: 'Patrician College of Arts and Science', place: 'Adyar', type: 'founded' },
+  { name: 'Mount St. Patrick’s Academy', place: 'Pune', type: 'founded' },
+  { name: 'St. Patrick’s Academy', place: 'Dindigul', type: 'founded' },
+  { name: 'St. Patrick’s Academy', place: 'Angamaly (Kerala)', type: 'founded' },
+  { name: 'College of Education', place: 'Dehradun', type: 'founded' },
+  { name: 'St. Patrick’s Academy', place: 'Bangalore', type: 'founded' },
+];
+
+let active = null, land = null, pinPos = {};
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const box = document.getElementById('map'), card = document.getElementById('card');
+
+const GROUPS = (() => {
+  const g = {};
+  INST.forEach((x) => { (g[x.place] = g[x.place] || []).push(x); });
+  return Object.keys(g).map((p) => ({ place: p, items: g[p], founded: g[p].some((x) => x.type === 'founded') }));
+})();
+
+function popup(g) {
+  return '<div class="pp"><h4>' + esc(g.place) + '</h4><ul>' + g.items.map((x) =>
+    '<li><em class="' + (x.type === 'taken' ? 't' : '') + '">' + (x.type === 'taken' ? 'Taken over' : 'Founded') + '</em>' + esc(x.name) +
+    (x.note ? '<span class="note">' + esc(x.note) + '</span>' : '') + '</li>').join('') + '</ul></div>';
+}
+function showCard() {
+  const g = GROUPS.find((x) => x.place === active), p = pinPos[active];
+  if (!g || !p) { card.style.display = 'none'; return; }
+  document.getElementById('cardbody').innerHTML = popup(g);
+  card.style.display = 'block';
+  const W = box.clientWidth, H = box.clientHeight, cw = card.offsetWidth, ch = card.offsetHeight;
+  let x = p.x + 18, y = p.y - 20 - ch / 2;
+  if (x + cw > W - 10) x = p.x - 18 - cw;
+  y = Math.max(10, Math.min(H - ch - 10, y));
+  card.style.left = Math.max(10, x) + 'px'; card.style.top = y + 'px';
+}
+function select(place) {
+  active = active === place ? null : place;
+  d3.selectAll('.pin').classed('on', (d) => d.place === active);
+  showCard();
+}
+
+function drawMap() {
+  if (!land) return;
+  const W = box.clientWidth, H = box.clientHeight;
+  const india = land.features.find((f) => f.id === '356');
+  const near = land.features.filter((f) => ['586', '524', '064', '050', '144', '104', '156', '004'].includes(f.id));
+  const focus = { type: 'FeatureCollection', features: [india, { type: 'Feature', geometry: { type: 'Point', coordinates: COORDS['Lahore'] } }] };
+  const proj = d3.geoMercator().fitExtent([[24, 40], [W - 24, H - 24]], focus);
+
+  const svg = d3.select(box).selectAll('svg').data([0]).join('svg').attr('viewBox', [0, 0, W, H]);
+  svg.selectAll('*').remove();
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent').on('click', () => { if (active) select(active); });
+
+  const gp = d3.geoPath(proj);
+  const NAMES = { '586': 'Pakistan', '524': 'Nepal', '064': 'Bhutan', '050': 'Bangladesh', '144': 'Sri Lanka', '104': 'Myanmar', '156': 'China', '004': 'Afghanistan' };
+  const lg = svg.append('g').attr('pointer-events', 'none').attr('stroke-linejoin', 'round');
+  lg.selectAll('path.n').data(near).join('path').attr('class', 'n').attr('d', gp)
+    .attr('fill', 'hsl(214,24%,95%)').attr('stroke', 'hsl(214,18%,72%)').attr('stroke-width', 0.9);
+  lg.append('path').datum(india).attr('d', gp).attr('fill', 'hsl(44,55%,95%)').attr('stroke', 'hsl(220,55%,30%)').attr('stroke-width', 1.4);
+  const labels = near.map((f) => { const c = gp.centroid(f); return { n: NAMES[f.id], x: c[0], y: c[1] }; })
+    .filter((l) => l.x > 30 && l.x < W - 30 && l.y > 20 && l.y < H - 20);
+  labels.push({ n: 'INDIA', x: proj([79.5, 22.5])[0], y: proj([79.5, 22.5])[1], main: true });
+  lg.selectAll('text').data(labels).join('text').attr('x', (d) => d.x).attr('y', (d) => d.y).attr('text-anchor', 'middle')
+    .attr('font-family', "'Plus Jakarta Sans', sans-serif").attr('font-weight', (d) => d.main ? 800 : 600)
+    .attr('font-size', (d) => d.main ? 15 : 11).attr('letter-spacing', (d) => d.main ? '0.3em' : '0.08em')
+    .attr('fill', (d) => d.main ? 'hsl(220,40%,62%)' : 'hsl(214,14%,56%)').text((d) => d.n);
+
+  const nodes = GROUPS.map((g) => { const [x, y] = proj(COORDS[g.place]); return { ...g, ox: x, oy: y, x, y }; });
+  const sim = d3.forceSimulation(nodes).force('x', d3.forceX((d) => d.ox).strength(0.7)).force('y', d3.forceY((d) => d.oy).strength(0.7))
+    .force('c', d3.forceCollide(13)).stop();
+  for (let i = 0; i < 240; i++) sim.tick();
+  pinPos = {}; nodes.forEach((n) => { pinPos[n.place] = n; });
+
+  const g = svg.append('g');
+  g.selectAll('line').data(nodes.filter((n) => Math.hypot(n.x - n.ox, n.y - n.oy) > 4)).join('line')
+    .attr('x1', (d) => d.ox).attr('y1', (d) => d.oy).attr('x2', (d) => d.x).attr('y2', (d) => d.y)
+    .attr('stroke', 'hsl(220,45%,35%)').attr('stroke-width', 1).attr('stroke-dasharray', '2 2');
+  const color = (d) => d.founded ? 'hsl(45,88%,50%)' : 'hsl(221,70%,26%)';
+  const pin = g.selectAll('g.pin').data(nodes).join('g').attr('class', (d) => 'pin' + (d.place === active ? ' on' : ''))
+    .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')').on('click', (e, d) => { e.stopPropagation(); select(d.place); });
+  pin.append('title').text((d) => d.place + ' — ' + d.items.length + (d.items.length === 1 ? ' institution' : ' institutions'));
+  pin.append('circle').attr('class', 'pulse').attr('r', 7).attr('fill', color).style('animation-delay', (d, i) => (i * 0.17) + 's');
+  pin.append('ellipse').attr('rx', 4.5).attr('ry', 1.8).attr('fill', 'rgba(10,22,55,0.25)');
+  const drop = pin.append('g').attr('class', 'drop');
+  drop.append('path').attr('d', 'M0 0 C -2 -6 -10 -11 -10 -19 A 10 10 0 1 1 10 -19 C 10 -11 2 -6 0 0 Z').attr('fill', color).attr('stroke', '#fff').attr('stroke-width', 1.6);
+  drop.append('text').attr('y', -19).attr('dy', '0.36em').attr('text-anchor', 'middle').attr('font-size', 11).attr('font-weight', 800)
+    .attr('font-family', "'Plus Jakarta Sans', sans-serif").attr('fill', (d) => d.founded ? 'hsl(220,74%,14%)' : '#fff').text((d) => d.items.length);
+  pin.append('text').attr('class', 'lbl').attr('y', -19).attr('dy', '0.35em')
+    .attr('x', (d) => d.x > W - 150 ? -15 : 15).attr('text-anchor', (d) => d.x > W - 150 ? 'end' : 'start')
+    .text((d) => d.place.replace(/ \(.*\)$/, ''));
+  showCard();
+}
+
+document.getElementById('cardx').addEventListener('click', () => { if (active) select(active); });
+let lastSize = '', rt;
+window.addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(() => { const s = box.clientWidth + 'x' + box.clientHeight; if (s !== lastSize) { lastSize = s; drawMap(); } }, 150);
+});
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then((r) => r.json()).then((t) => {
+  land = topojson.feature(t, t.objects.countries); lastSize = box.clientWidth + 'x' + box.clientHeight; drawMap();
+});
+</script>
+</body>
+</html>
