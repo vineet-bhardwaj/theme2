@@ -184,31 +184,32 @@
     </div>
 
     <!-- interactive journey timeline -->
-    <div style="margin-top: 72px; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 24px; padding: clamp(28px, 4vw, 44px); box-shadow: 0 30px 60px -40px rgba(15,28,70,0.35);">
-      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-        <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; color: hsl(220,80%,22%);">The Patrician journey</span>
-        <span style="font-size: 13px; font-weight: 600; color: hsl(220,14%,50%);">Select a milestone</span>
-      </div>
-      <div style="position: relative; margin-top: 36px;">
-        <div style="position: absolute; left: 16.66%; right: 16.66%; top: 27px; height: 3px; border-radius: 999px; background: hsl(212,32%,90%);"></div>
-        <div style="position: absolute; left: 16.66%; top: 27px; height: 3px; border-radius: 999px; background: linear-gradient(90deg, hsl(45,88%,55%), hsl(45,92%,62%)); width: {{ journeyFill }}; transition: width .6s cubic-bezier(.2,.8,.2,1);"></div>
-        <div style="position: relative; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px;">
-          <sc-for list="{{ journeyStops }}" as="j" hint-placeholder-count="3">
-            <button type="button" onClick="{{ j.select }}" onMouseEnter="{{ j.select }}" style="display: flex; flex-direction: column; align-items: center; gap: 12px; border: none; background: transparent; cursor: pointer; padding: 0; font-family: inherit;">
-              <span style="width: 57px; height: 57px; border-radius: 50%; display: grid; place-items: center; background: {{ j.nodeBg }}; color: {{ j.nodeColor }}; border: 3px solid {{ j.nodeBorder }}; font-size: 13px; font-weight: 800; box-shadow: {{ j.nodeShadow }}; transform: {{ j.nodeScale }}; transition: all .35s ease;">{{ j.year }}</span>
-              <span style="font-size: 14.5px; font-weight: 700; color: {{ j.labelColor }}; transition: color .3s ease;">{{ j.place }}</span>
+    <div style="margin-top: 72px; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 24px; padding: clamp(26px, 4vw, 44px); box-shadow: 0 30px 60px -40px rgba(15,28,70,0.35);">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;">
+        <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 24px; color: hsl(220,80%,22%);">A Patrician Timeline</span>
+        <div style="display: flex; gap: 6px; padding: 5px; border-radius: 14px; background: hsl(210,40%,96%);">
+          <sc-for list="{{ eraTabs }}" as="t" hint-placeholder-count="2">
+            <button type="button" onClick="{{ t.select }}" style="border: none; border-radius: 10px; padding: 9px 16px; cursor: pointer; font-family: inherit; background: {{ t.bg }}; color: {{ t.color }}; box-shadow: {{ t.shadow }}; transition: all .25s ease; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;">
+              <span style="font-size: 13.5px; font-weight: 800;">{{ t.label }}</span>
+              <span style="font-size: 11.5px; font-weight: 600; opacity: 0.8;">{{ t.range }}</span>
             </button>
           </sc-for>
         </div>
       </div>
-      <div style="margin-top: 30px; padding: 26px 28px; border-radius: 18px; background: hsl(221,72%,14%); color: #fff; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 22px; align-items: center;">
-        <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(34px, 4vw, 46px); color: hsl(45,92%,62%); line-height: 1;">{{ journey.year }}</span>
-        <div>
-          <div style="font-size: 17px; font-weight: 700;">{{ journey.title }}</div>
-          <div style="font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.82); margin-top: 6px;">{{ journey.text }}</div>
-          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;">
-            <sc-for list="{{ journey.chips }}" as="c" hint-placeholder-count="0">
-              <span style="padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(241,196,48,0.5); font-size: 12.5px; font-weight: 600; color: hsl(45,92%,70%);">{{ c }}</span>
+
+      <div style="overflow-x: auto; margin: 30px -8px 0; padding: 0 8px 8px;">
+        <div style="position: relative; min-width: {{ tlMinWidth }}; height: 300px;">
+          <div style="position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 999px; background: linear-gradient(90deg, hsl(45,88%,55%), hsl(221,60%,30%));"></div>
+          <div style="position: relative; height: 100%; display: grid; grid-template-columns: {{ tlCols }};">
+            <sc-for list="{{ tlItems }}" as="m" hint-placeholder-count="12">
+              <div style="position: relative; height: 100%;">
+                <span style="position: absolute; left: 50%; top: 50%; width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px; border-radius: 50%; background: {{ m.dot }}; border: 3px solid #fff; box-shadow: 0 0 0 2px {{ m.ring }};"></span>
+                <span style="position: absolute; left: 50%; width: 1.5px; margin-left: -0.75px; height: 26px; background: hsl(212,32%,82%); top: {{ m.stemTop }};"></span>
+                <div style="position: absolute; left: 4px; right: 4px; top: {{ m.cardTop }}; bottom: {{ m.cardBottom }}; display: flex; flex-direction: column; justify-content: {{ m.justify }}; align-items: center; text-align: center; gap: 6px;">
+                  <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; line-height: 1; color: {{ m.yearColor }};">{{ m.year }}</span>
+                  <span style="font-size: 13px; font-weight: 600; line-height: 1.4; color: hsl(220,30%,28%); text-wrap: balance;">{{ m.label }}</span>
+                </div>
+              </div>
             </sc-for>
           </div>
         </div>
@@ -254,52 +255,7 @@
       <p style="font-size: 16.5px; line-height: 1.78; color: hsl(220,16%,34%); margin: 22px 0 0; text-wrap: pretty;">The educational institutions they founded became instant success stories. From their first foundation in Chennai in the year 1857 - St. Patrick&rsquo;s School, Adyar; they began taking over schools that were offered to them or started founding new ones of their own. The Brothers took over schools like St. Joseph&rsquo;s in Coonoor, St. George&rsquo;s in Mussoorie and St. Antony&rsquo;s in Lahore. They founded new schools like St. Joseph&rsquo;s Academy in Dehradun, St. Mary&rsquo;s Academy in Meerut, St. Michael&rsquo;s Academy in Adyar, Mount St. Mary&rsquo;s School in Delhi, Nirmala Inter College in Mussoorie, St. James and St. Patrick&rsquo;s Schools in Binnaguri (West Bengal), St. Patrick&rsquo;s Higher Secondary School in Trichy, St. Patrick&rsquo;s School in Mananthavady (Kerala), Patrician College of Arts and Science in Adyar, Mount St. Patrick&rsquo;s Academy in Pune, St. Patrick&rsquo;s Academy in Dindigul, St. Patrick&rsquo;s Academy in Angamaly (Kerala), College of Education in Dehradun and St. Patrick&rsquo;s Academy in Bangalore.</p>
     </div>
 
-    <div data-inst-split="1" style="display: grid; grid-template-columns: 340px minmax(0,1fr); gap: 28px; margin-top: 48px; align-items: start;">
-      <div style="position: sticky; top: 112px; background: #fff; border: 1px solid hsl(212,32%,91%); border-radius: 22px; padding: 26px;">
-        <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; padding: 5px; border-radius: 14px; background: hsl(210,40%,96%);">
-          <sc-for list="{{ instTabs }}" as="t" hint-placeholder-count="3">
-            <button type="button" onClick="{{ t.select }}" style="border: none; border-radius: 10px; padding: 10px 6px; cursor: pointer; font-family: inherit; background: {{ t.bg }}; color: {{ t.color }}; box-shadow: {{ t.shadow }}; transition: all .25s ease; display: flex; flex-direction: column; align-items: center; gap: 2px;">
-              <span style="font-size: 18px; font-weight: 800; line-height: 1;">{{ t.count }}</span>
-              <span style="font-size: 11.5px; font-weight: 700;">{{ t.label }}</span>
-            </button>
-          </sc-for>
-        </div>
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 24px;">
-          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(220,14%,46%);">By region</span>
-          <sc-if value="{{ instRegionActive }}" hint-placeholder-val="{{ false }}">
-            <button type="button" onClick="{{ clearRegion }}" style="border: none; background: transparent; cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 700; color: hsl(45,78%,40%);" style-hover="color: hsl(220,80%,25%) !important;">Clear</button>
-          </sc-if>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px;">
-          <sc-for list="{{ instRegions }}" as="r" hint-placeholder-count="6">
-            <button type="button" onClick="{{ r.select }}" style="display: grid; grid-template-columns: 112px minmax(0,1fr) 22px; align-items: center; gap: 10px; border: none; border-radius: 10px; padding: 8px 10px; cursor: pointer; font-family: inherit; text-align: left; background: {{ r.rowBg }}; opacity: {{ r.dim }}; transition: background .2s ease, opacity .2s ease;" style-hover="background: hsl(45,80%,95%);">
-              <span style="font-size: 13px; font-weight: 600; color: hsl(220,60%,22%); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.name }}</span>
-              <span style="height: 10px; border-radius: 999px; background: hsl(212,32%,92%); overflow: hidden;"><span style="display: block; height: 100%; width: {{ r.pct }}; border-radius: 999px; background: {{ r.barBg }}; transition: width .5s cubic-bezier(.2,.8,.2,1);"></span></span>
-              <span style="font-size: 13px; font-weight: 800; color: hsl(220,80%,22%); text-align: right;">{{ r.count }}</span>
-            </button>
-          </sc-for>
-        </div>
-      </div>
-
-      <div>
-        <div style="font-size: 14px; font-weight: 600; color: hsl(220,14%,46%);">Showing <strong style="color: hsl(220,80%,22%);">{{ instShownCount }}</strong> {{ instShownLabel }}</div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 16px;">
-          <sc-for list="{{ instCards }}" as="c" hint-placeholder-count="9">
-            <div style="position: relative; background: #fff; border: 1px solid {{ c.border }}; border-radius: 16px; padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 10px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 22px 40px -24px rgba(15,28,70,0.3); border-color: hsl(45,85%,58%) !important;">
-              <span style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: {{ c.tagBg }}; color: {{ c.tagColor }};">{{ c.tag }}</span>
-              <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; line-height: 1.25; color: hsl(220,80%,20%);">{{ c.name }}</span>
-              <span style="display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: hsl(220,14%,46%);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(45,78%,45%)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                {{ c.place }}
-              </span>
-              <sc-if value="{{ c.hasNote }}" hint-placeholder-val="{{ false }}">
-                <span style="font-size: 12.5px; font-weight: 700; color: hsl(45,78%,38%);">{{ c.note }}</span>
-              </sc-if>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-    </div>
+    <iframe src="Institutions Map.html" title="Map of institutions founded or taken over by the Patrician Brothers" loading="lazy" style="display: block; width: 100%; height: clamp(620px, 72vh, 720px); border: 0; margin-top: 48px; background: transparent;"></iframe>
 
     <div style="margin-top: 64px; padding: 34px clamp(24px, 4vw, 48px); border-radius: 22px; background: linear-gradient(120deg, hsl(45,88%,62%), hsl(45,90%,54%)); display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
       <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 64px; width: auto; flex-shrink: 0;">
@@ -380,15 +336,17 @@
           <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 16px; font-size: 14.5px; line-height: 1.5;">
             <span style="display: flex; align-items: flex-start; gap: 11px;">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              Cantt Road, Meerut &mdash; 250001, Uttar Pradesh (India)
+              NH - 58 Delhi Meerut Bypass, Opp. Dewan Institute of Management, Meerut Uttar Pradesh 250103
             </span>
-            <a href="tel:+911212640000" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+            <span style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap;">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-              +91 121 264 0000
-            </a>
-            <a href="mailto:admissions@stpatricks.edu.in" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
+              <a href="tel:+919084428226" style-hover="color: hsl(45,92%,64%);">9084428226</a>
+              <span style="opacity: 0.4;">/</span>
+              <a href="tel:+919412705414" style-hover="color: hsl(45,92%,64%);">9412705414</a>
+            </span>
+            <a href="mailto:stpatrickmeerut@gmail.com" style="display: flex; align-items: center; gap: 11px;" style-hover="color: hsl(45,92%,64%);">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="hsl(45,92%,62%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>
-              admissions@stpatricks.edu.in
+              stpatrickmeerut@gmail.com
             </a>
           </div>
         </div>
@@ -427,8 +385,8 @@
         <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">School Map</span>
         <h4 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: #fff; margin: 10px 0 16px;">Reach us</h4>
         <div style="position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 20px 40px -24px rgba(0,0,0,0.6); height: 168px; background: rgba(255,255,255,0.06);">
-          <iframe title="St. Patrick's Academy location map" src="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001&output=embed" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.15) contrast(1.05);" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          <a href="https://www.google.com/maps?q=Cantt+Road,+Meerut,+Uttar+Pradesh+250001" target="_blank" rel="noopener" style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.95); color: hsl(220,80%,20%); font-size: 12px; font-weight: 700;">
+          <iframe title="St. Patrick's Academy location map" src="https://www.google.com/maps/search/?api=1&amp;query=St.+Patrick%27s+Academy+School+Meerut&output=embed" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.15) contrast(1.05);" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=St.+Patrick%27s+Academy+School+Meerut" target="_blank" rel="noopener" style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.95); color: hsl(220,80%,20%); font-size: 12px; font-weight: 700;">
             Open in Maps
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>
           </a>
@@ -453,10 +411,14 @@
 class Component extends DCLogic {
   state = { mobileOpen: false, aboutMenuOpen: false, mobileAboutOpen: false, quoteIdx: 0, journeyIdx: 0, instType: 'all', instRegion: null };
 
-  _journey = [
-    { year: '1808', place: 'Ireland', title: 'Founded in Tullow', text: 'Founded on 2nd February, 1808 by Rt. Rev. Dr. Daniel Delany, the Bishop of Kildare and Leighlin.', chips: [] },
-    { year: '1857', place: 'India', title: 'The first mission abroad', text: 'Bros. Ignatius Price, Paul Hughes and Fintan Parkinson land in Madras to take care of the Orphanage at Condichetty street.', chips: ['Madras (Chennai)'] },
-    { year: 'Beyond', place: 'Worldwide', title: 'Schools and institutes of higher learning', text: 'The mission in India led the Brothers to open schools and institutes of higher learning across the world.', chips: ['Australia', 'America', 'Kenya', 'Papua New Guinea', 'Ghana'] },
+  _eras = [
+    { label: 'Bishop Delany', range: '1747 \u2013 1814', items: [
+      ['1747', 'Birth of Daniel Delany'], ['1763', 'To France to study for priesthood'], ['1771', 'Ordained a priest'], ['1771', 'Taught at St. Omer, France'],
+      ['1777', 'Returned to Ireland'], ['1777', 'Fr Delany begins his Sunday School programme'], ['1783', 'Consecrated bishop'], ['1787', 'Appointed Bishop of Kildare & Leighlin'],
+      ['1793', 'Co-founded St. Patrick\u2019s College, Carlow'], ['1807', 'Founded Brigidine Sisters'], ['1808', 'Founded Patrician Brothers'], ['1814', 'Death of Bishop Delany'] ] },
+    { label: 'The Missions', range: '1846 \u2013 2014', items: [
+      ['1846', 'America'], ['1875', 'India'], ['1883', 'Australia'], ['1911', 'Lahore (Pakistan)'], ['1948', 'Aden'], ['1948', 'USA'], ['1961', 'Kenya'],
+      ['1968', 'Papua New Guinea'], ['2008', 'Ghana'], ['2012', 'Dubai, UAE'], ['2014', 'Doha, Qatar'] ] },
   ];
 
   _institutions = [
@@ -535,16 +497,21 @@ class Component extends DCLogic {
   renderVals() {
     const qi = this.state.quoteIdx || 0;
     const ji = this.state.journeyIdx || 0;
-    const journeyStops = this._journey.map((j, i) => ({
-      year: j.year, place: j.place,
-      select: () => this.setState({ journeyIdx: i }),
-      nodeBg: i === ji ? 'hsl(45,90%,56%)' : (i < ji ? 'hsl(221,72%,16%)' : '#fff'),
-      nodeColor: i === ji ? 'hsl(220,60%,12%)' : (i < ji ? '#fff' : 'hsl(220,40%,40%)'),
-      nodeBorder: i <= ji ? 'hsl(45,88%,55%)' : 'hsl(212,32%,86%)',
-      nodeShadow: i === ji ? '0 0 0 8px rgba(241,196,48,0.2)' : 'none',
-      nodeScale: i === ji ? 'scale(1.1)' : 'scale(1)',
-      labelColor: i === ji ? 'hsl(220,80%,20%)' : 'hsl(220,14%,50%)',
-    }));
+    const era = this._eras[ji] || this._eras[0];
+    const n = era.items.length;
+    const tlItems = era.items.map(([year, label], i) => {
+      const up = i % 2 === 0;
+      const key = (ji === 0 && year === '1808') || (ji === 1 && year === '1875');
+      return {
+        year, label,
+        cardTop: up ? '0' : 'calc(50% + 34px)', cardBottom: up ? 'calc(50% + 34px)' : '0',
+        justify: up ? 'flex-end' : 'flex-start',
+        stemTop: up ? 'calc(50% - 33px)' : 'calc(50% + 7px)',
+        dot: key ? 'hsl(45,90%,52%)' : 'hsl(221,70%,26%)',
+        ring: key ? 'hsl(45,90%,52%)' : 'hsl(221,40%,70%)',
+        yearColor: key ? 'hsl(45,80%,38%)' : 'hsl(220,80%,22%)',
+      };
+    });
     const it = this.state.instType;
     const reg = this.state.instRegion;
     const byType = this._institutions.filter((x) => it === 'all' || x.type === it);
@@ -555,9 +522,16 @@ class Component extends DCLogic {
     const shown = byType.filter((x) => !reg || x.region === reg);
     const tabDefs = [['all', 'All'], ['founded', 'Founded'], ['taken', 'Taken over']];
     return {
-      journeyStops,
-      journey: this._journey[ji],
-      journeyFill: (ji / (this._journey.length - 1) * 66.68).toFixed(2) + '%',
+      tlItems,
+      tlCols: 'repeat(' + n + ', minmax(0,1fr))',
+      tlMinWidth: (n * 104) + 'px',
+      eraTabs: this._eras.map((e, i) => ({
+        label: e.label, range: e.range,
+        select: () => this.setState({ journeyIdx: i }),
+        bg: i === ji ? '#fff' : 'transparent',
+        color: i === ji ? 'hsl(220,80%,20%)' : 'hsl(220,14%,48%)',
+        shadow: i === ji ? '0 6px 16px -8px rgba(15,28,70,0.3)' : 'none',
+      })),
       instTabs: tabDefs.map(([k, l]) => ({
         label: l,
         count: this._institutions.filter((x) => k === 'all' || x.type === k).length,
@@ -616,4 +590,3 @@ class Component extends DCLogic {
 </script>
 </body>
 </html>
-
