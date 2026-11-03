@@ -381,10 +381,10 @@
       <div style="display: grid; grid-template-columns: 1.15fr 0.85fr 1fr 1.1fr; gap: 40px; align-items: start;">
 
         <!-- brand + contact -->
-        <div>
-          <span style="display: flex; align-items: center; gap: 14px; color: #fff; cursor: default;">
+        <div style="container-type: inline-size;">
+          <span style="display: flex; align-items: center; gap: 14px; color: #fff; cursor: default; min-width: 0;">
             <img src="assets/crest.png" alt="St. Patrick's Academy crest" style="height: 76px; width: auto; display: block; flex-shrink: 0; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.4));">
-            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 25px; line-height: 1.15;">St. Patrick's Academy,<br>Meerut</span>
+            <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: min(25px, calc(7.7cqw - 7px)); line-height: 1.15; white-space: nowrap;">St. Patrick's Academy, Meerut</span>
           </span>
           <div style="margin-top: 24px;">
             <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(45,92%,64%);">Get in Touch</span>
